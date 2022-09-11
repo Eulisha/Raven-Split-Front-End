@@ -10,7 +10,7 @@ const ControllerButton = ({debtInfo, debts, details, setDebt, setDetail, members
   return (
     <div className="blog__controller">
       <Button variant="outline-success" onClick={() => setEditingShow(true)} >修改</Button>
-      {/* <Button variant="outline-danger">刪除</Button> */}
+      <Button variant="outline-danger">刪除</Button>
       {editingShow &&
         <EditingWindow /** 編輯視窗 */
           debtInfo={debtInfo}
@@ -34,7 +34,7 @@ const EditingWindow = ({ debtInfo, debts, details, members, setDebt, setDetail, 
 
   const [splitInfo, setInfoValue] = useState(debtInfo ? debtInfo : {gid:1, date:`${new Date(Date.now()).getFullYear()}-${new Date(Date.now()).getMonth()+1}-${new Date(Date.now()).getDate()}`}) //FIXME: gid要再傳進來
   //整理本筆帳的初始值
-  const oriBalance = {total: splitInfo ? splitInfo.total : 0, sum: 0};
+  const oriSummarize = {total: splitInfo ? splitInfo.total : 0, sum: 0};
   // console.log(members, details, debts);
   members.map((member)=>{
     ////
@@ -42,7 +42,7 @@ const EditingWindow = ({ debtInfo, debts, details, members, setDebt, setDetail, 
       details.map((detail)=>{
         if(member.uid===detail.borrower){
           oriDebt[member.uid]={borrower: detail.borrower, name: member.name, amount: detail.amount}
-          oriBalance.sum += detail.amount
+          oriSummarize.sum += detail.amount
         }else{
           //本來沒有欠債關係
           oriDebt[member.uid]={borrower: member.uid, name: member.name, amount: null}
@@ -53,11 +53,11 @@ const EditingWindow = ({ debtInfo, debts, details, members, setDebt, setDetail, 
     }
   })
   const [splitValue, setSplitValue] = useState(oriDebt)
-  const [currBalance, setBalance] = useState(oriBalance)
+  const [currSummarize, setSummarize] = useState(oriSummarize)
 
   console.log('set splitInfo: ', splitInfo);
   console.log('set splitValue: ', splitValue)
-  console.log('set splitBalance: ', currBalance)
+  console.log('set splitsummarize: ', currSummarize)
 
   //更新表單輸入
   const handleDebtInfo = (prop)=>(e)=>{
@@ -72,22 +72,22 @@ const EditingWindow = ({ debtInfo, debts, details, members, setDebt, setDetail, 
     console.log('updated splitValue:',splitValue);
   }
 
-  //更新balance
+  //更新summarize
   useEffect(()=>{
     const currTotal = splitInfo.total
-    const handleBalance = (prop)=>{
-      setBalance({...currBalance, [prop]:splitInfo.total})
+    const handleSummarize = (prop)=>{
+      setSummarize({...currSummarize, [prop]:splitInfo.total})
     }
-    handleBalance('total')
+    handleSummarize('total')
   },[splitInfo])
   useEffect(()=>{
     const currSum = Object.values(splitValue).reduce((acc, curr)=>{
       return acc + curr.amount
     },0)
-    const handleBalance = (prop)=>{
-      setBalance({...currBalance, [prop]:currSum})
+    const handleSummarize = (prop)=>{
+      setSummarize({...currSummarize, [prop]:currSum})
     }
-    handleBalance('sum')
+    handleSummarize('sum')
   },[splitValue])
   
   //儲存DB
@@ -134,7 +134,7 @@ const EditingWindow = ({ debtInfo, debts, details, members, setDebt, setDetail, 
           setDetail(updatedDetail)
         }
     }
-    // setBalance()
+    // setSummarize()
     }catch(err){
       console.log(err);
     }
@@ -178,7 +178,7 @@ const EditingWindow = ({ debtInfo, debts, details, members, setDebt, setDetail, 
                 )
               })}
             </ul>
-            <ul>總共{currBalance.total}，還剩{currBalance.total-currBalance.sum}</ul>
+            <ul>總共{currSummarize.total}，還剩{currSummarize.total-currSummarize.sum}</ul>
           </div>
       </div>
     </Modal.Body>
