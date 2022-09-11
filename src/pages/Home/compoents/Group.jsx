@@ -8,12 +8,12 @@ let gid = 1 //暫時寫死
 const  Group = () =>{
   const [members, setMembers] = useState([])
   useEffect(()=>{
-    const fetchMebers = async(id)=>{
+    const fetchMembers = async(id)=>{
         const {data} = await axios(`${constants.API_GET_GROUP_MEMBERS}${id}`)
         console.log('fetch data group-members:  ', data);
         setMembers(data.data)
     }
-    fetchMebers(1)
+    fetchMembers(1)
   },[]) 
   return (
     <div>成員列表

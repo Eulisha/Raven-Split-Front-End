@@ -29,22 +29,14 @@ const Debts = ({members, gid}) => {
         setDebt={setDebt}
       />
       {debts.map((item) => {
-        const { id, date, title, total, isOwned, lender, ownAmount} = item;
         return (
-          <div key={id}>
+          <div key={item.id}>
           <DebtList
-            id={id}
-            date={date}
-            title={title}
-            total={total}
-            lender={lender}
-            isOwned={isOwned}
-            ownAmount={ownAmount}
-            deleteData={setDebt}
-            switchExtend={setExtend}
+            debtInfo={item}
+            setDebt={setDebt}
+            setExtend={setExtend}
           />
           <Details 
-            id={id}
             debtInfo={item}
             debts={debts}
             members = {members}
