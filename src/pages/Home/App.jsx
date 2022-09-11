@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import './index.css';
-import Debts from './compoents/Debts';
+import Group from './compoents/Group';
 
 const App = () => {
   return (
     <div>
-      <Debts />
+      <Group />
     </div>
   );
 };

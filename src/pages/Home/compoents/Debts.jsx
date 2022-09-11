@@ -6,7 +6,7 @@ import DebtList from './DebtList';
 import Edit from './Edit';
 
 
-const Debts = ({listData, deleteData}) => {
+const Debts = ({members}) => {
   const [debts, setDebt] = useState([]);
   const [extend, setExtend] = useState({})
   const [editingShow, setEditingShow] = useState(false);
@@ -25,10 +25,11 @@ useEffect(() => {
   return (
     <div className="list">
       <Edit.ControllerButton 
-      debts={debts}
-      setDebt={setDebt}
+        debts={debts}
+        members = {members}
+        setDebt={setDebt}
       />
-      {debts.map((item, index) => {
+      {debts.map((item) => {
         // setExtendDefault(item.id)
         const { id, date, title, total, isOwned, lender, ownAmount} = item;
         return (
@@ -47,7 +48,6 @@ useEffect(() => {
           <Details 
             id={id}
             debtInfo={item}
-            index={index}
             debts={debts}
             extend={extend}
           />

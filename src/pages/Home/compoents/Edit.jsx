@@ -4,7 +4,7 @@ import { Button, Modal } from 'react-bootstrap';
 import constants from '../../../global/constants'
 
 
-const ControllerButton = ({debtInfo, debts, index, detail, setDebt, setDetail}) => {
+const ControllerButton = ({debtInfo, debts, detail, setDebt, setDetail, members}) => {
   const [editingShow, setEditingShow] = useState(false);
   return (
     <div className="blog__controller">
@@ -14,8 +14,8 @@ const ControllerButton = ({debtInfo, debts, index, detail, setDebt, setDetail}) 
         <EditingWindow /** 編輯視窗 */
           debtInfo={debtInfo}
           debts={debts}
-          index={index}
           detail={detail}
+          members = {members}
           setDebt={setDebt}
           setDetail={setDetail}
           show={editingShow}
@@ -27,7 +27,7 @@ const ControllerButton = ({debtInfo, debts, index, detail, setDebt, setDetail}) 
 }
 
 
-const EditingWindow = ({ debtInfo, debts, index, detail, setDebt, setDetail, onHide, show, state}) => {
+const EditingWindow = ({ debtInfo, debts, detail, members, setDebt, setDetail, onHide, show, state}) => {
   console.log('in!!!');
   const value = {}
   detail.forEach((ele)=>{value[ele.id]=ele}) //本筆detail的初始值
