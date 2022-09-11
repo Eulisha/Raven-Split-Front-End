@@ -1,14 +1,15 @@
+
 const DebtList = ({ id, date, title, total, isOwned, lender, ownAmount, switchExtend, deleteData }) => {
 
-  function clickExtend(e){
-    console.log('clicked:', e.target.id);
+  //  切換detail開闔
+  const clickExtend = (e)=>{
     const id = e.target.id
     switchExtend((prev)=>{
-        console.log('prev:  ',prev);
         return {[id]:!prev[id]}
       })
   }
-  function deleteItem() {
+  //刪除debt列
+  const deleteItem = ()=>{
     deleteData(function(prev) {
       return prev.filter(item => item.id !== id)
     })
@@ -26,8 +27,8 @@ const DebtList = ({ id, date, title, total, isOwned, lender, ownAmount, switchEx
         {`${isOwned ? 'You Paid':'You Own'} ${ownAmount}`}
         </li>
       </div>
-      <button id={id} onClick={clickExtend} className="remove">V</button>
-      <button onClick={deleteItem} className="remove">刪除</button>
+      <button id={id} onClick={clickExtend}>V</button>
+      <button onClick={deleteItem}>刪除</button>
     </div>
   );
 };

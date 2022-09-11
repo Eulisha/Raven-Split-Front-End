@@ -1,35 +1,36 @@
+import axios from "axios"
 import { useState, useEffect } from "react";
 import constants from "../../../global/constants";
 import DetailList from "./DetailList";
 import Edit from './Edit';
 
-async function fetchDetail(setDetail, id) {
-  // console.log('i am id:  ',id);
-  const res = await fetch(`${constants.API_GET_DEBT_DETAILS}${id}`)
-  const { data } = await res.json()
-  console.log('detail: ', data);
-  setDetail(data)
-  localStorage.setItem(`detail_${id}`, JSON.stringify(data))
-}
-
-const Details  = ({id, debtInfo, debts, index, extend, setDebt})=>{
-  const [detail, setDetail] = useState([]);
+const Details  = ({id, debtInfo, debts, members, extend, setDebt})=>{
+  const [details, setDetail] = useState([]);
   
   useEffect(() => {
     if (extend[id]){
-    fetchDetail(setDetail, id)
+      async function fetchDetail(id) {
+        // console.log('i am id:  ',id);
+        const {data} = await axios(`${constants.API_GET_DEBT_DETAILS}${id}`)
+        console.log('fetch data details: ', data);
+        setDetail(data.data)
+      }
+    fetchDetail(id)
   }
   }, [extend])
+  console.log('set details: ', details);
 
   return (
     <div>
       <Edit.ControllerButton 
         debtInfo={debtInfo} 
         debts={debts}
-        index={index}
-        detail={detail}
-        setDetail={setDetail}/>
-      {detail.map((item) => {
+        details={details}
+        members = {members}
+        setDetail={setDetail}
+        setDebt={setDebt}
+      />
+      {details.map((item) => {
         const { id, borrower, amount} = item
         return (
             <DetailList

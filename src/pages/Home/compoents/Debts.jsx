@@ -8,29 +8,27 @@ import Edit from './Edit';
 
 const Debts = ({members}) => {
   const [debts, setDebt] = useState([]);
-  const [extend, setExtend] = useState({})
-  const [editingShow, setEditingShow] = useState(false);
+  const [extend, setExtend] = useState(false)
 
-  //要資料
+  useEffect(() => {
+    async function fetchData() {
+      // const res = 
+      const  {data}  = await axios(constants.API_GET_DEBTS)
+      console.log('fetch data debts:',data);
+      setDebt(data.data)
+    }
+    fetchData()
+  }, [])
+  console.log('set debts: ', debts);
 
-useEffect(() => {
-  async function fetchData() {
-    // const res = 
-    const  res  = await axios(constants.API_GET_DEBTS)
-    console.log('useEffect data:',res.data);
-    setDebt(res.data.data)
-  }
-  fetchData()
-}, [])
   return (
     <div className="list">
       <Edit.ControllerButton 
         debts={debts}
-        members = {members}
+        members={members}
         setDebt={setDebt}
       />
       {debts.map((item) => {
-        // setExtendDefault(item.id)
         const { id, date, title, total, isOwned, lender, ownAmount} = item;
         return (
           <div key={id}>
@@ -49,7 +47,9 @@ useEffect(() => {
             id={id}
             debtInfo={item}
             debts={debts}
+            members = {members}
             extend={extend}
+            setDebt={setDebt}
           />
           </div>
         );

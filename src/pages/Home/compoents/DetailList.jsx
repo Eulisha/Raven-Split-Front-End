@@ -1,5 +1,4 @@
 const DetailList = ({ id, isOwned, borrower, amount }) => {
-  console.log(id);
   return (
     <div key={id} className="item">
       <div>

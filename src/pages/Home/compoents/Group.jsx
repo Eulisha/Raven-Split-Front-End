@@ -7,12 +7,10 @@ import Debts from "./Debts"
 const  Group = () =>{
   const [members, setMembers] = useState([])
   useEffect(()=>{
-    console.log('effect');
     const fetchMebers = async(id)=>{
-      console.log('fetch');
-        const res = await axios(`${constants.API_GET_GROUP_MEMBERS}${id}`)
-        console.log(res.data);
-        setMembers(res.data.data)
+        const {data} = await axios(`${constants.API_GET_GROUP_MEMBERS}${id}`)
+        console.log('fetch data group-members:  ', data);
+        setMembers(data.data)
     }
     fetchMebers(1)
   },[]) 
@@ -20,7 +18,6 @@ const  Group = () =>{
     <div>成員列表
       <ul>
         {members.map((item)=>{
-          console.log(item);
           return <li key={item.uid}>{item.name}</li>
         })}
       </ul>
