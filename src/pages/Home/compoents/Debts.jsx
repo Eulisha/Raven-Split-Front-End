@@ -6,7 +6,7 @@ import DebtList from './DebtList';
 import Edit from './Edit';
 
 
-const Debts = ({members}) => {
+const Debts = ({members, gid}) => {
   const [debts, setDebt] = useState([]);
   const [extend, setExtend] = useState(false)
 

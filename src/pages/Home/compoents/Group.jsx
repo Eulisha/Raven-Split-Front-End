@@ -1,8 +1,9 @@
 import axios from "axios"
 import { useState,useEffect } from "react"
 import constants from "../../../global/constants"
+import Balance from "./Balance"
 import Debts from "./Debts"
-
+let gid = 1 //暫時寫死
 
 const  Group = () =>{
   const [members, setMembers] = useState([])
@@ -22,7 +23,11 @@ const  Group = () =>{
         })}
       </ul>
       <Debts 
+        gid = {gid}
         members = {members}
+      />
+      <Balance 
+        gid = {gid}
       />
     </div>
 
