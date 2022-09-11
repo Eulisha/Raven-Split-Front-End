@@ -6,16 +6,16 @@ import Edit from './Edit';
 
 const Details  = ({id, debtInfo, debts, members, extend, setDebt})=>{
   const [details, setDetail] = useState([]);
+  const debtId = debtInfo.id
   
   useEffect(() => {
-    if (extend[id]){
-      async function fetchDetail(id) {
-        // console.log('i am id:  ',id);
-        const {data} = await axios(`${constants.API_GET_DEBT_DETAILS}${id}`)
+    if (extend[debtId]){
+      async function fetchDetail(debtId) {
+        const {data} = await axios(`${constants.API_GET_DEBT_DETAILS}${debtId}`)
         console.log('fetch data details: ', data);
         setDetail(data.data)
       }
-    fetchDetail(id)
+    fetchDetail(debtId)
   }
   }, [extend])
   console.log('set details: ', details);

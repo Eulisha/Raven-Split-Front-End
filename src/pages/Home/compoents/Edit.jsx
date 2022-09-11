@@ -10,7 +10,7 @@ const ControllerButton = ({debtInfo, debts, details, setDebt, setDetail, members
   return (
     <div className="blog__controller">
       <Button variant="outline-success" onClick={() => setEditingShow(true)} >修改</Button>
-      <Button variant="outline-danger">刪除</Button>
+      {/* <Button variant="outline-danger">刪除</Button> */}
       {editingShow &&
         <EditingWindow /** 編輯視窗 */
           debtInfo={debtInfo}
