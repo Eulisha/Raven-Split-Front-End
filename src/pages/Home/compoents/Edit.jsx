@@ -77,8 +77,8 @@ const EditingWindow = ({ gid, debtInfo, debts, details, members, setDebt, setDet
   };
 
   //更新要給debt和detail的資料
-  const [updatedDebt, setUpdatedDebt] = useState([]);
-  const [updatedDetail, setUpdatedDetail] = useState([]);
+  const [updatedDebt, setUpdatedDebt] = useState(debts);
+  const [updatedDetail, setUpdatedDetail] = useState(details);
 
   //更新debt和detail表
   useEffect(() => {
@@ -117,16 +117,8 @@ const EditingWindow = ({ gid, debtInfo, debts, details, members, setDebt, setDet
       });
       console.log('splitValue:', updatedDetail);
       let result;
-      if (details) {
-        //Edit Debt
-        const data = { debt_Id: debtInfo.id, debt_main_old: debtInfo, debt_detail_old: details, debt_main_new: splitInfo, debt_detail_new: updatedDetail };
-        result = await axios.put(constants.API_UPDATE_DEBT, data);
-      } else {
-        //Add Debt
-        console.log('data for fetch: ', splitInfo, updatedDetail);
-        const data = { debt_main: splitInfo, debt_detail: updatedDetail };
-        result = await axios.post(constants.API_POST_DEBT, data);
-      }
+      const data = { debt_Id: debtInfo.id, debt_main_old: debtInfo, debt_detail_old: details, debt_main_new: splitInfo, debt_detail_new: updatedDetail };
+      result = await axios.put(constants.API_UPDATE_DEBT, data);
       console.log(result.data);
 
       //更新state
@@ -135,24 +127,14 @@ const EditingWindow = ({ gid, debtInfo, debts, details, members, setDebt, setDet
         setInfoValue(splitInfo);
         console.log('new splitInfo: ', splitInfo);
         let updatedDebt;
-        if (details) {
-          updatedDebt = debts.map((debt) => {
-            console.log('debt: ', debt);
-            return debt.id === debtInfo.id ? splitInfo : debt;
-          });
-        } else {
-          debts.splice(0, 0, splitInfo);
-          updatedDebt = debts;
-        }
+        updatedDebt = debts.map((debt) => {
+          console.log('debt: ', debt);
+          return debt.id === debtInfo.id ? splitInfo : debt;
+        });
         console.log('updateDebt:', updatedDebt);
         setUpdatedDebt(updatedDebt);
         setUpdatedDetail(updatedDetail);
-        // setDebt(updatedDebt);
-        // if (details) {
-        //   setDetail(updatedDetail);
-        // }
       }
-      // setSummarize()
     } catch (err) {
       console.log(err);
     }
