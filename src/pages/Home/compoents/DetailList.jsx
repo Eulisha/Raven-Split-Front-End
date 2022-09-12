@@ -1,13 +1,8 @@
 const DetailList = ({ id, isOwned, borrower, amount }) => {
   return (
     <div key={id} className="item">
-      <div>
-        <li>
-        {`${borrower}${isOwned ? 'paid':'owns'} ${amount}`}        
-        </li>
-      </div>
+      <li>{`${borrower}${isOwned ? 'paid' : 'owns'} ${amount}`}</li>
     </div>
-    
   );
 };
-export default DetailList
+export default DetailList;

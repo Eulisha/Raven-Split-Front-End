@@ -3,17 +3,16 @@ import { useState, useEffect } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import constants from '../../../global/constants';
 
-const EditButton = ({ gid, debtInfo, debts, details, setDebt, setDetail, members }) => {
+const AddButton = ({ gid, debtInfo, debts, details, setDebt, setDetail, members }) => {
   const [editingShow, setEditingShow] = useState(false);
 
   return (
     <div className="blog__controller">
       <Button variant="outline-success" onClick={() => setEditingShow(true)}>
-        修改
+        新增
       </Button>
-      {/* <Button variant="outline-danger">刪除</Button> */}
       {editingShow && (
-        <EditingWindow /** 編輯視窗 */
+        <AddingWindow /** 編輯視窗 */
           gid={gid}
           debtInfo={debtInfo}
           debts={debts}
@@ -30,7 +29,7 @@ const EditButton = ({ gid, debtInfo, debts, details, setDebt, setDetail, members
   );
 };
 
-const EditingWindow = ({ gid, debtInfo, debts, details, members, setDebt, setDetail, onHide, show, state }) => {
+const AddingWindow = ({ gid, debtInfo, debts, details, members, setDebt, setDetail, onHide, show, state }) => {
   console.log('Editing....');
   const oriDebt = {};
 
@@ -85,7 +84,9 @@ const EditingWindow = ({ gid, debtInfo, debts, details, members, setDebt, setDet
     setDebt(updatedDebt);
   }, [updatedDebt]);
   useEffect(() => {
-    setDetail(updatedDetail);
+    if (details) {
+      setDetail(updatedDetail);
+    }
   }, [updatedDetail]);
 
   //動態更新summarize總額與餘額
@@ -117,16 +118,10 @@ const EditingWindow = ({ gid, debtInfo, debts, details, members, setDebt, setDet
       });
       console.log('splitValue:', updatedDetail);
       let result;
-      if (details) {
-        //Edit Debt
-        const data = { debt_Id: debtInfo.id, debt_main_old: debtInfo, debt_detail_old: details, debt_main_new: splitInfo, debt_detail_new: updatedDetail };
-        result = await axios.put(constants.API_UPDATE_DEBT, data);
-      } else {
-        //Add Debt
-        console.log('data for fetch: ', splitInfo, updatedDetail);
-        const data = { debt_main: splitInfo, debt_detail: updatedDetail };
-        result = await axios.post(constants.API_POST_DEBT, data);
-      }
+      console.log('data for fetch: ', splitInfo, updatedDetail);
+      const data = { debt_main: splitInfo, debt_detail: updatedDetail };
+      result = await axios.post(constants.API_POST_DEBT, data);
+
       console.log(result.data);
 
       //更新state
@@ -224,4 +219,4 @@ const EditingWindow = ({ gid, debtInfo, debts, details, members, setDebt, setDet
   );
 };
 
-export default { EditingWindow, EditButton };
+export default { AddingWindow, AddButton };
