@@ -3,9 +3,9 @@ import Group from './compoents/Group';
 
 const App = () => {
   return (
-    <div>
+    <body>
       <Group />
-    </div>
+    </body>
   );
 };
 export default App;

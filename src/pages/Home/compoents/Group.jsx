@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import constants from '../../../global/constants';
 import Balance from './Balance';
 import Debts from './Debts';
-let gid = 82; //暫時寫死
+let gid = 123; //暫時寫死
 
 const Group = () => {
   const [members, setMembers] = useState([]);
@@ -18,13 +18,15 @@ const Group = () => {
     fetchMembers(gid);
   }, []);
   return (
-    <div>
-      成員列表
-      <ul>
-        {members.map((item) => {
-          return <li key={item.uid}>{item.name}</li>;
-        })}
-      </ul>
+    <div id="main">
+      <div id="group">
+        {gid} 成員列表
+        <ul>
+          {members.map((item) => {
+            return <li key={item.uid}>{item.name}</li>;
+          })}
+        </ul>
+      </div>
       <Debts
         key="debts"
         id="debts"

@@ -3,7 +3,8 @@ import { useState, useEffect } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import constants from '../../../global/constants';
 
-const SettleButton = ({ setIsSettle, debtInfo, debts, details, setDebt, setDetail, members }) => {
+// const SettleButton = ({ gid, setIsSettle, debtInfo,
+const SettleButton = ({ gid, setIsSettle }) => {
   const [editingShow, setEditingShow] = useState(false);
 
   return (
@@ -13,13 +14,14 @@ const SettleButton = ({ setIsSettle, debtInfo, debts, details, setDebt, setDetai
       </Button>
       {editingShow && (
         <SettleWindow
-          debtInfo={debtInfo}
-          debts={debts}
-          details={details}
-          members={members}
-          setDebt={setDebt}
-          setDetail={setDetail}
+          gid={gid}
           setIsSettle={setIsSettle}
+          // debtInfo={debtInfo}
+          // debts={debts}
+          // details={details}
+          // members={members}
+          // setDebt={setDebt}
+          // setDetail={setDetail}
           show={editingShow}
           onHide={() => setEditingShow(false)}
           state="editing"
@@ -29,9 +31,8 @@ const SettleButton = ({ setIsSettle, debtInfo, debts, details, setDebt, setDetai
   );
 };
 
-const SettleWindow = ({ setIsSettle, onHide, show, state }) => {
+const SettleWindow = ({ gid, setIsSettle, onHide, show, state }) => {
   console.log('Editing....');
-  let gid = 76; //暫時寫死
   const [settle, setSettle] = useState([]);
 
   useEffect(() => {
@@ -73,7 +74,7 @@ const SettleWindow = ({ setIsSettle, onHide, show, state }) => {
   return (
     <Modal size="lg" aria-labelledby="contained-modal-title-vcenter" centered {...{ onHide, show }}>
       <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">{state === 'editing' ? '你正在編輯文章' : '你正在新增文章'}</Modal.Title>
+        <Modal.Title id="contained-modal-title-vcenter">{state === 'editing' ? '你正在結帳' : '你正在新增文章'}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <div>

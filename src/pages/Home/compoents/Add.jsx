@@ -29,7 +29,7 @@ const AddButton = ({ gid, debtInfo, debts, details, setDebt, setDetail, members 
   );
 };
 
-const AddingWindow = ({ gid, debtInfo, debts, details, members, setDebt, setDetail, onHide, show, state }) => {
+const AddingWindow = ({ gid, debtInfo, debts, members, setDebt, onHide, show, state }) => {
   console.log('Editing....');
   const oriDebt = {};
 
@@ -38,21 +38,8 @@ const AddingWindow = ({ gid, debtInfo, debts, details, members, setDebt, setDeta
   );
   //整理本筆帳的初始值
   const oriSummarize = { total: splitInfo ? splitInfo.total : 0, sum: 0 };
-  // console.log(members, details, debts);
   members.map((member) => {
-    if (details) {
-      details.map((detail) => {
-        if (member.uid === detail.borrower) {
-          oriDebt[member.uid] = { borrower: detail.borrower, name: member.name, amount: detail.amount };
-          oriSummarize.sum += detail.amount;
-        } else {
-          //本來沒有欠債關係
-          oriDebt[member.uid] = { borrower: member.uid, name: member.name, amount: null };
-        }
-      });
-    } else {
-      oriDebt[member.uid] = { borrower: member.uid, name: member.name, amount: null };
-    }
+    oriDebt[member.uid] = { borrower: member.uid, name: member.name, amount: null };
   });
   const [splitValue, setSplitValue] = useState(oriDebt);
   const [currSummarize, setSummarize] = useState(oriSummarize);
@@ -76,18 +63,12 @@ const AddingWindow = ({ gid, debtInfo, debts, details, members, setDebt, setDeta
   };
 
   //更新要給debt和detail的資料
-  const [updatedDebt, setUpdatedDebt] = useState([]);
-  const [updatedDetail, setUpdatedDetail] = useState([]);
+  // const [updatedDebt, setUpdatedDebt] = useState([debts]);
 
   //更新debt和detail表
-  useEffect(() => {
-    setDebt(updatedDebt);
-  }, [updatedDebt]);
-  useEffect(() => {
-    if (details) {
-      setDetail(updatedDetail);
-    }
-  }, [updatedDetail]);
+  // useEffect(() => {
+  //   setDebt(updatedDebt);
+  // }, [updatedDebt]);
 
   //動態更新summarize總額與餘額
   useEffect(() => {
@@ -129,34 +110,41 @@ const AddingWindow = ({ gid, debtInfo, debts, details, members, setDebt, setDeta
         splitInfo.id = result.data.data.debtId;
         setInfoValue(splitInfo);
         console.log('new splitInfo: ', splitInfo);
-        let updatedDebt;
-        if (details) {
-          updatedDebt = debts.map((debt) => {
-            console.log('debt: ', debt);
-            return debt.id === debtInfo.id ? splitInfo : debt;
-          });
-        } else {
-          debts.splice(0, 0, splitInfo);
-          updatedDebt = debts;
-        }
-        console.log('updateDebt:', updatedDebt);
-        setUpdatedDebt(updatedDebt);
-        setUpdatedDetail(updatedDetail);
-        // setDebt(updatedDebt);
-        // if (details) {
-        //   setDetail(updatedDetail);
-        // }
+        // let updatedDebt = { ...splitInfo, isOwned: false };
+        // console.log('updateDebt:', updatedDebt);
+        // let updatedDebt = {
+        //   id: 486,
+        //   gid: 82,
+        //   date: '2022-09-11',
+        //   title: '是不是要這樣',
+        //   total: 100,
+        //   isOwned: false,
+        //   lender: 1,
+        //   split_method: '2',
+        //   ownAmount: 50,
+        // };
+        // setUpdatedDebt(updatedDebt);
+        // setDebt((prev)=>{{...prev, updatedDebt}});
+        setDebt((prev) => {
+          return prev;
+          // console.log('prev', prev);
+          // console.log('update', updatedDebt);
+          // prev.push(updatedDebt);
+          // console.log(prev);
+        });
+        // setExtend((prev) => {
+        //   return { [id]: !prev[id] }; //true-false交換
+        // });
       }
-      // setSummarize()
     } catch (err) {
       console.log(err);
     }
   };
 
   return (
-    <Modal size="lg" aria-labelledby="contained-modal-title-vcenter" centered {...{ onHide, show }}>
+    <Modal className="window" size="lg" aria-labelledby="contained-modal-title-vcenter" centered {...{ onHide, show }}>
       <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">{state === 'editing' ? '你正在編輯文章' : '你正在新增文章'}</Modal.Title>
+        <Modal.Title id="contained-modal-title-vcenter">{state === 'editing' ? '你正在新增' : '你正在新增文章'}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <div>

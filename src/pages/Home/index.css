@@ -1,0 +1,26 @@
+
+*{
+  box-sizing: border-box;
+  font-family: Noto Sans TC;
+  font-style: normal;
+  font-weight: 400;
+}
+
+
+#main, #top-button{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content:center;
+  /* flex-direction: column; */
+}
+#group, #debts, #balance, .window{
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  margin: 10px;
+  padding: 20px;
+  border: solid 1px #979797;
+}
+#debts{
+  width: 400px;
+}

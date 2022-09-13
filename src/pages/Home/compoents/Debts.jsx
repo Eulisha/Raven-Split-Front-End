@@ -22,9 +22,11 @@ const Debts = ({ members, gid, isSettle, setIsSettle }) => {
   }, [isSettle]);
 
   return (
-    <div className="list">
-      <Add.AddButton gid={gid} debts={debts} members={members} setDebt={setDebt} />
-      <Settle.SettleButton key="settle-button" gid={gid} setIsSettle={setIsSettle} />
+    <div id="debts">
+      <div id="top-button">
+        <Add.AddButton gid={gid} debts={debts} members={members} setDebt={setDebt} />
+        <Settle.SettleButton key="settle-button" gid={gid} setIsSettle={setIsSettle} />
+      </div>
       {debts.map((item) => {
         return (
           <div key={item.id}>

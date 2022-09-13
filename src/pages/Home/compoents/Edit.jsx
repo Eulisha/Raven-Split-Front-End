@@ -11,7 +11,6 @@ const EditButton = ({ gid, debtInfo, debts, details, setDebt, setDetail, members
       <Button variant="outline-success" onClick={() => setEditingShow(true)}>
         修改
       </Button>
-      {/* <Button variant="outline-danger">刪除</Button> */}
       {editingShow && (
         <EditingWindow /** 編輯視窗 */
           gid={gid}
@@ -39,7 +38,6 @@ const EditingWindow = ({ gid, debtInfo, debts, details, members, setDebt, setDet
   );
   //整理本筆帳的初始值
   const oriSummarize = { total: splitInfo ? splitInfo.total : 0, sum: 0 };
-  // console.log(members, details, debts);
   members.map((member) => {
     if (details) {
       details.map((detail) => {
@@ -141,9 +139,9 @@ const EditingWindow = ({ gid, debtInfo, debts, details, members, setDebt, setDet
   };
 
   return (
-    <Modal size="lg" aria-labelledby="contained-modal-title-vcenter" centered {...{ onHide, show }}>
+    <Modal className="window" size="lg" aria-labelledby="contained-modal-title-vcenter" centered {...{ onHide, show }}>
       <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">{state === 'editing' ? '你正在編輯文章' : '你正在新增文章'}</Modal.Title>
+        <Modal.Title id="contained-modal-title-vcenter">{state === 'editing' ? '你正在編輯' : '你正在新增'}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <div>

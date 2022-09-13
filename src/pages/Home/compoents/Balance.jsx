@@ -19,7 +19,7 @@ const Balance = ({ gid, isSettle }) => {
   }, [isSettle]);
 
   return (
-    <div>
+    <div id="balance">
       {balances.map((balance) => {
         return (
           <div key={balance.id}>

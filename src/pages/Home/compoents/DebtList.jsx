@@ -43,7 +43,7 @@ const DebtList = ({ debtInfo, setExtend, setDebt, isSettle }) => {
   };
 
   return (
-    <div className="item">
+    <div id="debt">
       <div>
         <li>
           {`日期: ${date} `}
