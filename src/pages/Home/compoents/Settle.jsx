@@ -74,7 +74,7 @@ const SettleWindow = ({ gid, setIsSettle, onHide, show, state }) => {
   return (
     <Modal size="lg" aria-labelledby="contained-modal-title-vcenter" centered {...{ onHide, show }}>
       <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">{state === 'editing' ? '你正在結帳' : '你正在新增文章'}</Modal.Title>
+        <Modal.Title id="contained-modal-title-vcenter">{state === 'editing' ? '還錢囉！' : '你正在新增文章'}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <div>

@@ -33,29 +33,34 @@ const AddingWindow = ({ gid, debtInfo, debts, members, setDebt, onHide, show, st
   console.log('Editing....');
   const oriDebt = {};
 
-  const [splitInfo, setInfoValue] = useState(
-    debtInfo ? debtInfo : { gid, date: `${new Date(Date.now()).getFullYear()}-${new Date(Date.now()).getMonth() + 1}-${new Date(Date.now()).getDate()}` }
-  );
-  //整理本筆帳的初始值
-  const oriSummarize = { total: splitInfo ? splitInfo.total : 0, sum: 0 };
-  members.map((member) => {
+  //帳的初始值
+  const initialInfo = { gid, date: `${new Date(Date.now()).getFullYear()}-${new Date(Date.now()).getMonth() + 1}-${new Date(Date.now()).getDate()}` };
+  const oriSummarize = { total: 0, sum: 0 };
+
+  //設定state
+  const [info, setInfo] = useState(initialInfo);
+  const [isSave, setIsSave] = useState(false);
+
+  //整理成快速查找object
+  group_users = [];
+  oriDebt = members.map((member) => {
     oriDebt[member.uid] = { borrower: member.uid, name: member.name, amount: null };
   });
   const [splitValue, setSplitValue] = useState(oriDebt);
   const [currSummarize, setSummarize] = useState(oriSummarize);
 
-  console.log('set splitInfo: ', splitInfo);
+  console.log('set info: ', info);
   console.log('set splitValue: ', splitValue);
   console.log('set splitsummarize: ', currSummarize);
 
   //更新表單輸入
   const handleDebtInfo = (prop) => (e) => {
     if (e.target.name === 'total' || e.target.name === 'amount') {
-      setInfoValue({ ...splitInfo, [prop]: Number(e.target.value) });
+      setInfo({ ...info, [prop]: Number(e.target.value) });
     } else {
-      setInfoValue({ ...splitInfo, [prop]: e.target.value });
+      setInfo({ ...info, [prop]: e.target.value });
     }
-    console.log('updated splitInfo:', splitInfo);
+    console.log('updated info:', info);
   };
   const handleSplitValue = (prop) => (e) => {
     setSplitValue({ ...splitValue, [Number(prop)]: { borrower: splitValue[Number(prop)].borrower, name: splitValue[Number(prop)].name, amount: Number(e.target.value) } });
@@ -73,10 +78,10 @@ const AddingWindow = ({ gid, debtInfo, debts, members, setDebt, onHide, show, st
   //動態更新summarize總額與餘額
   useEffect(() => {
     const handleSummarize = (prop) => {
-      setSummarize({ ...currSummarize, [prop]: splitInfo.total });
+      setSummarize({ ...currSummarize, [prop]: info.total });
     };
     handleSummarize('total');
-  }, [splitInfo]);
+  }, [info]);
   useEffect(() => {
     const currSum = Object.values(splitValue).reduce((acc, curr) => {
       return acc + curr.amount;
@@ -99,18 +104,18 @@ const AddingWindow = ({ gid, debtInfo, debts, members, setDebt, onHide, show, st
       });
       console.log('splitValue:', updatedDetail);
       let result;
-      console.log('data for fetch: ', splitInfo, updatedDetail);
-      const data = { debt_main: splitInfo, debt_detail: updatedDetail };
+      console.log('data for fetch: ', info, updatedDetail);
+      const data = { debt_main: info, debt_detail: updatedDetail };
       result = await axios.post(constants.API_POST_DEBT, data);
 
       console.log(result.data);
 
       //更新state
       if (result.status === 200) {
-        splitInfo.id = result.data.data.debtId;
-        setInfoValue(splitInfo);
-        console.log('new splitInfo: ', splitInfo);
-        // let updatedDebt = { ...splitInfo, isOwned: false };
+        info.id = result.data.data.debtId;
+        setInfo(info);
+        console.log('new info: ', info);
+        // let updatedDebt = { ...info, isOwned: false };
         // console.log('updateDebt:', updatedDebt);
         // let updatedDebt = {
         //   id: 486,
@@ -153,7 +158,7 @@ const AddingWindow = ({ gid, debtInfo, debts, members, setDebt, onHide, show, st
           <div>
             <ul>
               <li>
-                Date: <input type="text" defaultValue={debtInfo ? debtInfo.date : splitInfo.date} onChange={handleDebtInfo('date')}></input>
+                Date: <input type="text" defaultValue={debtInfo ? debtInfo.date : info.date} onChange={handleDebtInfo('date')}></input>
               </li>
               <li>
                 Title: <input type="text" defaultValue={debtInfo ? debtInfo.title : ''} onChange={handleDebtInfo('title')}></input>
