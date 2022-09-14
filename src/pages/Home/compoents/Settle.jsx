@@ -19,7 +19,7 @@ const SettleButton = ({ gid, setIsSettle }) => {
           // debtInfo={debtInfo}
           // debts={debts}
           // details={details}
-          // members={members}
+          // groupUsers={groupUsers}
           // setDebt={setDebt}
           // setDetail={setDetail}
           show={editingShow}

@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import constants from '../../../global/constants';
 
-const ControllerButton = ({ gid, debtInfo, debts, details, setDebt, setDetail, members }) => {
+const ControllerButton = ({ gid, debtInfo, debts, details, setDebt, setDetail, groupUsers }) => {
   const [editingShow, setEditingShow] = useState(false);
 
   return (
@@ -16,7 +16,7 @@ const ControllerButton = ({ gid, debtInfo, debts, details, setDebt, setDetail, m
           debtInfo={debtInfo}
           debts={debts}
           details={details}
-          members={members}
+          groupUsers={groupUsers}
           setDebt={setDebt}
           setDetail={setDetail}
           show={editingShow}
@@ -28,7 +28,7 @@ const ControllerButton = ({ gid, debtInfo, debts, details, setDebt, setDetail, m
   );
 };
 
-const EditingWindow = ({ gid, debtInfo, debts, details, members, setDebt, setDetail, onHide, show, state }) => {
+const EditingWindow = ({ gid, debtInfo, debts, details, groupUsers, setDebt, setDetail, onHide, show, state }) => {
   console.log('Editing....');
   const oriDebt = {};
 
@@ -37,7 +37,7 @@ const EditingWindow = ({ gid, debtInfo, debts, details, members, setDebt, setDet
   );
   //整理本筆帳的初始值
   const oriBalance = { total: splitInfo ? splitInfo.total : 0, sum: 0 };
-  members.map((member) => {
+  groupUsers.map((member) => {
     oriDebt[member.uid] = { borrower: member.uid, name: member.name, amount: null };
   });
   const [splitValue, setSplitValue] = useState(oriDebt);

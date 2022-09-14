@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import constants from '../../../global/constants';
 
-const EditButton = ({ gid, debtInfo, debts, details, setDebt, setDetail, members }) => {
+const EditButton = ({ gid, debtInfo, debts, details, setDebt, setDetail, groupUsers }) => {
   const [editingShow, setEditingShow] = useState(false);
 
   return (
@@ -17,7 +17,7 @@ const EditButton = ({ gid, debtInfo, debts, details, setDebt, setDetail, members
           debtInfo={debtInfo}
           debts={debts}
           details={details}
-          members={members}
+          groupUsers={groupUsers}
           setDebt={setDebt}
           setDetail={setDetail}
           show={editingShow}
@@ -29,7 +29,7 @@ const EditButton = ({ gid, debtInfo, debts, details, setDebt, setDetail, members
   );
 };
 
-const EditingWindow = ({ gid, debtInfo, debts, details, members, setDebt, setDetail, onHide, show, state }) => {
+const EditingWindow = ({ gid, debtInfo, debts, details, groupUsers, setDebt, setDetail, onHide, show, state }) => {
   console.log('Editing....');
   const oriDebt = {};
 
@@ -38,7 +38,7 @@ const EditingWindow = ({ gid, debtInfo, debts, details, members, setDebt, setDet
   );
   //整理本筆帳的初始值
   const oriSummarize = { total: splitInfo ? splitInfo.total : 0, sum: 0 };
-  members.map((member) => {
+  groupUsers.map((member) => {
     if (details) {
       details.map((detail) => {
         if (member.uid === detail.borrower) {
@@ -65,7 +65,7 @@ const EditingWindow = ({ gid, debtInfo, debts, details, members, setDebt, setDet
     if (e.target.name === 'total' || e.target.name === 'amount') {
       setInfoValue({ ...splitInfo, [prop]: Number(e.target.value) });
     } else {
-      setInfoValue({ ...splitInfo, [prop]: e.target.value });
+      setInfoValue({ ...splitInfo, [prop]: e.target.value }); //TODO:這樣本來沒有的key可以直接set進去嗎？
     }
     console.log('updated splitInfo:', splitInfo);
   };

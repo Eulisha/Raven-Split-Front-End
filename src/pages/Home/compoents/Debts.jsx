@@ -6,32 +6,43 @@ import DebtList from './DebtList';
 import Settle from './Settle';
 import Add from './Add';
 
-const Debts = ({ members, gid, isSettle, setIsSettle }) => {
+const Debts = ({ currUserId, gid, groupUsers, groupUserNames, isSettle, setIsSettle }) => {
   const [debts, setDebt] = useState([]);
-  const [extend, setExtend] = useState(false);
+  const [extend, setExtend] = useState({}); //FIXME:應該要是一個陣列記錄所有的extend state
 
+  //撈debts
   useEffect(() => {
-    const fetchData = async () => {
-      // const res =
-      const { data } = await axios(`${constants.API_GET_DEBTS}?group=${gid}`);
-      console.log('fetch data debts:', data);
-      setDebt(data.data);
-      console.log('set debts: ', data.data);
+    const fetchDebts = async () => {
+      try {
+        const result = await axios(`${constants.API_GET_DEBTS}?group=${gid}`); //FIXME:要改成paramas
+        if (result.status !== 200) {
+          console.log(result.error);
+        }
+        setDebt(result.data.data);
+        console.log('debts set: ', result.data.data);
+      } catch (err) {
+        console.log(err);
+      }
     };
-    fetchData();
+    fetchDebts();
+  }, []);
+
+  //控制細目開合
+  useEffect(() => {
+    setExtend(false);
   }, [isSettle]);
 
   return (
     <div id="debts">
-      <div id="top-button">
-        <Add.AddButton gid={gid} debts={debts} members={members} setDebt={setDebt} />
-        <Settle.SettleButton key="settle-button" gid={gid} setIsSettle={setIsSettle} />
+      <div>
+        <Add.AddButton currUserId={currUserId} gid={gid} groupUsers={groupUsers} groupUserNames={groupUserNames} setDebt={setDebt} />
+        <Settle.SettleButton key="settle-button" gid={gid} groupUsers={groupUsers} groupUserNames={groupUserNames} setIsSettle={setIsSettle} />
       </div>
-      {debts.map((item) => {
+      {debts.map((debt) => {
         return (
-          <div key={item.id}>
-            <DebtList className="debt-list" debtInfo={item} setDebt={setDebt} setExtend={setExtend} isSettle={isSettle} />
-            <Details className="details" gid={gid} debtInfo={item} debts={debts} members={members} extend={extend} setDebt={setDebt} />
+          <div key={debt.id}>
+            <DebtList className="debt-list" groupUserNames={groupUserNames} debtInfo={debt} setDebt={setDebt} setExtend={setExtend} />
+            <Details className="details" gid={gid} groupUsers={groupUsers} groupUserNames={groupUserNames} debts={debts} debtInfo={debt} extend={extend} setDebt={setDebt} />
           </div>
         );
       })}

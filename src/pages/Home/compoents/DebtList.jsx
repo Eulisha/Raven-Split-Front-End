@@ -1,30 +1,30 @@
 import axios from 'axios';
-import { useEffect } from 'react';
 import constants from '../../../global/constants';
 
-const DebtList = ({ debtInfo, setExtend, setDebt, isSettle }) => {
-  const { date, title, total, isOwned, lender, ownAmount } = debtInfo;
+const DebtList = ({ groupUserNames, debtInfo, setDebt, setExtend }) => {
+  const { date, title, total, lender, isOwned, ownAmount } = debtInfo;
   const debtId = debtInfo.id;
 
-  //  切換detail開闔
-  const extendDetail = (e) => {
-    const id = e.target.id;
-    setExtend((prev) => {
-      return { [id]: !prev[id] }; //true-false交換
+  //  切換detail開闔 FIXME:父層需要調整才會有用
+  const handleExtend = (e) => {
+    console.log('click');
+    setExtend(() => {
+      const debtId = Number(e.target.id);
+      let extendStatus = {};
+      extendStatus[debtId] = true;
+      console.log(extendStatus);
+      return extendStatus; //true-false交換
+      // return { [debtId]: !prev[debtId] }; //true-false交換
     });
   };
 
-  useEffect(() => {
-    setExtend(false);
-  }, [isSettle]);
-
   //刪除debt列
-  const deleteItem = async (e) => {
+  const handleDeleteDebt = async (e) => {
+    const debtId = Number(e.target.id);
     const confirm = prompt('被刪除的帳將無法復原，若真要刪除，請輸入「刪除」');
     if (confirm !== '刪除') {
       return alert(' 輸入錯誤，再考慮看看唄 ');
     }
-    const debtId = Number(e.target.id);
     try {
       const result = await axios.delete(`${constants.API_DELETE_DEBT}${debtId}`);
       console.log('fetch delete debt: ', result);
@@ -32,6 +32,7 @@ const DebtList = ({ debtInfo, setExtend, setDebt, isSettle }) => {
         console.log(result);
         return alert(' Something wrong ˊˋ Please try again..');
       }
+      //刪除成功，set debt
       setDebt((prev) => {
         return prev.filter((item) => item.id !== debtId);
       });
@@ -39,7 +40,6 @@ const DebtList = ({ debtInfo, setExtend, setDebt, isSettle }) => {
       console.log(err);
       return alert(' Something wrong ˊˋ Please try again..');
     }
-    // console.log(data);
   };
 
   return (
@@ -48,16 +48,15 @@ const DebtList = ({ debtInfo, setExtend, setDebt, isSettle }) => {
         <li>
           {`日期: ${date} `}
           {`項目: ${title} `}
-          {`$NT:${total} `}
-          {isOwned}
-          {`Paid By: ${lender}`}
-          {`${isOwned ? 'You Paid' : 'You Own'} ${ownAmount}`}
+          {`$NT: ${total} `}
+          {`Paid By: ${groupUserNames[lender]}`}
+          {`${isOwned ? 'You Paid' : 'You Own'} $NT: ${isOwned ? total - ownAmount : ownAmount}`}
         </li>
       </div>
-      <button id={debtId} onClick={extendDetail}>
+      <button id={debtId} onClick={handleExtend}>
         V
       </button>
-      <button id={debtId} onClick={deleteItem}>
+      <button id={debtId} onClick={handleDeleteDebt}>
         刪除
       </button>
     </div>

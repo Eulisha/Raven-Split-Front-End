@@ -3,39 +3,56 @@ import { useState, useEffect } from 'react';
 import constants from '../../../global/constants';
 import Balance from './Balance';
 import Debts from './Debts';
-let gid = 123; //暫時寫死
+const currUserId = 1; //FIXME:之後要用傳進來的
+let gid = 83; //暫時寫死
+// const groupUsers = [1, 2, 3, 4, 5]; //FIXME:之後要用傳進來的
+// const userNames = { 1: 'Euli', 2: 'Tim', 3: 'Adam', 4: 'Kelvin', 5: 'Ellie' }; //FIXME:之後要用傳進來的
 
 const Group = () => {
-  const [members, setMembers] = useState([]);
+  const [groupUsers, setGroupUsers] = useState([]);
+  const [groupUserNames, setGroupUserNames] = useState({}); //{1:Euli}
   const [isSettle, setIsSettle] = useState(false);
+
   useEffect(() => {
-    const fetchMembers = async (gid) => {
-      const { data } = await axios(`${constants.API_GET_GROUP_MEMBERS}${gid}`);
-      console.log('fetch data group-members:  ', data);
-      setMembers(data.data);
-      console.log('set members:  ', data.data);
+    const fetchgroupUsers = async (gid) => {
+      const { data } = await axios(`${constants.API_GET_GROUP_USERS}${gid}`);
+      console.log('fetch data group-groupUsers:  ', data);
+      const groupUsers = [];
+      const groupUserNames = [];
+      let userNames = {};
+      data.data.map((user) => {
+        groupUsers.push(user.uid);
+        userNames[user.uid] = user.name;
+      });
+      setGroupUsers(groupUsers);
+      setGroupUserNames(userNames);
+      console.log('groupUsers', groupUsers);
+      console.log('groupUserNames', groupUserNames);
     };
-    fetchMembers(gid);
+    fetchgroupUsers(gid);
   }, []);
+
   return (
     <div id="main">
       <div id="group">
         {gid} 成員列表
         <ul>
-          {members.map((item) => {
-            return <li key={item.uid}>{item.name}</li>;
+          {groupUsers.map((userId) => {
+            return <li key={userId}>{groupUserNames[userId]}</li>;
           })}
         </ul>
       </div>
       <Debts
         key="debts"
         id="debts"
+        currUserId={currUserId}
         gid={gid}
-        members={members}
+        groupUsers={groupUsers}
+        groupUserNames={groupUserNames}
         isSettle={isSettle} //傳給debt跟detail
         setIsSettle={setIsSettle} //要傳給settle頁
       />
-      <Balance key="balance" id="balance" gid={gid} isSettle={isSettle} />
+      <Balance key="balance" id="balance" currUserId={currUserId} gid={gid} groupUsers={groupUsers} groupUserNames={groupUserNames} x />
     </div>
   );
 };

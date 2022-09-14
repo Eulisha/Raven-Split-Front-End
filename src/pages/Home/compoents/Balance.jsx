@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import constants from '../../../global/constants';
 
-const Balance = ({ gid, isSettle }) => {
+const Balance = ({ gid, groupUserNames, isSettle }) => {
   const [balances, setBalance] = useState([]);
   useEffect(() => {
     const fetchBalance = async (gid) => {
@@ -21,13 +21,14 @@ const Balance = ({ gid, isSettle }) => {
   return (
     <div id="balance">
       {balances.map((balance) => {
-        return (
-          <div key={balance.id}>
-            <li>
-              {balance.borrower} 欠 {balance.lender} ${balance.amount}
-            </li>
-          </div>
-        );
+        if (balance.borrower !== balance.lender)
+          return (
+            <div key={balance.id}>
+              <li>
+                {groupUserNames[balance.borrower]} 欠 {groupUserNames[balance.lender]} ${balance.amount}
+              </li>
+            </div>
+          );
       })}
     </div>
   );
