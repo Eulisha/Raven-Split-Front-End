@@ -1,9 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import axios from 'axios';
 import constants from '../../../global/constants';
 
-const Balance = ({ gid, groupUserNames, isSettle }) => {
-  const [balances, setBalance] = useState([]);
+const Balance = ({ gid, groupUserNames, isSettle, balances, setBalance }) => {
   useEffect(() => {
     const fetchBalance = async (gid) => {
       try {

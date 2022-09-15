@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import constants from '../../../global/constants';
 
-const AddButton = ({ currUserId, gid, groupUsers, groupUserNames, debts, debtInfo, details, setDebt, setDetail }) => {
+const AddButton = ({ currUserId, gid, groupUsers, groupUserNames, debtInfo, details, setDebt, setDetail }) => {
   const [editingShow, setEditingShow] = useState(false);
   return (
     <div className="blog__controller">
@@ -16,7 +16,6 @@ const AddButton = ({ currUserId, gid, groupUsers, groupUserNames, debts, debtInf
           gid={gid}
           groupUsers={groupUsers}
           groupUserNames={groupUserNames}
-          debts={debts}
           debtInfo={debtInfo}
           details={details}
           setDebt={setDebt}
@@ -127,12 +126,7 @@ const AddingWindow = ({ currUserId, gid, groupUsers, groupUserNames, debtInfo, d
         if (details) {
           setDetail(split); //FIXME:要確認
         }
-
-        // let updatedDebt = { ...info, isOwned: false };
-        // setUpdatedDebt(updatedDebt);
-        // setDebt((prev)=>{{...prev, updatedDebt}});
-        // setExtend((prev) => {
-        //   return { [id]: !prev[id] }; //true-false交換
+        onHide();
       }
     } catch (err) {
       console.log(err);

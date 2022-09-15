@@ -12,6 +12,7 @@ const Group = () => {
   const [groupUsers, setGroupUsers] = useState([]);
   const [groupUserNames, setGroupUserNames] = useState({}); //{1:Euli}
   const [isSettle, setIsSettle] = useState(false);
+  const [balances, setBalance] = useState([]);
 
   useEffect(() => {
     const fetchgroupUsers = async (gid) => {
@@ -52,7 +53,7 @@ const Group = () => {
         isSettle={isSettle} //傳給debt跟detail
         setIsSettle={setIsSettle} //要傳給settle頁
       />
-      <Balance key="balance" id="balance" currUserId={currUserId} gid={gid} groupUsers={groupUsers} groupUserNames={groupUserNames} x />
+      <Balance key="balance" id="balance" currUserId={currUserId} gid={gid} groupUsers={groupUsers} groupUserNames={groupUserNames} balances={balances} setBalance={setBalance} />
     </div>
   );
 };

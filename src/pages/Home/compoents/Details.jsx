@@ -2,7 +2,8 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import constants from '../../../global/constants';
 import DetailList from './DetailList';
-import Edit from './Edit';
+// import Edit from './Edit';
+import Add from './Add';
 
 const Details = ({ gid, groupUsers, groupUserNames, debtInfo, extend, setDebt }) => {
   const debtId = debtInfo.id;
@@ -32,21 +33,19 @@ const Details = ({ gid, groupUsers, groupUserNames, debtInfo, extend, setDebt })
     }
   }, [extend]);
 
-  // useEffect(() => {
-  //   if (extend[debtId]) {
-  //     const fetchDetail = async (debtId) => {
-  //       const { data } = await axios(`${constants.API_GET_DEBT_DETAILS}${debtId}`);
-  //       console.log('fetch data details: ', data);
-  //       setDetail(data.data);
-  //       console.log('set details: ', data.data);
-  //     };
-  //     fetchDetail(debtId);
-  //   }
-  // }, [extend]);
-
   return (
     <div>
-      <Edit.EditButton key="update" className="edit" gid={gid} groupUsers={groupUsers} debtInfo={debtInfo} details={details} setDebt={setDebt} setDetail={setDetail} />
+      <Add.AddButton
+        key="update"
+        className="edit"
+        gid={gid}
+        groupUsers={groupUsers}
+        groupUserNames={groupUserNames}
+        debtInfo={debtInfo}
+        details={details}
+        setDebt={setDebt}
+        setDetail={setDetail}
+      />
       <DetailList key="detail-list" details={details} groupUserNames={groupUserNames} />;
     </div>
   );
