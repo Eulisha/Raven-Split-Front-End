@@ -3,8 +3,8 @@ import { useState, useEffect } from 'react';
 import constants from '../../../global/constants';
 import Balance from './Balance';
 import Debts from './Debts';
-const currUserId = 1; //FIXME:之後要用傳進來的
-let gid = 83; //暫時寫死
+const currUserId = 9; //FIXME:之後要用傳進來的
+let gid = 100; //暫時寫死
 // const groupUsers = [1, 2, 3, 4, 5]; //FIXME:之後要用傳進來的
 // const userNames = { 1: 'Euli', 2: 'Tim', 3: 'Adam', 4: 'Kelvin', 5: 'Ellie' }; //FIXME:之後要用傳進來的
 
