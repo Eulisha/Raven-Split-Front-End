@@ -11,8 +11,8 @@ const Home = () => {
 
   return (
     <div className="Home">
-      <UserGroups setCurrGroup={setCurrGroup} />
-      <div id="main">
+      <UserGroups id="left_sidebar" setCurrGroup={setCurrGroup} />
+      <div id="center_column">
         {currGroup.gid ? (
           <Debts
             id="debts"
@@ -27,7 +27,7 @@ const Home = () => {
           <p>I'm dashboard</p>
         )}
       </div>
-      <div>
+      <div id="right_sidebar">
         {currGroup.gid ? (
           <GroupUsers
             gid={currGroup.gid}
