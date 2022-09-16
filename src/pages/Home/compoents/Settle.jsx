@@ -38,7 +38,7 @@ const SettleWindow = ({ gid, setIsSettle, onHide, show, state }) => {
     };
     fetchGetSettle();
   }, []);
-
+  // const handleSubmit = () => {};
   const fetchPostSettle = async () => {
     try {
       const token = localStorage.getItem('accessToken');
@@ -78,17 +78,25 @@ const SettleWindow = ({ gid, setIsSettle, onHide, show, state }) => {
       </Modal.Header>
       <Modal.Body>
         <div>
-          <h3>Edit Debts</h3>
-          <h4>Settle</h4>
           <div>
-            最佳結帳方式：
-            {settle.map((ele, ind) => {
-              return (
-                <li key={ind}>
-                  {ele.borrower} 還 {ele.lender} ${ele.amount}
-                </li>
-              );
-            })}
+            <h5>最佳結帳方式：</h5>
+            <ul>
+              <li>
+                Date: <input type="text" defaultValue={`${new Date(Date.now()).getFullYear()}-${new Date(Date.now()).getMonth() + 1}-${new Date(Date.now()).getDate()}`}></input>
+              </li>
+              <li>
+                Title: <input type="text" name="title" defaultValue="Settle Group All Debts"></input>
+              </li>
+            </ul>
+            <ul>
+              {settle.map((ele, ind) => {
+                return (
+                  <li key={ind}>
+                    {ele.borrower} 還 {ele.lender} ${ele.amount}
+                  </li>
+                );
+              })}
+            </ul>
           </div>
         </div>
       </Modal.Body>
@@ -97,7 +105,6 @@ const SettleWindow = ({ gid, setIsSettle, onHide, show, state }) => {
           Close
         </Button>
         <Button variant="outline-primary" onClick={fetchPostSettle}>
-          {' '}
           Submit
         </Button>
       </Modal.Footer>
