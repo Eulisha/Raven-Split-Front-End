@@ -7,7 +7,7 @@ const Home = () => {
   const [currGroup, setCurrGroup] = useState({ gid: null, name: null });
   const [groupUsers, setGroupUsers] = useState([]); //array of Ids of groupUsers
   const [groupUserNames, setGroupUserNames] = useState({}); //{1:Euli}
-  const [isSettle, setIsSettle] = useState(false);
+  const [isDebtChanged, setIsDebtChanged] = useState(false);
 
   return (
     <div className="Home">
@@ -20,8 +20,8 @@ const Home = () => {
             // currUserId={currUserId} //可以用jwt代替(?)
             groupUsers={groupUsers}
             groupUserNames={groupUserNames}
-            isSettle={isSettle} //傳給debt跟detail
-            setIsSettle={setIsSettle} //要傳給settle頁
+            isDebtChanged={isDebtChanged} //傳給debt跟detail
+            setIsDebtChanged={setIsDebtChanged} //要傳給settle頁
           />
         ) : (
           <p>I'm dashboard</p>
@@ -36,7 +36,7 @@ const Home = () => {
             groupUserNames={groupUserNames}
             setGroupUsers={setGroupUsers}
             setGroupUserNames={setGroupUserNames}
-            isSettle={isSettle}
+            isDebtChanged={isDebtChanged}
           />
         ) : (
           '尚未選取群組'

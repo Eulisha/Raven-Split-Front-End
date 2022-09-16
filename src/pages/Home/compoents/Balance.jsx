@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import constants from '../../../global/constants';
 
-const Balance = ({ gid, groupUserNames, isSettle }) => {
+const Balance = ({ gid, groupUserNames, isDebtChanged }) => {
   const [balances, setBalance] = useState([]);
   useEffect(() => {
     console.log('balance gid', gid);
@@ -22,7 +22,7 @@ const Balance = ({ gid, groupUserNames, isSettle }) => {
       }
     };
     fetchBalance(gid);
-  }, [isSettle]);
+  }, [isDebtChanged]);
 
   return (
     <div id="balance">

@@ -3,20 +3,20 @@ import { useState, useEffect, useRef } from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
 import constants from '../../../global/constants';
 
-// const SettleButton = ({ gid, setIsSettle, debtInfo,
-const SettleButton = ({ gid, setIsSettle }) => {
+// const SettleButton = ({ gid, setIsDebtChanged, debtInfo,
+const SettleButton = ({ gid, setIsDebtChanged }) => {
   const [editingShow, setEditingShow] = useState(false);
   return (
     <div className="blog__controller">
       <Button variant="outline-success" onClick={() => setEditingShow(true)}>
         結帳
       </Button>
-      {editingShow && <SettleWindow gid={gid} setIsSettle={setIsSettle} show={editingShow} onHide={() => setEditingShow(false)} state="editing" />}
+      {editingShow && <SettleWindow gid={gid} setIsDebtChanged={setIsDebtChanged} show={editingShow} onHide={() => setEditingShow(false)} state="editing" />}
     </div>
   );
 };
 
-const SettleWindow = ({ gid, setIsSettle, onHide, show, state }) => {
+const SettleWindow = ({ gid, setIsDebtChanged, onHide, show, state }) => {
   console.log('Editing....');
   const [settle, setSettle] = useState([]);
   const inputDate = useRef();
@@ -59,7 +59,7 @@ const SettleWindow = ({ gid, setIsSettle, onHide, show, state }) => {
       });
       if (data.data) {
         setSettle([]);
-        setIsSettle(true);
+        setIsDebtChanged(true);
       }
     } catch (err) {
       console.log(err);

@@ -7,7 +7,7 @@ import Settle from './Settle';
 import Add from './Add';
 // import Accordion from 'react-bootstrap/Accordion';
 
-const Debts = ({ currUserId, currGroup, groupUsers, groupUserNames, isSettle, setIsSettle }) => {
+const Debts = ({ currUserId, currGroup, groupUsers, groupUserNames, isDebtChanged, setIsDebtChanged }) => {
   const [debts, setDebt] = useState([]);
   const [extend, setExtend] = useState({}); //FIXME:應該要是一個陣列記錄所有的extend state
 
@@ -36,26 +36,38 @@ const Debts = ({ currUserId, currGroup, groupUsers, groupUserNames, isSettle, se
   //控制細目開合
   useEffect(() => {
     setExtend(false);
-  }, [isSettle]);
-
+  }, [isDebtChanged]);
+  console.log(debts);
   return (
     <div id="debts">
       <div>
-        <Add.AddButton currUserId={currUserId} gid={currGroup} groupUsers={groupUsers} groupUserNames={groupUserNames} setDebt={setDebt} />
-        <Settle.SettleButton key="settle-button" gid={currGroup} groupUsers={groupUsers} groupUserNames={groupUserNames} setIsSettle={setIsSettle} />
+        <Add.AddButton currUserId={currUserId} gid={currGroup} groupUsers={groupUsers} groupUserNames={groupUserNames} setDebt={setDebt} setIsDebtChanged={setIsDebtChanged} />
+        <Settle.SettleButton key="settle-button" gid={currGroup} groupUsers={groupUsers} groupUserNames={groupUserNames} setIsDebtChanged={setIsDebtChanged} />
       </div>
-      {debts.map((debt) => {
-        return (
-          <div key={debt.id}>
-            <DebtList className="debt-list" gid={currGroup} groupUserNames={groupUserNames} debtInfo={debt} setDebt={setDebt} setExtend={setExtend} />
-            <Details className="details" gid={currGroup} groupUsers={groupUsers} groupUserNames={groupUserNames} debts={debts} debtInfo={debt} extend={extend} setDebt={setDebt} />
-          </div>
-          //   <div key={debt.id}>
-          //   <DebtList className="debt-list" gid={currGroup} groupUserNames={groupUserNames} debtInfo={debt} setDebt={setDebt} setExtend={setExtend} />
-          //   <Details className="details" gid={currGroup} groupUsers={groupUsers} groupUserNames={groupUserNames} debts={debts} debtInfo={debt} extend={extend} setDebt={setDebt} />
-          //   </div>
-        );
-      })}
+      {debts.length > 0 &&
+        debts.map((debt) => {
+          console.log(debt.id);
+          return (
+            <div key={debt.id}>
+              <DebtList className="debt-list" gid={currGroup} groupUserNames={groupUserNames} debtInfo={debt} setDebt={setDebt} setExtend={setExtend} />
+              <Details
+                className="details"
+                gid={currGroup}
+                groupUsers={groupUsers}
+                groupUserNames={groupUserNames}
+                debts={debts}
+                debtInfo={debt}
+                extend={extend}
+                setDebt={setDebt}
+                setIsDebtChanged={setIsDebtChanged}
+              />
+            </div>
+            //   <div key={debt.id}>
+            //   <DebtList className="debt-list" gid={currGroup} groupUserNames={groupUserNames} debtInfo={debt} setDebt={setDebt} setExtend={setExtend} />
+            //   <Details className="details" gid={currGroup} groupUsers={groupUsers} groupUserNames={groupUserNames} debts={debts} debtInfo={debt} extend={extend} setDebt={setDebt} />
+            //   </div>
+          );
+        })}
     </div>
   );
 };

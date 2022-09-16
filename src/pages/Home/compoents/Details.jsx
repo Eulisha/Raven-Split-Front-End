@@ -5,7 +5,7 @@ import DetailList from './DetailList';
 // import Edit from './Edit';
 import Add from './Add';
 
-const Details = ({ gid, groupUsers, groupUserNames, debtInfo, extend, setDebt }) => {
+const Details = ({ gid, groupUsers, groupUserNames, debtInfo, extend, setDebt, setIsDebtChanged }) => {
   const debtId = debtInfo.id;
   const [details, setDetail] = useState({});
 
@@ -50,6 +50,7 @@ const Details = ({ gid, groupUsers, groupUserNames, debtInfo, extend, setDebt })
         details={details}
         setDebt={setDebt}
         setDetail={setDetail}
+        setIsDebtChanged={setIsDebtChanged}
       />
       <DetailList key="detail-list" details={details} groupUserNames={groupUserNames} />;
     </div>

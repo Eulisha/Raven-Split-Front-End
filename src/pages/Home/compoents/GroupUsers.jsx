@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import constants from '../../../global/constants';
 import Balance from './Balance';
 
-const GroupUsers = ({ gid, currGroup, groupUserNames, setGroupUsers, setGroupUserNames, isSettle }) => {
+const GroupUsers = ({ gid, currGroup, groupUserNames, setGroupUsers, setGroupUserNames, isDebtChanged }) => {
   useEffect(() => {
     if (gid) {
       const token = localStorage.getItem('accessToken');
@@ -38,7 +38,7 @@ const GroupUsers = ({ gid, currGroup, groupUserNames, setGroupUsers, setGroupUse
           return <li key={item.uid}>{item.name}</li>;
         })}
       </ul> */}
-      <Balance id="balance" gid={gid} groupUserNames={groupUserNames} isSettle={isSettle} />
+      <Balance id="balance" gid={gid} groupUserNames={groupUserNames} isDebtChanged={isDebtChanged} />
     </div>
   );
 };

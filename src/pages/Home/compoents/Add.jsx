@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import constants from '../../../global/constants';
 
-const AddButton = ({ currUserId, gid, groupUsers, groupUserNames, debtInfo, details, setDebt, setDetail }) => {
+const AddButton = ({ currUserId, gid, groupUsers, groupUserNames, debtInfo, details, setDebt, setDetail, setIsDebtChanged }) => {
   const [editingShow, setEditingShow] = useState(false);
   return (
     <div className="blog__controller">
@@ -21,6 +21,7 @@ const AddButton = ({ currUserId, gid, groupUsers, groupUserNames, debtInfo, deta
           details={details}
           setDebt={setDebt}
           setDetail={setDetail}
+          setIsDebtChanged={setIsDebtChanged}
           show={editingShow}
           onHide={() => setEditingShow(false)}
           state="editing"
@@ -30,7 +31,7 @@ const AddButton = ({ currUserId, gid, groupUsers, groupUserNames, debtInfo, deta
   );
 };
 
-const AddingWindow = ({ currUserId, gid, groupUsers, groupUserNames, debtInfo, details, setDebt, setDetail, onHide, show, state }) => {
+const AddingWindow = ({ currUserId, gid, groupUsers, groupUserNames, debtInfo, details, setDebt, setDetail, setIsDebtChanged, onHide, show, state }) => {
   console.log('Editing....');
   //帳的初始值 判斷是新增or編輯
   const initialInfo = details
@@ -124,6 +125,7 @@ const AddingWindow = ({ currUserId, gid, groupUsers, groupUserNames, debtInfo, d
       // //確認有成功後更新state
       if (result.status === 200) {
         setInfo((prev) => {
+          console.log(prev['id']);
           prev['id'] = result.data.data.debtId; //儲存之後會有新的debtId, 要額外更新上去
         });
 
@@ -132,8 +134,8 @@ const AddingWindow = ({ currUserId, gid, groupUsers, groupUserNames, debtInfo, d
         //FIXME: 要取表單裡的值;
         info.ownAmount = info.lender === currUserId ? info.total - (split[currUserId] ? split[currUserId] : 0) : split[currUserId] ? split[currUserId] : 0;
         //FIXME: 要取表單裡的值;
-        console.log(info);
-        console.log(split);
+        console.log('info: ', info);
+        console.log('split: ', split);
         setDebt((prev) => {
           console.log(prev);
           return [info, ...prev];
@@ -141,6 +143,7 @@ const AddingWindow = ({ currUserId, gid, groupUsers, groupUserNames, debtInfo, d
         if (details) {
           setDetail(split); //FIXME:要確認
         }
+        setIsDebtChanged(true);
         onHide();
       }
     } catch (err) {
