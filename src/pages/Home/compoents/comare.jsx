@@ -90,11 +90,16 @@ const EditingWindow = ({ gid, debtInfo, debts, details, groupUsers, setDebt, set
         }
       });
       console.log('splitValue:', updatedDetail);
-      let result;
-
       console.log('data for fetch: ', splitInfo, updatedDetail);
+      let result;
+      const token = localStorage.getItem('accessToken');
       const data = { debt_main: splitInfo, debt_detail: updatedDetail };
-      result = await axios.post(constants.API_POST_DEBT, data);
+      result = await axios.post(constants.API_POST_DEBT, {
+        body: data,
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      });
 
       console.log(result.data);
 

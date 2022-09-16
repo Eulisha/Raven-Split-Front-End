@@ -1,7 +1,7 @@
 import axios from 'axios';
 import constants from '../../../global/constants';
 
-const DebtList = ({ groupUserNames, debtInfo, setDebt, setExtend }) => {
+const DebtList = ({ gid, groupUserNames, debtInfo, setDebt, setExtend }) => {
   const { date, title, total, lender, isOwned, ownAmount } = debtInfo;
   const debtId = debtInfo.id;
 
@@ -26,7 +26,12 @@ const DebtList = ({ groupUserNames, debtInfo, setDebt, setExtend }) => {
       return alert(' 輸入錯誤，再考慮看看唄 ');
     }
     try {
-      const result = await axios.delete(`${constants.API_DELETE_DEBT}${debtId}`);
+      const token = localStorage.getItem('accessToken');
+      const result = await axios.delete(`${constants.API_DELETE_DEBT}/${gid}/${debtId}`, {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      });
       console.log('fetch delete debt: ', result);
       if (result.status !== 200) {
         console.log(result);

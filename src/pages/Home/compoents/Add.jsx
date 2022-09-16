@@ -90,8 +90,7 @@ const AddingWindow = ({ currUserId, gid, groupUsers, groupUserNames, debtInfo, d
   //儲存DB
   const handleSubmit = async () => {
     try {
-      console.log('info裡面有啥:', info); //確認info有啥
-      // //整理送後端格式
+      //整理送後端格式
       const newDetails = [];
       groupUsers.map((uid) => {
         console.log('uid type', split[uid], typeof split[uid]);
@@ -103,7 +102,24 @@ const AddingWindow = ({ currUserId, gid, groupUsers, groupUserNames, debtInfo, d
       console.log('data for fetch:', data);
 
       //傳給後端
-      const result = await axios.post(constants.API_POST_DEBT, data);
+      const token = localStorage.getItem('accessToken');
+      let result;
+      if (!details) {
+        result = await axios.post(`${constants.API_POST_DEBT}/${gid}`, {
+          data,
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        });
+      } else {
+        console.log(token, 'put');
+        result = await axios.put(`${constants.API_PUT_DEBT}/${gid}/${info.id}`, {
+          body: data,
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        });
+      }
       console.log(result.data);
 
       // //確認有成功後更新state

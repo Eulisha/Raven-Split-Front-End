@@ -116,7 +116,13 @@ const EditingWindow = ({ gid, debtInfo, debts, details, groupUsers, setDebt, set
       console.log('splitValue:', updatedDetail);
       let result;
       const data = { debt_Id: debtInfo.id, debt_main_old: debtInfo, debt_detail_old: details, debt_main_new: splitInfo, debt_detail_new: updatedDetail };
-      result = await axios.put(constants.API_UPDATE_DEBT, data);
+      const token = localStorage.getItem('accessToken');
+      result = await axios.put(constants.API_UPDATE_DEBT/${gid}, {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+        body: data,
+      });
       console.log(result.data);
 
       //更新state

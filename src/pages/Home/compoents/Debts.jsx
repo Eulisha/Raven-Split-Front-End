@@ -6,15 +6,20 @@ import DebtList from './DebtList';
 import Settle from './Settle';
 import Add from './Add';
 
-const Debts = ({ currUserId, gid, groupUsers, groupUserNames, isSettle, setIsSettle }) => {
+const Debts = ({ currUserId, currGroup, groupUsers, groupUserNames, isSettle, setIsSettle }) => {
   const [debts, setDebt] = useState([]);
   const [extend, setExtend] = useState({}); //FIXME:應該要是一個陣列記錄所有的extend state
 
   //撈debts
   useEffect(() => {
-    const fetchDebts = async () => {
+    const fetchDebts = async (currGroup) => {
       try {
-        const result = await axios(`${constants.API_GET_DEBTS}?group=${gid}`); //FIXME:要改成paramas
+        const token = localStorage.getItem('accessToken');
+        const result = await axios.get(`${constants.API_GET_DEBTS}/${currGroup}`, {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        }); //FIXME:要改成paramas
         if (result.status !== 200) {
           console.log(result.error);
         }
@@ -24,8 +29,8 @@ const Debts = ({ currUserId, gid, groupUsers, groupUserNames, isSettle, setIsSet
         console.log(err);
       }
     };
-    fetchDebts();
-  }, []);
+    fetchDebts(currGroup);
+  }, [currGroup]);
 
   //控制細目開合
   useEffect(() => {
@@ -35,14 +40,14 @@ const Debts = ({ currUserId, gid, groupUsers, groupUserNames, isSettle, setIsSet
   return (
     <div id="debts">
       <div>
-        <Add.AddButton currUserId={currUserId} gid={gid} groupUsers={groupUsers} groupUserNames={groupUserNames} setDebt={setDebt} />
-        <Settle.SettleButton key="settle-button" gid={gid} groupUsers={groupUsers} groupUserNames={groupUserNames} setIsSettle={setIsSettle} />
+        <Add.AddButton currUserId={currUserId} gid={currGroup} groupUsers={groupUsers} groupUserNames={groupUserNames} setDebt={setDebt} />
+        <Settle.SettleButton key="settle-button" gid={currGroup} groupUsers={groupUsers} groupUserNames={groupUserNames} setIsSettle={setIsSettle} />
       </div>
       {debts.map((debt) => {
         return (
           <div key={debt.id}>
-            <DebtList className="debt-list" groupUserNames={groupUserNames} debtInfo={debt} setDebt={setDebt} setExtend={setExtend} />
-            <Details className="details" gid={gid} groupUsers={groupUsers} groupUserNames={groupUserNames} debts={debts} debtInfo={debt} extend={extend} setDebt={setDebt} />
+            <DebtList className="debt-list" gid={currGroup} groupUserNames={groupUserNames} debtInfo={debt} setDebt={setDebt} setExtend={setExtend} />
+            <Details className="details" gid={currGroup} groupUsers={groupUsers} groupUserNames={groupUserNames} debts={debts} debtInfo={debt} extend={extend} setDebt={setDebt} />
           </div>
         );
       })}

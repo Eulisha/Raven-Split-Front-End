@@ -1,30 +1,44 @@
 import axios from 'axios';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import constants from '../../../global/constants';
 import Balance from './Balance';
-import Debts from './Debts';
-let gid = 1; //暫時寫死
 
-const GroupUsers = () => {
-  const [members, setMembers] = useState([]);
+const GroupUsers = ({ gid, currGroup, groupUserNames, setGroupUsers, setGroupUserNames, isSettle }) => {
   useEffect(() => {
-    const fetchMembers = async (id) => {
-      const { data } = await axios(`${constants.API_GET_GROUP_USERS}${id}`);
-      console.log('fetch data group-members:  ', data);
-      setMembers(data.data);
-    };
-    fetchMembers(gid);
-  }, []);
+    if (gid) {
+      const token = localStorage.getItem('accessToken');
+      const fetchUsers = async (gid) => {
+        const { data } = await axios.get(`${constants.API_GET_GROUP_USERS}/${gid}`, {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        });
+        console.log('fetch data group-groupUsers:  ', data);
+
+        //整理成適合的格式
+        const groupUsers = []; //array of Ids of groupUsers
+        const userNames = {}; //object of id-name key pair
+        data.data.map((user) => {
+          groupUsers.push(user.uid);
+          userNames[user.uid] = user.name; //{1:Euli}
+        });
+        setGroupUsers(groupUsers);
+        setGroupUserNames(userNames);
+        console.log('groupUsers', groupUsers);
+        console.log('groupUserNames', userNames);
+      };
+      fetchUsers(gid);
+    }
+  }, [currGroup]);
   return (
-    <div>
+    <div id="group-users">
       成員列表
-      <ul>
-        {members.map((item) => {
+      {/* <ul>
+        {groupUsers.map((item) => {
           return <li key={item.uid}>{item.name}</li>;
         })}
-      </ul>
-      <Debts gid={gid} members={members} />
-      <Balance gid={gid} />
+      </ul> */}
+      <Balance id="balance" gid={gid} groupUserNames={groupUserNames} isSettle={isSettle} />
     </div>
   );
 };

@@ -12,21 +12,7 @@ const SettleButton = ({ gid, setIsSettle }) => {
       <Button variant="outline-success" onClick={() => setEditingShow(true)}>
         結帳
       </Button>
-      {editingShow && (
-        <SettleWindow
-          gid={gid}
-          setIsSettle={setIsSettle}
-          // debtInfo={debtInfo}
-          // debts={debts}
-          // details={details}
-          // groupUsers={groupUsers}
-          // setDebt={setDebt}
-          // setDetail={setDetail}
-          show={editingShow}
-          onHide={() => setEditingShow(false)}
-          state="editing"
-        />
-      )}
+      {editingShow && <SettleWindow gid={gid} setIsSettle={setIsSettle} show={editingShow} onHide={() => setEditingShow(false)} state="editing" />}
     </div>
   );
 };
@@ -38,12 +24,16 @@ const SettleWindow = ({ gid, setIsSettle, onHide, show, state }) => {
   useEffect(() => {
     const fetchGetSettle = async () => {
       try {
-        const { data } = await axios(`${constants.API_GET_SETTLE}${gid}?uid=1`);
+        const token = localStorage.getItem('accessToken');
+        const { data } = await axios(`${constants.API_GET_SETTLE}/${gid}`, {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        });
         setSettle(data.data);
         console.log('set settle:  ', settle);
       } catch (err) {
         console.log(err);
-        alert(' Something went wrong...Please try again.');
       }
     };
     fetchGetSettle();
@@ -51,6 +41,7 @@ const SettleWindow = ({ gid, setIsSettle, onHide, show, state }) => {
 
   const fetchPostSettle = async () => {
     try {
+      const token = localStorage.getItem('accessToken');
       const body = {
         settle_main: {
           gid,
@@ -59,7 +50,12 @@ const SettleWindow = ({ gid, setIsSettle, onHide, show, state }) => {
         },
         settle_detail: settle,
       };
-      const { data } = await axios.post(constants.API_POST_SETTLE, body);
+      const { data } = await axios.post(`${constants.API_POST_SETTLE}/${gid}`, {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+        body: body,
+      });
       if (data.data) {
         setSettle([]);
         setIsSettle(true);

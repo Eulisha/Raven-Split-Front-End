@@ -28,10 +28,7 @@ const SignUp = () => {
       if (submitted) {
         //fetch sigin
         const fetchSigIn = async () => {
-          const { data } = await axios.post(
-            `${constants.API_POST_SIGNUP}`,
-            inputValues
-          );
+          const { data } = await axios.post(`${constants.API_POST_SIGNUP}`, inputValues);
           //set local storage
           localStorage.setItem('accessToken', data.data.accessToken);
         };
@@ -43,51 +40,22 @@ const SignUp = () => {
   }, [submitted]);
   return (
     <form id="sign-up">
-      {' '}
       SignUp
       <label>
-        {' '}
         Email
-        <input
-          id="email"
-          type="email"
-          name="email"
-          value={inputValues.email}
-          onChange={handleInput('email')}
-        />
+        <input id="email" type="email" name="email" value={inputValues.email} onChange={handleInput('email')} />
       </label>
       <label>
-        {' '}
         Password
-        <input
-          id="password"
-          type="password"
-          name="password"
-          value={inputValues.password}
-          onChange={handleInput('password')}
-        />
+        <input id="password" type="password" name="password" value={inputValues.password} onChange={handleInput('password')} />
       </label>
       <label>
-        {' '}
         Name
-        <input
-          id="name"
-          type="text"
-          name="name"
-          value={inputValues.name}
-          onChange={handleInput('name')}
-        />
+        <input id="name" type="text" name="name" value={inputValues.name} onChange={handleInput('name')} />
       </label>
       <label>
-        {' '}
         CellPhone
-        <input
-          id="cellphone"
-          type="text"
-          name="cellphone"
-          value={inputValues.cellphone}
-          onChange={handleInput('cellphone')}
-        />
+        <input id="cellphone" type="text" name="cellphone" value={inputValues.cellphone} onChange={handleInput('cellphone')} />
       </label>
       <button onClick={hanldleSubmit}>Submit</button>
     </form>

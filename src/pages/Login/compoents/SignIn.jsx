@@ -26,10 +26,9 @@ const SignIn = () => {
       if (submitted) {
         //fetch sigin
         const fetchSigIn = async () => {
-          const { data } = await axios.post(
-            `${constants.API_POST_SIGNIN}`,
-            inputValues
-          );
+          const { data } = await axios.post(`${constants.API_POST_SIGNIN}`, {
+            body: inputValues,
+          });
           //set local storage
           localStorage.setItem('accessToken', data.data.accessToken);
         };
@@ -46,24 +45,12 @@ const SignIn = () => {
       <label>
         {' '}
         Email
-        <input
-          id="email"
-          type="email"
-          name="email"
-          value={inputValues.email}
-          onChange={handleInput('email')}
-        />
+        <input id="email" type="email" name="email" value={inputValues.email} onChange={handleInput('email')} />
       </label>
       <label>
         {' '}
         Password
-        <input
-          id="password"
-          type="password"
-          name="password"
-          value={inputValues.password}
-          onChange={handleInput('password')}
-        />
+        <input id="password" type="password" name="password" value={inputValues.password} onChange={handleInput('password')} />
       </label>
       <button onClick={hanldleSubmit}>Submit</button>
     </form>

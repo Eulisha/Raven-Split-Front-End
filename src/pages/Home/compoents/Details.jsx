@@ -13,7 +13,12 @@ const Details = ({ gid, groupUsers, groupUserNames, debtInfo, extend, setDebt })
   useEffect(() => {
     if (extend[debtId]) {
       const fetchDetail = async (debtId) => {
-        const { data } = await axios(`${constants.API_GET_DEBT_DETAILS}${debtId}`);
+        const token = localStorage.getItem('accessToken');
+        const { data } = await axios(`${constants.API_GET_DEBT_DETAILS}/${gid}/${debtId}`, {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        });
 
         //整理成快速查找的object, oriSplit = {1:50, 2:50}
         const oriSplit = {};
