@@ -25,7 +25,7 @@ const SettleWindow = ({ gid, setIsSettle, onHide, show, state }) => {
     const fetchGetSettle = async () => {
       try {
         const token = localStorage.getItem('accessToken');
-        const { data } = await axios(`${constants.API_GET_SETTLE}/${gid}`, {
+        const { data } = await axios.get(`${constants.API_GET_SETTLE}/${gid}`, {
           headers: {
             authorization: `Bearer ${token}`,
           },
@@ -50,12 +50,16 @@ const SettleWindow = ({ gid, setIsSettle, onHide, show, state }) => {
         },
         settle_detail: settle,
       };
-      const { data } = await axios.post(`${constants.API_POST_SETTLE}/${gid}`, {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-        body: body,
-      });
+      const { data } = await axios.post(
+        `${constants.API_POST_SETTLE}/${gid}`,
+        {},
+        {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+          body: body,
+        }
+      );
       if (data.data) {
         setSettle([]);
         setIsSettle(true);

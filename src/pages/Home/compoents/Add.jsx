@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
-import { Button, Modal } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 import constants from '../../../global/constants';
 
 const AddButton = ({ currUserId, gid, groupUsers, groupUserNames, debtInfo, details, setDebt, setDetail }) => {
@@ -105,16 +106,14 @@ const AddingWindow = ({ currUserId, gid, groupUsers, groupUserNames, debtInfo, d
       const token = localStorage.getItem('accessToken');
       let result;
       if (!details) {
-        result = await axios.post(`${constants.API_POST_DEBT}/${gid}`, {
-          data,
+        result = await axios.post(`${constants.API_POST_DEBT}/${gid}`, data, {
           headers: {
             authorization: `Bearer ${token}`,
           },
         });
       } else {
         console.log(token, 'put');
-        result = await axios.put(`${constants.API_PUT_DEBT}/${gid}/${info.id}`, {
-          body: data,
+        result = await axios.put(`${constants.API_PUT_DEBT}/${gid}/${info.id}`, data, {
           headers: {
             authorization: `Bearer ${token}`,
           },

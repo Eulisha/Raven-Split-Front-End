@@ -5,6 +5,7 @@ import Details from './Details';
 import DebtList from './DebtList';
 import Settle from './Settle';
 import Add from './Add';
+// import Accordion from 'react-bootstrap/Accordion';
 
 const Debts = ({ currUserId, currGroup, groupUsers, groupUserNames, isSettle, setIsSettle }) => {
   const [debts, setDebt] = useState([]);
@@ -19,7 +20,7 @@ const Debts = ({ currUserId, currGroup, groupUsers, groupUserNames, isSettle, se
           headers: {
             authorization: `Bearer ${token}`,
           },
-        }); //FIXME:要改成paramas
+        });
         if (result.status !== 200) {
           console.log(result.error);
         }
@@ -49,6 +50,10 @@ const Debts = ({ currUserId, currGroup, groupUsers, groupUserNames, isSettle, se
             <DebtList className="debt-list" gid={currGroup} groupUserNames={groupUserNames} debtInfo={debt} setDebt={setDebt} setExtend={setExtend} />
             <Details className="details" gid={currGroup} groupUsers={groupUsers} groupUserNames={groupUserNames} debts={debts} debtInfo={debt} extend={extend} setDebt={setDebt} />
           </div>
+          //   <div key={debt.id}>
+          //   <DebtList className="debt-list" gid={currGroup} groupUserNames={groupUserNames} debtInfo={debt} setDebt={setDebt} setExtend={setExtend} />
+          //   <Details className="details" gid={currGroup} groupUsers={groupUsers} groupUserNames={groupUserNames} debts={debts} debtInfo={debt} extend={extend} setDebt={setDebt} />
+          //   </div>
         );
       })}
     </div>
