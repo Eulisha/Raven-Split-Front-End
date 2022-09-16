@@ -25,10 +25,9 @@ const SignIn = () => {
     try {
       if (submitted) {
         //fetch sigin
+        console.log(inputValues);
         const fetchSigIn = async () => {
-          const { data } = await axios.post(`${constants.API_POST_SIGNIN}`, {
-            body: inputValues,
-          });
+          const { data } = await axios.post(`${constants.API_POST_SIGNIN}`, inputValues);
           //set local storage
           localStorage.setItem('accessToken', data.data.accessToken);
         };

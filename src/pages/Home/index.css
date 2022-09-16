@@ -6,21 +6,21 @@
   font-weight: 400;
 }
 
-
-#main, #top-button{
+#Home{
   display: flex;
   flex-wrap: wrap;
-  justify-content:center;
   /* flex-direction: column; */
+  justify-content:center;
 }
-#group, #debts, #balance, .window{
+
+#left_sidebar, #center_column, #right_sidebar{
   display: flex;
   flex-wrap: wrap;
-  flex-direction: column;
+  /* flex-direction: column; */
   margin: 10px;
   padding: 20px;
   border: solid 1px #979797;
 }
-#debts{
+#center_column{
   width: 400px;
 }

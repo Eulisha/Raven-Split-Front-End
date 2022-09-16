@@ -1,3 +1,4 @@
+import '../index.css';
 import { useState } from 'react';
 import GroupUsers from './GroupUsers';
 import UserGroups from './UserGroups';
@@ -10,8 +11,8 @@ const Home = () => {
   const [isDebtChanged, setIsDebtChanged] = useState(false);
 
   return (
-    <div className="Home">
-      <UserGroups id="left_sidebar" setCurrGroup={setCurrGroup} />
+    <div id="Home">
+      <UserGroups setCurrGroup={setCurrGroup} />
       <div id="center_column">
         {currGroup.gid ? (
           <Debts
@@ -21,7 +22,7 @@ const Home = () => {
             groupUsers={groupUsers}
             groupUserNames={groupUserNames}
             isDebtChanged={isDebtChanged} //傳給debt跟detail
-            setIsDebtChanged={setIsDebtChanged} //要傳給settle頁
+            setIsDebtChanged={setIsDebtChaxnged} //要傳給settle頁
           />
         ) : (
           <p>I'm dashboard</p>

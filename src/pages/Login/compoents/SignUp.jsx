@@ -28,6 +28,7 @@ const SignUp = () => {
       if (submitted) {
         //fetch sigin
         const fetchSigIn = async () => {
+          console.log(inputValues);
           const { data } = await axios.post(`${constants.API_POST_SIGNUP}`, inputValues);
           //set local storage
           localStorage.setItem('accessToken', data.data.accessToken);
