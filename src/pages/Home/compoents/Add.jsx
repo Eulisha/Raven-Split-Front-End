@@ -31,7 +31,7 @@ const AddButton = ({ gid, groupUsers, groupUserNames, debtInfo, details, setDebt
   );
 };
 
-const AddingWindow = ({ gid, groupUsers, groupUserNames, debtInfo, details, setDebt, setDetail, setIsDebtChanged, onHide, show, state }) => {
+const AddingWindow = ({ gid, groupUsers, groupUserNames, debtInfo, details, setDebt, setDetail, setIsDebtChanged, onHide, show }) => {
   console.log('Editing....');
   let currUser = useContext(CurrUser);
   let currUserId = currUser.id;
@@ -158,7 +158,7 @@ const AddingWindow = ({ gid, groupUsers, groupUserNames, debtInfo, details, setD
   return (
     <Modal className="window" size="lg" aria-labelledby="contained-modal-title-vcenter" centered {...{ onHide, show }}>
       <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">{state === 'editing' ? '你正在新增' : '你正在新增文章'}</Modal.Title>
+        <Modal.Title id="contained-modal-title-vcenter">{details ? '你正在編輯' : '你正在新增'}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <div>
@@ -204,7 +204,7 @@ const AddingWindow = ({ gid, groupUsers, groupUserNames, debtInfo, details, setD
           Close
         </Button>
         <Button variant="outline-primary" onClick={handleSubmit}>
-          Save changes
+          Save
         </Button>
       </Modal.Footer>
     </Modal>

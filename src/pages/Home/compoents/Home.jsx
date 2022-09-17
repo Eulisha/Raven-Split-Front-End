@@ -1,19 +1,23 @@
 import '../index.css';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import GroupUsers from './GroupUsers';
 import UserGroups from './UserGroups';
 import Debts from './Debts';
 import GroupTopBar from './GroupTopBar';
 import Dashboard from './Dashboard';
 
+export const CurrGroupInfo = React.createContext();
+
 const Home = () => {
   const [currGroup, setCurrGroup] = useState({ gid: null, name: null });
   const [groupUsers, setGroupUsers] = useState([]); //array of Ids of groupUsers
   const [groupUserNames, setGroupUserNames] = useState({}); //{1:Euli}
+  const [groupUserEmails, setGroupUserEmails] = useState({}); //{1:Euli}
   const [isDebtChanged, setIsDebtChanged] = useState(false);
   const [debts, setDebt] = useState([]);
   console.log('@home log currgroup', currGroup, 'gid', currGroup.gid, currGroup.name);
   return (
+    // <CurrGroupInfo.Provider value={{ currGroup, groupUsers, groupUserNames, groupUserEmails }}>
     <div id="Home">
       <div id="left_sidebar">
         <UserGroups setCurrGroup={setCurrGroup} />
@@ -42,8 +46,10 @@ const Home = () => {
             currGroup={currGroup}
             groupUsers={groupUsers}
             groupUserNames={groupUserNames}
+            groupUserEmails={groupUserEmails}
             setGroupUsers={setGroupUsers}
             setGroupUserNames={setGroupUserNames}
+            setGroupUserEmails={setGroupUserEmails}
             isDebtChanged={isDebtChanged}
           />
         ) : (
@@ -51,6 +57,7 @@ const Home = () => {
         )}
       </div>
     </div>
+    // </CurrGroupInfo.Provider>
   );
 };
 export default Home;

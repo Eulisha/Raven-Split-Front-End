@@ -41,7 +41,7 @@ const Details = ({ gid, groupUsers, groupUserNames, debtInfo, extend, setDebt, s
 
   return (
     <div>
-      <DetailList key="detail-list" details={details} groupUserNames={groupUserNames} />;
+      <DetailList key="detail-list" details={details} groupUserNames={groupUserNames} />
       <Add.AddButton
         key="update"
         className="edit"

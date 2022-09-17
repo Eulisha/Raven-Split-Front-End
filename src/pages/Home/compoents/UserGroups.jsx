@@ -2,10 +2,10 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import constants from '../../../global/constants';
 import { Nav } from 'react-bootstrap';
+import GroupManage from './GroupManage';
 
 const UserGroups = ({ setCurrGroup }) => {
   console.log('at usergroups');
-  // const UserGroups = () => {
   const [userGroups, setUserGroups] = useState([]);
   console.log('userGroups', userGroups);
 
@@ -25,7 +25,10 @@ const UserGroups = ({ setCurrGroup }) => {
 
   return (
     <div id="group_area">
-      <div>Groups</div>
+      <div className="top_bar">
+        <div>Groups</div>
+        <GroupManage.GroupManageButton />
+      </div>
       {/* <ul id="group_list"> */}
       <Nav defaultActiveKey="/home" className="flex-column">
         {userGroups.map((group) => {
