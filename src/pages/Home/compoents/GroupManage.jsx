@@ -99,12 +99,12 @@ const GroupManageWindow = ({ currGroup, groupUsers, groupUserNames, groupUserEma
       <Modal.Body>
         <div>
           <h4>給個名字吧</h4>
-          <div>
+          <div id="group_name">
             群組的名字
             <input type="text" defaultValue={currGroup ? currGroup.name : ''}></input>
           </div>
           <h4>成員們</h4>
-          <div>
+          <div id="group_members">
             <ul>
               {currGroup
                 ? groupUsers.map((uid) => {
@@ -123,6 +123,7 @@ const GroupManageWindow = ({ currGroup, groupUsers, groupUserNames, groupUserEma
             </div>
           </div>
         </div>
+        {currGroup ? <button>delete group</button> : ''}
       </Modal.Body>
       <Modal.Footer>
         <Button variant="outline-secondary" onClick={onHide}>
