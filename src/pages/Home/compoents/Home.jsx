@@ -4,6 +4,7 @@ import GroupUsers from './GroupUsers';
 import UserGroups from './UserGroups';
 import Debts from './Debts';
 import GroupTopBar from './GroupTopBar';
+import Dashboard from './Dashboard';
 
 const Home = () => {
   const [currGroup, setCurrGroup] = useState({ gid: null, name: null });
@@ -31,7 +32,7 @@ const Home = () => {
             setIsDebtChanged={setIsDebtChanged} //要傳給settle頁
           />
         ) : (
-          <p>I'm dashboard</p>
+          <Dashboard />
         )}
       </div>
       <div id="right_sidebar">

@@ -3,23 +3,21 @@ import Add from './Add';
 import { Navbar } from 'react-bootstrap';
 
 const GroupTopBar = ({ currGroup, groupUsers, groupUserNames, setDebt, setIsDebtChanged }) => {
+  console.log('at top bar log currgroup', currGroup);
   return (
-    // <div id="top_bar">
     <Navbar id="top_bar">
       {/* <Container> */}
-      <Navbar.Brand id="group_name">{currGroup.name}</Navbar.Brand>
-      <Navbar.Toggle />
-      <Navbar.Collapse className="justify-content-end">
-        <Add.AddButton
-          // currUserId={currUserId} //FIXME: currUser可能要用 use context傳
-          gid={currGroup.gid}
-          groupUsers={groupUsers}
-          groupUserNames={groupUserNames}
-          setDebt={setDebt}
-          setIsDebtChanged={setIsDebtChanged}
-        />
-        <Settle.SettleButton key="settle-button" gid={currGroup.gid} groupUsers={groupUsers} groupUserNames={groupUserNames} setIsDebtChanged={setIsDebtChanged} />
-      </Navbar.Collapse>
+      <Navbar.Brand id="group_name">Dashboard</Navbar.Brand>
+      {/* {currGroup.gid ? <Navbar.Brand id="group_name">{currGroup.name}</Navbar.Brand> : <Navbar.Brand id="group_name">Dashboard</Navbar.Brand>}
+      {currGroup.gid ? <Navbar.Toggle /> : ''} */}
+      {currGroup.gid ? (
+        <Navbar.Collapse className="justify-content-end">
+          <Add.AddButton gid={currGroup.gid} groupUsers={groupUsers} groupUserNames={groupUserNames} setDebt={setDebt} setIsDebtChanged={setIsDebtChanged} />
+          <Settle.SettleButton key="settle-button" gid={currGroup.gid} groupUsers={groupUsers} groupUserNames={groupUserNames} setIsDebtChanged={setIsDebtChanged} />
+        </Navbar.Collapse>
+      ) : (
+        ''
+      )}
       {/* </Container> */}
     </Navbar>
   );

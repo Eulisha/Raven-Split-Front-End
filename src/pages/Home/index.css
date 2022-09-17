@@ -12,7 +12,7 @@
   justify-content:center;
 }
 
-#left_sidebar, #center_column, #right_sidebar{
+#left_sidebar, #center_column, #right_sidebar, #self_balance_list{
   display: flex;
   flex-wrap: wrap;
   margin: 10px;
@@ -21,7 +21,7 @@
 }
 #center_column{
   flex-direction: column;
-  width: 400px;
+  width: 600px;
 }
 #group_area, #group_list, .debt_list{
   display: flex;
@@ -32,4 +32,13 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
+}
+#self_balance_list{
+  display: flex;
+  /* flex-direction: column; */
+  /* flex-wrap: wrap; */
+  justify-content: center;
+  margin: 10px;
+  padding: 20px;
+  border: solid 1px #979797;
 }

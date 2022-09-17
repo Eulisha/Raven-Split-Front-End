@@ -4,8 +4,10 @@ import constants from '../../../global/constants';
 import { Nav } from 'react-bootstrap';
 
 const UserGroups = ({ setCurrGroup }) => {
+  console.log('at usergroups');
   // const UserGroups = () => {
   const [userGroups, setUserGroups] = useState([]);
+  console.log('userGroups', userGroups);
 
   useEffect(() => {
     const fetchuserGroups = async () => {
