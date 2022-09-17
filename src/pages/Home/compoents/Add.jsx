@@ -1,10 +1,11 @@
 import axios from 'axios';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import constants from '../../../global/constants';
+import { CurrUser } from '../../App';
 
-const AddButton = ({ currUserId, gid, groupUsers, groupUserNames, debtInfo, details, setDebt, setDetail, setIsDebtChanged }) => {
+const AddButton = ({ gid, groupUsers, groupUserNames, debtInfo, details, setDebt, setDetail, setIsDebtChanged }) => {
   const [editingShow, setEditingShow] = useState(false);
   return (
     <div className="blog__controller">
@@ -13,7 +14,6 @@ const AddButton = ({ currUserId, gid, groupUsers, groupUserNames, debtInfo, deta
       </Button>
       {editingShow && (
         <AddingWindow /** 編輯視窗 */
-          currUserId={currUserId}
           gid={gid}
           groupUsers={groupUsers}
           groupUserNames={groupUserNames}
@@ -31,9 +31,12 @@ const AddButton = ({ currUserId, gid, groupUsers, groupUserNames, debtInfo, deta
   );
 };
 
-const AddingWindow = ({ currUserId, gid, groupUsers, groupUserNames, debtInfo, details, setDebt, setDetail, setIsDebtChanged, onHide, show, state }) => {
+const AddingWindow = ({ gid, groupUsers, groupUserNames, debtInfo, details, setDebt, setDetail, setIsDebtChanged, onHide, show, state }) => {
   console.log('Editing....');
-  console.log('uid:  ', currUserId);
+  let currUser = useContext(CurrUser);
+  let currUserId = currUser.id;
+  let currUserName = currUser.name;
+
   //帳的初始值 判斷是新增or編輯
   const initialInfo = details
     ? debtInfo
@@ -172,7 +175,7 @@ const AddingWindow = ({ currUserId, gid, groupUsers, groupUserNames, debtInfo, d
               Total: <input type="number" name="total" defaultValue={debtInfo ? debtInfo.total : 0} onChange={handleInfoChange('total')}></input>
             </li>
             <li>
-              Paid By: <input type="text" defaultValue={debtInfo ? debtInfo.lender : currUserId} onChange={handleInfoChange('lender')}></input>
+              Paid By: <input type="text" defaultValue={debtInfo ? debtInfo.lender : currUserName} onChange={handleInfoChange('lender')}></input>
             </li>
             <li>
               Split Method<input type="number" defaultValue={debtInfo ? debtInfo.split_method : 1} onChange={handleInfoChange('split_method')}></input>

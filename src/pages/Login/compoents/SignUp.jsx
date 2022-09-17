@@ -1,6 +1,7 @@
 import axios from 'axios';
 // import { useEffect } from 'react';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import constants from '../../../global/constants';
 
 const SignUp = ({ setUser }) => {
@@ -11,6 +12,7 @@ const SignUp = ({ setUser }) => {
     cellphone: '',
     provider: 'native',
   });
+  const navigate = useNavigate();
   // const [submitted, setSubmitted] = useState(false);
 
   //event handler
@@ -24,7 +26,7 @@ const SignUp = ({ setUser }) => {
       const { data } = await axios.post(`${constants.API_POST_SIGNIN}`, inputValues);
       localStorage.setItem('accessToken', data.data.accessToken);
       setUser(data.data.user);
-      window.location.assign('/');
+      navigate('/dashboard');
     } catch (err) {
       console.log(err);
     }

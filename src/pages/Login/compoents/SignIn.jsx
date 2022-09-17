@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import constants from '../../../global/constants';
 
 const SignIn = ({ setUser }) => {
@@ -8,6 +9,8 @@ const SignIn = ({ setUser }) => {
     password: '',
     provider: 'native',
   });
+
+  const navigate = useNavigate();
 
   //event handler
   const handleInput = (prop) => (e) => {
@@ -20,7 +23,7 @@ const SignIn = ({ setUser }) => {
       const { data } = await axios.post(`${constants.API_POST_SIGNIN}`, inputValues);
       localStorage.setItem('accessToken', data.data.accessToken);
       setUser(data.data.user);
-      window.location.assign('/');
+      navigate('/dashboard');
     } catch (err) {
       console.log(err);
     }
