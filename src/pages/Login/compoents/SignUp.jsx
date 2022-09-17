@@ -1,9 +1,9 @@
 import axios from 'axios';
-import { useEffect } from 'react';
+// import { useEffect } from 'react';
 import { useState } from 'react';
 import constants from '../../../global/constants';
 
-const SignUp = () => {
+const SignUp = ({ setUser }) => {
   const [inputValues, setinputValues] = useState({
     email: '',
     password: '',
@@ -11,34 +11,48 @@ const SignUp = () => {
     cellphone: '',
     provider: 'native',
   });
-  const [submitted, setSubmitted] = useState(false);
+  // const [submitted, setSubmitted] = useState(false);
 
   //event handler
   const handleInput = (prop) => (e) => {
     setinputValues({ ...inputValues, [prop]: e.target.value });
   };
-  const hanldleSubmit = (e) => {
-    e.preventDefault();
-    setSubmitted(true);
-  };
 
-  //submit form
-  useEffect(() => {
+  const hanldleSubmit = async (e) => {
+    e.preventDefault();
     try {
-      if (submitted) {
-        //fetch sigin
-        const fetchSigIn = async () => {
-          console.log(inputValues);
-          const { data } = await axios.post(`${constants.API_POST_SIGNUP}`, inputValues);
-          //set local storage
-          localStorage.setItem('accessToken', data.data.accessToken);
-        };
-        fetchSigIn();
-      }
+      const { data } = await axios.post(`${constants.API_POST_SIGNIN}`, inputValues);
+      localStorage.setItem('accessToken', data.data.accessToken);
+      setUser(data.data.user);
+      window.location.assign('/');
     } catch (err) {
       console.log(err);
     }
-  }, [submitted]);
+  };
+
+  // const hanldleSubmit = (e) => {
+  //   e.preventDefault();
+  //   setSubmitted(true);
+  // };
+
+  // //submit form
+  // useEffect(() => {
+  //   try {
+  //     if (submitted) {
+  //       //fetch sigin
+  //       const fetchSigIn = async () => {
+  //         console.log(inputValues);
+  //         const { data } = await axios.post(`${constants.API_POST_SIGNUP}`, inputValues);
+  //         //set local storage
+  //         localStorage.setItem('accessToken', data.data.accessToken);
+  //       };
+  //       fetchSigIn();
+  //     }
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // }, [submitted]);
+
   return (
     <form id="sign-up">
       SignUp

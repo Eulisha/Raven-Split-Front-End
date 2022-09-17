@@ -1,42 +1,31 @@
 import axios from 'axios';
-import { useEffect } from 'react';
 import { useState } from 'react';
 import constants from '../../../global/constants';
 
-const SignIn = () => {
+const SignIn = ({ setUser }) => {
   const [inputValues, setinputValues] = useState({
     email: '',
     password: '',
     provider: 'native',
   });
-  const [submitted, setSubmitted] = useState(false);
 
   //event handler
   const handleInput = (prop) => (e) => {
     setinputValues({ ...inputValues, [prop]: e.target.value });
   };
-  const hanldleSubmit = (e) => {
-    e.preventDefault();
-    setSubmitted(true);
-  };
 
-  //submit form
-  useEffect(() => {
+  const hanldleSubmit = async (e) => {
+    e.preventDefault();
     try {
-      if (submitted) {
-        //fetch sigin
-        console.log(inputValues);
-        const fetchSigIn = async () => {
-          const { data } = await axios.post(`${constants.API_POST_SIGNIN}`, inputValues);
-          //set local storage
-          localStorage.setItem('accessToken', data.data.accessToken);
-        };
-        fetchSigIn();
-      }
+      const { data } = await axios.post(`${constants.API_POST_SIGNIN}`, inputValues);
+      localStorage.setItem('accessToken', data.data.accessToken);
+      setUser(data.data.user);
+      window.location.assign('/');
     } catch (err) {
       console.log(err);
     }
-  }, [submitted]);
+  };
+
   return (
     <form id="sign-in">
       SignIn

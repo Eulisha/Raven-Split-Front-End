@@ -1,11 +1,11 @@
 import SignIn from './SignIn';
 import SignUp from './SignUp';
 
-const Login = () => {
+const Login = ({ setUser }) => {
   return (
     <div id="login">
-      <SignIn />
-      <SignUp />
+      <SignIn setUser={setUser} />
+      <SignUp setUser={setUser} />
     </div>
   );
 };
