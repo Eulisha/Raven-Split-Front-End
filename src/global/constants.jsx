@@ -12,7 +12,7 @@ const API_DELETE_DEBT = `${API_HOST}/debt/debt`;
 const API_POST_SETTLE = `${API_HOST}/debt/settle`;
 
 //Group
-const API_GET_GROUP_USERS = `${API_HOST}/group/group-users`;
+const API_GET_GROUP_USERS = `${API_HOST}/group/users`;
 
 //User
 const API_POST_SIGNIN = `${API_HOST}/user/signin`;
