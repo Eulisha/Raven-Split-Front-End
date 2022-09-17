@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import constants from '../../../global/constants';
+import { ListGroup } from 'react-bootstrap';
 
 const Balance = ({ gid, groupUserNames, isDebtChanged }) => {
   const [balances, setBalance] = useState([]);
@@ -26,16 +27,20 @@ const Balance = ({ gid, groupUserNames, isDebtChanged }) => {
 
   return (
     <div id="balance">
-      {balances.map((balance) => {
-        if (balance.borrower !== balance.lender)
-          return (
-            <div key={balance.id}>
-              <li>
-                {groupUserNames[balance.borrower]} 欠 {groupUserNames[balance.lender]} ${balance.amount}
-              </li>
-            </div>
-          );
-      })}
+      <ListGroup>
+        {balances.map((balance) => {
+          if (balance.borrower !== balance.lender)
+            return (
+              // <div key={balance.id}>
+              <ListGroup.Item key={balance.id} className="item">
+                <li>
+                  {groupUserNames[balance.borrower]} 欠 {groupUserNames[balance.lender]} ${balance.amount}
+                </li>
+              </ListGroup.Item>
+              // </div>
+            );
+        })}
+      </ListGroup>
     </div>
   );
 };

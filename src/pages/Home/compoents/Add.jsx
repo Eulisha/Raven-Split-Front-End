@@ -9,7 +9,7 @@ const AddButton = ({ currUserId, gid, groupUsers, groupUserNames, debtInfo, deta
   return (
     <div className="blog__controller">
       <Button variant="outline-success" onClick={() => setEditingShow(true)}>
-        新增
+        {details ? '編輯' : '新增'}
       </Button>
       {editingShow && (
         <AddingWindow /** 編輯視窗 */
@@ -33,6 +33,7 @@ const AddButton = ({ currUserId, gid, groupUsers, groupUserNames, debtInfo, deta
 
 const AddingWindow = ({ currUserId, gid, groupUsers, groupUserNames, debtInfo, details, setDebt, setDetail, setIsDebtChanged, onHide, show, state }) => {
   console.log('Editing....');
+  console.log('uid:  ', currUserId);
   //帳的初始值 判斷是新增or編輯
   const initialInfo = details
     ? debtInfo
@@ -200,7 +201,6 @@ const AddingWindow = ({ currUserId, gid, groupUsers, groupUserNames, debtInfo, d
           Close
         </Button>
         <Button variant="outline-primary" onClick={handleSubmit}>
-          {' '}
           Save changes
         </Button>
       </Modal.Footer>

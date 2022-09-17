@@ -39,15 +39,12 @@ const SignIn = () => {
   }, [submitted]);
   return (
     <form id="sign-in">
-      {' '}
       SignIn
       <label>
-        {' '}
         Email
         <input id="email" type="email" name="email" value={inputValues.email} onChange={handleInput('email')} />
       </label>
       <label>
-        {' '}
         Password
         <input id="password" type="password" name="password" value={inputValues.password} onChange={handleInput('password')} />
       </label>

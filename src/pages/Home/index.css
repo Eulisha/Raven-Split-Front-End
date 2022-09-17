@@ -9,18 +9,27 @@
 #Home{
   display: flex;
   flex-wrap: wrap;
-  /* flex-direction: column; */
   justify-content:center;
 }
 
 #left_sidebar, #center_column, #right_sidebar{
   display: flex;
   flex-wrap: wrap;
-  /* flex-direction: column; */
   margin: 10px;
   padding: 20px;
   border: solid 1px #979797;
 }
 #center_column{
+  flex-direction: column;
   width: 400px;
+}
+#group_area, #group_list, .debt_list{
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+}
+#top_bar,#debt{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }

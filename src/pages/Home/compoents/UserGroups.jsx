@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import constants from '../../../global/constants';
+import { Nav } from 'react-bootstrap';
 
 const UserGroups = ({ setCurrGroup }) => {
   // const UserGroups = () => {
@@ -18,24 +19,26 @@ const UserGroups = ({ setCurrGroup }) => {
       setUserGroups(data.data);
     };
     fetchuserGroups();
-
-    console.log('aaa');
   }, []);
 
   return (
-    <div>
-      Groups
-      <ul>
+    <div id="group_area">
+      <div>Groups</div>
+      {/* <ul id="group_list"> */}
+      <Nav defaultActiveKey="/home" className="flex-column">
         {userGroups.map((group) => {
           return (
-            <button key={group.gid} onClick={() => setCurrGroup({ gid: group.gid, name: group.name })}>
+            <Nav.Link key={group.gid} onClick={() => setCurrGroup({ gid: group.gid, name: group.name })}>
               {group.name}
-            </button>
+            </Nav.Link>
+            // <button key={group.gid} onClick={() => setCurrGroup({ gid: group.gid, name: group.name })}>
+            //   {group.name}
+            // </button>
           );
         })}
-      </ul>
+      </Nav>
+      {/* </ul> */}
     </div>
   );
 };
-
 export default UserGroups;

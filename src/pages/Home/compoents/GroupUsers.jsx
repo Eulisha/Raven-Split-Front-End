@@ -4,6 +4,7 @@ import constants from '../../../global/constants';
 import Balance from './Balance';
 
 const GroupUsers = ({ gid, currGroup, groupUserNames, setGroupUsers, setGroupUserNames, isDebtChanged }) => {
+  console.log('@groupuser log currgroup', currGroup, 'gid', currGroup.gid, currGroup.name);
   useEffect(() => {
     if (gid) {
       const token = localStorage.getItem('accessToken');
@@ -32,7 +33,7 @@ const GroupUsers = ({ gid, currGroup, groupUserNames, setGroupUsers, setGroupUse
   }, [currGroup]);
   return (
     <div id="group-users">
-      成員列表
+      <div>成員列表</div>
       {/* <ul>
         {groupUsers.map((item) => {
           return <li key={item.uid}>{item.name}</li>;

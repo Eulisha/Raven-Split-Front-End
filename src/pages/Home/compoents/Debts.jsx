@@ -3,20 +3,17 @@ import axios from 'axios';
 import constants from '../../../global/constants';
 import Details from './Details';
 import DebtList from './DebtList';
-import Settle from './Settle';
-import Add from './Add';
-// import Accordion from 'react-bootstrap/Accordion';
+import { Accordion } from 'react-bootstrap';
 
-const Debts = ({ currUserId, currGroup, groupUsers, groupUserNames, isDebtChanged, setIsDebtChanged }) => {
-  const [debts, setDebt] = useState([]);
-  const [extend, setExtend] = useState({}); //FIXME:應該要是一個陣列記錄所有的extend state
-
+const Debts = ({ currGroup, groupUsers, groupUserNames, debts, setDebt, isDebtChanged, setIsDebtChanged }) => {
+  // const [extend, setExtend] = useState({}); //FIXME:應該要是一個陣列記錄所有的extend state
+  const [extend, setExtend] = useState(false);
   //撈debts
   useEffect(() => {
-    const fetchDebts = async (currGroup) => {
+    const fetchDebts = async (gid) => {
       try {
         const token = localStorage.getItem('accessToken');
-        const result = await axios.get(`${constants.API_GET_DEBTS}/${currGroup}`, {
+        const result = await axios.get(`${constants.API_GET_DEBTS}/${gid}`, {
           headers: {
             authorization: `Bearer ${token}`,
           },
@@ -30,7 +27,7 @@ const Debts = ({ currUserId, currGroup, groupUsers, groupUserNames, isDebtChange
         console.log(err);
       }
     };
-    fetchDebts(currGroup);
+    fetchDebts(currGroup.gid);
   }, [currGroup]);
 
   //控制細目開合
@@ -38,34 +35,49 @@ const Debts = ({ currUserId, currGroup, groupUsers, groupUserNames, isDebtChange
     setExtend(false);
   }, [isDebtChanged]);
   console.log(debts);
+
+  const handleExtend = (e) => {
+    console.log('click');
+    console.log(e.target);
+    console.log(extend);
+    setExtend(true);
+    console.log(extend);
+    // setExtend(() => {
+    //   const debtId = Number(e.target.id);
+    //   let extendStatus = {};
+    //   extendStatus[debtId] = true;
+    //   console.log(extendStatus);
+    //   return extendStatus; //true-false交換
+    //   // return { [debtId]: !prev[debtId] }; //true-false交換
+    // });
+  };
+
   return (
-    <div id="debts">
-      <div>
-        <Add.AddButton currUserId={currUserId} gid={currGroup} groupUsers={groupUsers} groupUserNames={groupUserNames} setDebt={setDebt} setIsDebtChanged={setIsDebtChanged} />
-        <Settle.SettleButton key="settle-button" gid={currGroup} groupUsers={groupUsers} groupUserNames={groupUserNames} setIsDebtChanged={setIsDebtChanged} />
-      </div>
+    <div id="debts_column">
       {debts.length > 0 &&
         debts.map((debt) => {
           console.log(debt.id);
           return (
-            <div key={debt.id}>
-              <DebtList className="debt-list" gid={currGroup} groupUserNames={groupUserNames} debtInfo={debt} setDebt={setDebt} setExtend={setExtend} />
-              <Details
-                className="details"
-                gid={currGroup}
-                groupUsers={groupUsers}
-                groupUserNames={groupUserNames}
-                debts={debts}
-                debtInfo={debt}
-                extend={extend}
-                setDebt={setDebt}
-                setIsDebtChanged={setIsDebtChanged}
-              />
-            </div>
-            //   <div key={debt.id}>
-            //   <DebtList className="debt-list" gid={currGroup} groupUserNames={groupUserNames} debtInfo={debt} setDebt={setDebt} setExtend={setExtend} />
-            //   <Details className="details" gid={currGroup} groupUsers={groupUsers} groupUserNames={groupUserNames} debts={debts} debtInfo={debt} extend={extend} setDebt={setDebt} />
-            //   </div>
+            <Accordion key={debt.id}>
+              <Accordion.Item key={debt.id} className="debt_list" eventKey="1" onClick={handleExtend}>
+                <Accordion.Header id={debt.id}>
+                  <DebtList gid={currGroup.gid} groupUserNames={groupUserNames} debtInfo={debt} setDebt={setDebt} setExtend={setExtend} />
+                </Accordion.Header>
+                <Accordion.Body>
+                  <Details
+                    id="details"
+                    gid={currGroup.gid}
+                    groupUsers={groupUsers}
+                    groupUserNames={groupUserNames}
+                    debts={debts}
+                    debtInfo={debt}
+                    extend={extend}
+                    setDebt={setDebt}
+                    setIsDebtChanged={setIsDebtChanged}
+                  />
+                </Accordion.Body>
+              </Accordion.Item>
+            </Accordion>
           );
         })}
     </div>
@@ -73,3 +85,4 @@ const Debts = ({ currUserId, currGroup, groupUsers, groupUserNames, isDebtChange
 };
 
 export default Debts;
+//

@@ -1,16 +1,21 @@
 import { useEffect } from 'react';
+import { ListGroup } from 'react-bootstrap';
 
 useEffect;
 const DetailList = ({ details, groupUserNames }) => {
   return (
     <>
-      {Object.keys(details).map((borrowerId) => {
-        return (
-          <div key={borrowerId} className="item">
-            <li>{`${groupUserNames[borrowerId]} owns ${details[borrowerId]}`}</li>
-          </div>
-        );
-      })}
+      <ListGroup>
+        {Object.keys(details).map((borrowerId) => {
+          return (
+            <ListGroup.Item key={borrowerId} className="item">
+              {/* <div key={borrowerId} className="item"> */}
+              {`${groupUserNames[borrowerId]} owns ${details[borrowerId]}`}
+              {/* </div> */}
+            </ListGroup.Item>
+          );
+        })}
+      </ListGroup>
     </>
   );
 };

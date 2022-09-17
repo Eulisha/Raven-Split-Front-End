@@ -1,22 +1,24 @@
 import axios from 'axios';
 import constants from '../../../global/constants';
+import Button from 'react-bootstrap/Button';
 
-const DebtList = ({ gid, groupUserNames, debtInfo, setDebt, setExtend }) => {
+// , setExtend
+const DebtList = ({ gid, groupUserNames, debtInfo, setDebt }) => {
   const { date, title, total, lender, isOwned, ownAmount } = debtInfo;
   const debtId = debtInfo.id;
 
-  //  切換detail開闔 FIXME:父層需要調整才會有用
-  const handleExtend = (e) => {
-    console.log('click');
-    setExtend(() => {
-      const debtId = Number(e.target.id);
-      let extendStatus = {};
-      extendStatus[debtId] = true;
-      console.log(extendStatus);
-      return extendStatus; //true-false交換
-      // return { [debtId]: !prev[debtId] }; //true-false交換
-    });
-  };
+  //  切換detail開闔
+  // const handleExtend = (e) => {
+  //   console.log('click');
+  //   setExtend(() => {
+  //     const debtId = Number(e.target.id);
+  //     let extendStatus = {};
+  //     extendStatus[debtId] = true;
+  //     console.log(extendStatus);
+  //     return extendStatus; //true-false交換
+  //     // return { [debtId]: !prev[debtId] }; //true-false交換
+  //   });
+  // };
 
   //刪除debt列
   const handleDeleteDebt = async (e) => {
@@ -50,20 +52,18 @@ const DebtList = ({ gid, groupUserNames, debtInfo, setDebt, setExtend }) => {
   return (
     <div id="debt">
       <div>
-        <li>
-          {`日期: ${date} `}
-          {`項目: ${title} `}
-          {`$NT: ${total} `}
-          {`Paid By: ${groupUserNames[lender]}`}
-          {`${isOwned ? 'You Paid' : 'You Own'} $NT: ${isOwned ? total - ownAmount : ownAmount}`}
-        </li>
+        <div className="date">{`${date} `}</div>
+        <div className="description">{`項目: ${title} `}</div>
+        <div className="cost">
+          <span>{`Paid By: ${groupUserNames[lender]}`}</span>
+          <span>{`$NT: ${total} `}</span>
+        </div>
+        <div className="you">{`${isOwned ? 'You Paid' : 'You Own'} $NT: ${isOwned ? total - ownAmount : ownAmount}`}</div>
       </div>
-      <button id={debtId} onClick={handleExtend}>
+      {/* <button id={debtId} onClick={handleExtend}>
         V
-      </button>
-      <button id={debtId} onClick={handleDeleteDebt}>
-        刪除
-      </button>
+      </button> */}
+      <Button closeButton variant="outline-secondary" id={debtId} onClick={handleDeleteDebt}></Button>
     </div>
   );
 };
