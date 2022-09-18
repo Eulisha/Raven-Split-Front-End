@@ -151,16 +151,15 @@ const GroupManageWindow = ({ currGroup, groupUsers, groupUserNames, groupUserEma
       </Modal.Header>
       <Modal.Body>
         <div>
-          <h4>給個名字吧</h4>
+          <h4>群組的名字</h4>
           <div id="group_name">
-            群組的名字
             <input ref={inputGroupName} type="text" defaultValue={currGroup ? currGroup.name : ''}></input>
           </div>
-          <h4>哪種群組呢</h4>
+          {/* <h4>哪種群組呢</h4>
           <div id="group_name">
             群組類型
             <input ref={inputGroupType} type="text" defaultValue={currGroup ? currGroup.type : ''}></input>
-          </div>
+          </div> */}
           <h4>成員們</h4>
           <div id="group_members">
             <ul>
@@ -169,9 +168,13 @@ const GroupManageWindow = ({ currGroup, groupUsers, groupUserNames, groupUserEma
                   return (
                     <div key={uid}>
                       <div>{`${editedGroupUserNames[uid]} (${editedGroupUserEmails[uid]})`}</div>
-                      <button id={uid} onClick={handleDeleteUser}>
-                        x
-                      </button>
+                      {!groupUsers.includes(uid) ? (
+                        <button id={uid} onClick={handleDeleteUser}>
+                          x
+                        </button>
+                      ) : (
+                        ''
+                      )}
                     </div>
                   );
                 })
@@ -180,6 +183,7 @@ const GroupManageWindow = ({ currGroup, groupUsers, groupUserNames, groupUserEma
               )}
             </ul>
             <div id="add_user">
+              <h4>新增成員</h4>
               <input ref={inputUserName} id="add_user_name" type="text" placeholder="取個名吧" />
               <input ref={inputUserEmail} id="add_user_email" type="email" placeholder="成員的信箱" />
               {/* <input id="add_user_email" type="text" placeholder="成員的權限" /> */}
