@@ -34,6 +34,7 @@ const AddButton = ({ gid, groupUsers, groupUserNames, debtInfo, details, setDebt
 const AddingWindow = ({ gid, groupUsers, groupUserNames, debtInfo, details, setDebt, setDetail, setIsDebtChanged, onHide, show }) => {
   console.log('Editing....');
   let currUser = useContext(CurrUser);
+  console.log(currUser);
   let currUserId = currUser.id;
   let currUserName = currUser.name;
 
@@ -52,6 +53,7 @@ const AddingWindow = ({ gid, groupUsers, groupUserNames, debtInfo, details, setD
   const oriSplit = details ? details : {};
 
   //設定state
+  //編輯時暫存的值
   const [info, setInfo] = useState(initialInfo);
   const [split, setSplit] = useState(oriSplit); //{uid:amount}
   const [currSum, setSum] = useState(oriSum);
@@ -145,7 +147,10 @@ const AddingWindow = ({ gid, groupUsers, groupUserNames, debtInfo, details, setD
           return [info, ...prev];
         });
         if (details) {
-          setDetail(split); //FIXME:要確認
+          setDetail((prev) => {
+            console.log(prev);
+            split;
+          }); //FIXME:要確認
         }
         setIsDebtChanged((prev) => {
           return !prev;

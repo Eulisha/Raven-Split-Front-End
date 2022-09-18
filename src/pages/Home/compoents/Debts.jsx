@@ -38,8 +38,9 @@ const Debts = ({ currGroup, groupUsers, groupUserNames, debts, setDebt, isDebtCh
 
   const handleExtend = (e) => {
     console.log(e.target);
+    console.log(e.target.id);
     console.log(extend);
-    setExtend(true);
+    setExtend((prev) => !prev);
     console.log(extend);
     // setExtend(() => {
     //   const debtId = Number(e.target.id);

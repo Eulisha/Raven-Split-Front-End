@@ -22,15 +22,20 @@ const Details = ({ gid, groupUsers, groupUserNames, debtInfo, extend, setDebt, s
       });
 
       //整理成快速查找的object, oriSplit = {1:50, 2:50}
+      console.log(data.data);
+
+      console.log('debug map');
       const oriSplit = {};
-      groupUsers.map((uid) => {
-        data.data.map((detail) => {
+      data.data.map((detail) => {
+        console.log('borrow', detail.borrower);
+        for (let uid of groupUsers) {
+          console.log('uid', uid);
           if (uid === detail.borrower) {
+            console.log('true');
             oriSplit[uid] = detail.amount;
-          } else {
-            oriSplit[uid] = null;
+            break;
           }
-        });
+        }
       });
       setDetail(oriSplit);
       console.log('set details: ', oriSplit);

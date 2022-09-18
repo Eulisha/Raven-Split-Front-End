@@ -9,8 +9,10 @@ import React, { useState } from 'react';
 export const CurrUser = React.createContext();
 
 const App = () => {
+  console.log('@App');
   // if (!localStorage.getItem('accessToken')) {
   const [user, setUser] = useState({});
+  console.log('user from setUser:', user);
   // }
   return (
     <CurrUser.Provider value={user}>

@@ -5,10 +5,15 @@ import UserGroups from './UserGroups';
 import Debts from './Debts';
 import GroupTopBar from './GroupTopBar';
 import Dashboard from './Dashboard';
+import { useContext } from 'react';
+import { CurrUser } from '../../App';
 
 export const CurrGroupInfo = React.createContext();
 
 const Home = () => {
+  console.log('@Home');
+  const user = useContext(CurrUser);
+  console.log('user form context', user);
   const [currGroup, setCurrGroup] = useState({ gid: null, name: null, type: null });
   const [groupUsers, setGroupUsers] = useState([]); //array of Ids of groupUsers
   const [groupUserNames, setGroupUserNames] = useState({}); //{1:Euli}
