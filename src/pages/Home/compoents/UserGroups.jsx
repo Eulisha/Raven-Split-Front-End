@@ -4,7 +4,7 @@ import constants from '../../../global/constants';
 import { Nav } from 'react-bootstrap';
 import GroupManage from './GroupManage';
 
-const UserGroups = ({ setCurrGroup, setGroupUsers, setGroupUserNames, setGroupUserEmails }) => {
+const UserGroups = ({ setCurrGroup, setGroupUsers, setGroupUserNames, setGroupUserEmails, isGroupChanged, setIsGroupChanged }) => {
   console.log('at usergroups');
   const [userGroups, setUserGroups] = useState([]);
   console.log('userGroups', userGroups);
@@ -21,13 +21,18 @@ const UserGroups = ({ setCurrGroup, setGroupUsers, setGroupUserNames, setGroupUs
       setUserGroups(data.data);
     };
     fetchuserGroups();
-  }, []);
+  }, [isGroupChanged]);
 
   return (
     <div id="group_area">
       <div id="group_normal_type">
         My Groups
-        <GroupManage.GroupManageButton setGroupUsers={setGroupUsers} setGroupUserNames={setGroupUserNames} setGroupUserEmails={setGroupUserEmails} />
+        <GroupManage.GroupManageButton
+          setGroupUsers={setGroupUsers}
+          setGroupUserNames={setGroupUserNames}
+          setGroupUserEmails={setGroupUserEmails}
+          setIsGroupChanged={setIsGroupChanged}
+        />
         <div className="top_bar">
           <div>Groups</div>
         </div>

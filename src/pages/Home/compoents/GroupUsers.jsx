@@ -39,7 +39,15 @@ const GroupUsers = ({ gid, currGroup, groupUsers, groupUserNames, setGroupUsers,
     <div id="group-users">
       <div className="top_bar">
         <div>成員列表</div>
-        <GroupManage.GroupManageButton currGroup={currGroup} groupUsers={groupUsers} groupUserNames={groupUserNames} groupUserEmails={groupUserEmails} />
+        <GroupManage.GroupManageButton
+          currGroup={currGroup}
+          groupUsers={groupUsers}
+          groupUserNames={groupUserNames}
+          groupUserEmails={groupUserEmails}
+          setGroupUsers={setGroupUsers}
+          setGroupUserNames={setGroupUserNames}
+          setGroupUserEmails={setGroupUserEmails}
+        />
       </div>
       {/* <ul>
         {groupUsers.map((item) => {

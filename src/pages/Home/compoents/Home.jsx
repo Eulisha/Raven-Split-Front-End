@@ -14,13 +14,14 @@ const Home = () => {
   const [groupUserNames, setGroupUserNames] = useState({}); //{1:Euli}
   const [groupUserEmails, setGroupUserEmails] = useState({}); //{1:Euli}
   const [isDebtChanged, setIsDebtChanged] = useState(false);
+  const [isGroupChanged, setIsGroupChanged] = useState(false);
   const [debts, setDebt] = useState([]);
   console.log('@home log currgroup', currGroup, 'gid', currGroup.gid, currGroup.name);
   return (
     // <CurrGroupInfo.Provider value={{ currGroup, groupUsers, groupUserNames, groupUserEmails }}>
     <div id="Home">
       <div id="left_sidebar">
-        <UserGroups setCurrGroup={setCurrGroup} />
+        <UserGroups setCurrGroup={setCurrGroup} isGroupChanged={isGroupChanged} setIsGroupChanged={setIsGroupChanged} />
       </div>
       <div id="center_column">
         <GroupTopBar currGroup={currGroup} groupUsers={groupUsers} groupUserNames={groupUserNames} setDebt={setDebt} setIsDebtChanged={setIsDebtChanged} />
@@ -51,6 +52,8 @@ const Home = () => {
             setGroupUserNames={setGroupUserNames}
             setGroupUserEmails={setGroupUserEmails}
             isDebtChanged={isDebtChanged}
+            isGroupChanged={isGroupChanged}
+            setIsGroupChanged={setIsGroupChanged}
           />
         ) : (
           '尚未選取群組'
