@@ -4,7 +4,7 @@ import constants from '../../../global/constants';
 import { Nav } from 'react-bootstrap';
 import GroupManage from './GroupManage';
 
-const UserGroups = ({ setCurrGroup }) => {
+const UserGroups = ({ setCurrGroup, setGroupUsers, setGroupUserNames, setGroupUserEmails }) => {
   console.log('at usergroups');
   const [userGroups, setUserGroups] = useState([]);
   console.log('userGroups', userGroups);
@@ -25,24 +25,71 @@ const UserGroups = ({ setCurrGroup }) => {
 
   return (
     <div id="group_area">
-      <div className="top_bar">
-        <div>Groups</div>
-        <GroupManage.GroupManageButton />
+      <div id="group_normal_type">
+        My Groups
+        <GroupManage.GroupManageButton setGroupUsers={setGroupUsers} setGroupUserNames={setGroupUserNames} setGroupUserEmails={setGroupUserEmails} />
+        <div className="top_bar">
+          <div>Groups</div>
+        </div>
+        {/* <ul id="group_list"> */}
+        <Nav defaultActiveKey="/home" className="flex-column">
+          {userGroups.map((group) => {
+            if (group.type === '1') {
+              return (
+                <Nav.Link key={group.gid} onClick={() => setCurrGroup({ gid: group.gid, name: group.name, type: group.type })}>
+                  {group.name}
+                </Nav.Link>
+                // <button key={group.gid} onClick={() => setCurrGroup({ gid: group.gid, name: group.name })}>
+                //   {group.name}
+                // </button>
+              );
+            }
+          })}
+        </Nav>
+        {/* </ul> */}
       </div>
-      {/* <ul id="group_list"> */}
-      <Nav defaultActiveKey="/home" className="flex-column">
-        {userGroups.map((group) => {
-          return (
-            <Nav.Link key={group.gid} onClick={() => setCurrGroup({ gid: group.gid, name: group.name })}>
-              {group.name}
-            </Nav.Link>
-            // <button key={group.gid} onClick={() => setCurrGroup({ gid: group.gid, name: group.name })}>
-            //   {group.name}
-            // </button>
-          );
-        })}
-      </Nav>
-      {/* </ul> */}
+      <div id="group_pair_type">
+        <div className="top_bar">
+          <div>Pair</div>
+        </div>
+        {/* <ul id="group_list"> */}
+        <Nav defaultActiveKey="/home" className="flex-column">
+          {userGroups.map((group) => {
+            if (group.type === '2') {
+              return (
+                <Nav.Link key={group.gid} onClick={() => setCurrGroup({ gid: group.gid, name: group.name, type: group.type })}>
+                  {group.name}
+                </Nav.Link>
+                // <button key={group.gid} onClick={() => setCurrGroup({ gid: group.gid, name: group.name })}>
+                //   {group.name}
+                // </button>
+              );
+            }
+          })}
+        </Nav>
+        {/* </ul> */}
+      </div>
+      <div id="group_buying_type">
+        <div className="top_bar">
+          <div>Group Buying</div>
+        </div>
+        {/* <ul id="group_list"> */}
+        <Nav defaultActiveKey="/home" className="flex-column">
+          {userGroups.map((group) => {
+            if (group.type === '3') {
+              return (
+                <Nav.Link key={group.gid} onClick={() => setCurrGroup({ gid: group.gid, name: group.name, type: group.type })}>
+                  {group.name}
+                </Nav.Link>
+                // <button key={group.gid} onClick={() => setCurrGroup({ gid: group.gid, name: group.name })}>
+                //   {group.name}
+                // </button>
+              );
+            }
+          })}
+        </Nav>
+        {/* </ul> */}
+      </div>
     </div>
   );
 };
