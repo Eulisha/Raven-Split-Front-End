@@ -59,7 +59,9 @@ const SettleWindow = ({ gid, setIsDebtChanged, onHide, show, state }) => {
       });
       if (data.data) {
         setSettle([]);
-        setIsDebtChanged(true);
+        setIsDebtChanged((prev) => {
+          return !prev;
+        });
       }
     } catch (err) {
       console.log(err);

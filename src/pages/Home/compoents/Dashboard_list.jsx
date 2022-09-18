@@ -1,5 +1,4 @@
 const Dashboard_list = ({ selfBalance }) => {
-  console.log('child:', selfBalance);
   return (
     <div id="self_balance_list">
       <div id="negatives">

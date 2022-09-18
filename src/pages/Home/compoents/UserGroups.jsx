@@ -5,7 +5,7 @@ import { Nav } from 'react-bootstrap';
 import GroupManage from './GroupManage';
 
 const UserGroups = ({ setCurrGroup, setGroupUsers, setGroupUserNames, setGroupUserEmails, isGroupChanged, setIsGroupChanged }) => {
-  console.log('at usergroups');
+  console.log('@UserGroups');
   const [userGroups, setUserGroups] = useState([]);
   console.log('userGroups', userGroups);
 
@@ -17,7 +17,7 @@ const UserGroups = ({ setCurrGroup, setGroupUsers, setGroupUserNames, setGroupUs
           authorization: `Bearer ${token}`,
         },
       });
-      console.log('fetch data user-groups:  ', data);
+      console.log('fetch data userGroups:  ', data);
       setUserGroups(data.data);
     };
     fetchuserGroups();

@@ -3,7 +3,6 @@ import Add from './Add';
 import { Navbar } from 'react-bootstrap';
 
 const GroupTopBar = ({ currGroup, groupUsers, groupUserNames, setDebt, setIsDebtChanged }) => {
-  console.log('at top bar log currgroup', currGroup);
   return (
     <Navbar id="top_bar">
       {/* <Container> */}

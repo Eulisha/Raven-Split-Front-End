@@ -4,12 +4,14 @@ import Login from './Login/compoents/Login';
 import Home from './Home/compoents/Home';
 import Header from '../global/Header';
 import React, { useState } from 'react';
+// import { useEffect } from 'react';
 
 export const CurrUser = React.createContext();
 
 const App = () => {
+  // if (!localStorage.getItem('accessToken')) {
   const [user, setUser] = useState({});
-  console.log('logging', user);
+  // }
   return (
     <CurrUser.Provider value={user}>
       <div className="App">

@@ -23,7 +23,7 @@ const SignUp = ({ setUser }) => {
   const hanldleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post(`${constants.API_POST_SIGNIN}`, inputValues);
+      const { data } = await axios.post(`${constants.API_POST_SIGNUP}`, inputValues);
       localStorage.setItem('accessToken', data.data.accessToken);
       setUser(data.data.user);
       navigate('/dashboard');

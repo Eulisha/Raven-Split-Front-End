@@ -147,7 +147,9 @@ const AddingWindow = ({ gid, groupUsers, groupUserNames, debtInfo, details, setD
         if (details) {
           setDetail(split); //FIXME:要確認
         }
-        setIsDebtChanged(true);
+        setIsDebtChanged((prev) => {
+          return !prev;
+        });
         onHide();
       }
     } catch (err) {

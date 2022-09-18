@@ -130,7 +130,7 @@ const GroupManageWindow = ({ currGroup, groupUsers = [], groupUserNames, groupUs
 
       //確認有成功後更新state
       if (result.status === 200) {
-        setIsGroupChanged(true);
+        setIsGroupChanged((prev) => !prev);
         onHide();
       }
     } catch (err) {

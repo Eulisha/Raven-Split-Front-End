@@ -6,12 +6,12 @@ import DetailList from './DetailList';
 import Add from './Add';
 
 const Details = ({ gid, groupUsers, groupUserNames, debtInfo, extend, setDebt, setIsDebtChanged }) => {
+  console.log('@Details');
   const debtId = debtInfo.id;
   const [details, setDetail] = useState({});
 
   //撈debt_details
   useEffect(() => {
-    console.log('relog detail');
     // if (extend[debtId]) {
     const fetchDetail = async (debtId) => {
       const token = localStorage.getItem('accessToken');

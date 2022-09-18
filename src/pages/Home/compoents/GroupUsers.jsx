@@ -5,7 +5,8 @@ import Balance from './Balance';
 import GroupManage from './GroupManage';
 
 const GroupUsers = ({ gid, currGroup, groupUsers, groupUserNames, setGroupUsers, groupUserEmails, setGroupUserNames, setGroupUserEmails, isDebtChanged, isGroupChanged }) => {
-  console.log('@groupuser log currgroup', currGroup, 'gid', currGroup.gid, currGroup.name);
+  console.log('@groupUsers');
+
   useEffect(() => {
     if (gid) {
       const token = localStorage.getItem('accessToken');
@@ -15,7 +16,7 @@ const GroupUsers = ({ gid, currGroup, groupUsers, groupUserNames, setGroupUsers,
             authorization: `Bearer ${token}`,
           },
         });
-        console.log('fetch data group-groupUsers:  ', data);
+        console.log('fetch data groupUsers:  ', data);
 
         //整理成適合的格式
         const groupUsers = []; //array of Ids of groupUsers
@@ -29,12 +30,11 @@ const GroupUsers = ({ gid, currGroup, groupUsers, groupUserNames, setGroupUsers,
         setGroupUsers(groupUsers);
         setGroupUserNames(userNames);
         setGroupUserEmails(userEmails);
-        console.log('groupUsers', groupUsers);
-        console.log('groupUserNames', userNames);
       };
       fetchUsers(gid);
     }
-  }, [currGroup, isGroupChanged]);
+  }, [isGroupChanged]);
+  // currGroup,
   return (
     <div id="group-users">
       <div className="top_bar">
@@ -54,7 +54,7 @@ const GroupUsers = ({ gid, currGroup, groupUsers, groupUserNames, setGroupUsers,
           return <li key={item.uid}>{item.name}</li>;
         })}
       </ul> */}
-      <Balance id="balance" gid={gid} groupUserNames={groupUserNames} isDebtChanged={isDebtChanged} />
+      <Balance id="balance" gid={gid} groupUserNames={groupUserNames} currGroup={currGroup} isDebtChanged={isDebtChanged} />
     </div>
   );
 };

@@ -9,14 +9,14 @@ import Dashboard from './Dashboard';
 export const CurrGroupInfo = React.createContext();
 
 const Home = () => {
-  const [currGroup, setCurrGroup] = useState({ gid: null, name: null });
+  const [currGroup, setCurrGroup] = useState({ gid: null, name: null, type: null });
   const [groupUsers, setGroupUsers] = useState([]); //array of Ids of groupUsers
   const [groupUserNames, setGroupUserNames] = useState({}); //{1:Euli}
   const [groupUserEmails, setGroupUserEmails] = useState({}); //{1:Euli}
   const [isDebtChanged, setIsDebtChanged] = useState(false);
   const [isGroupChanged, setIsGroupChanged] = useState(false);
   const [debts, setDebt] = useState([]);
-  console.log('@home log currgroup', currGroup, 'gid', currGroup.gid, currGroup.name);
+  // console.log('@home log currgroup', currGroup, 'gid', currGroup.gid, currGroup.name);
   return (
     // <CurrGroupInfo.Provider value={{ currGroup, groupUsers, groupUserNames, groupUserEmails }}>
     <div id="Home">

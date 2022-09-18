@@ -3,10 +3,10 @@ import axios from 'axios';
 import constants from '../../../global/constants';
 import { ListGroup } from 'react-bootstrap';
 
-const Balance = ({ gid, groupUserNames, isDebtChanged }) => {
+const Balance = ({ gid, groupUserNames, currGroup, isDebtChanged }) => {
+  console.log('@balance');
   const [balances, setBalance] = useState([]);
   useEffect(() => {
-    console.log('balance gid', gid);
     const fetchBalance = async (gid) => {
       const token = localStorage.getItem('accessToken');
       try {
@@ -23,7 +23,7 @@ const Balance = ({ gid, groupUserNames, isDebtChanged }) => {
       }
     };
     fetchBalance(gid);
-  }, [isDebtChanged]);
+  }, [currGroup, isDebtChanged]);
 
   return (
     <div id="balance">

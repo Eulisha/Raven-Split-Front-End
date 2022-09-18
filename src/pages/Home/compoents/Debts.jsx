@@ -7,6 +7,7 @@ import { Accordion } from 'react-bootstrap';
 
 const Debts = ({ currGroup, groupUsers, groupUserNames, debts, setDebt, isDebtChanged, setIsDebtChanged }) => {
   // const [extend, setExtend] = useState({}); //FIXME:應該要是一個陣列記錄所有的extend state
+  console.log('@Debts');
   const [extend, setExtend] = useState(false);
   //撈debts
   useEffect(() => {
@@ -34,10 +35,8 @@ const Debts = ({ currGroup, groupUsers, groupUserNames, debts, setDebt, isDebtCh
   useEffect(() => {
     setExtend(false);
   }, [isDebtChanged]);
-  console.log(debts);
 
   const handleExtend = (e) => {
-    console.log('click');
     console.log(e.target);
     console.log(extend);
     setExtend(true);
@@ -56,7 +55,6 @@ const Debts = ({ currGroup, groupUsers, groupUserNames, debts, setDebt, isDebtCh
     <div id="debts_column">
       {debts.length > 0 &&
         debts.map((debt) => {
-          console.log(debt.id);
           return (
             <Accordion key={debt.id}>
               <Accordion.Item key={debt.id} className="debt_list" eventKey="1" onClick={handleExtend}>
