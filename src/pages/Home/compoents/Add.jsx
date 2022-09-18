@@ -10,7 +10,7 @@ const AddButton = ({ gid, groupUsers, groupUserNames, debtInfo, details, setDebt
   return (
     <div className="blog__controller">
       <Button variant="outline-success" onClick={() => setEditingShow(true)}>
-        {details ? '編輯' : '新增'}
+        {details ? 'Edit' : 'Add'}
       </Button>
       {editingShow && (
         <AddingWindow /** 編輯視窗 */

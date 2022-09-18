@@ -14,7 +14,7 @@ const Header = () => {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <NavDropdown title="Dropdown" id="basic-nav-dropdown">
+            <NavDropdown title="My Account" id="basic-nav-dropdown">
               <NavDropdown.Item href="#action/3.1">Account Setting</NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item

@@ -4,7 +4,7 @@ import constants from '../../../global/constants';
 import Balance from './Balance';
 import GroupManage from './GroupManage';
 
-const GroupUsers = ({ gid, currGroup, groupUsers, groupUserNames, setGroupUsers, groupUserEmails, setGroupUserNames, setGroupUserEmails, isDebtChanged }) => {
+const GroupUsers = ({ gid, currGroup, groupUsers, groupUserNames, setGroupUsers, groupUserEmails, setGroupUserNames, setGroupUserEmails, isDebtChanged, isGroupChanged }) => {
   console.log('@groupuser log currgroup', currGroup, 'gid', currGroup.gid, currGroup.name);
   useEffect(() => {
     if (gid) {
@@ -34,7 +34,7 @@ const GroupUsers = ({ gid, currGroup, groupUsers, groupUserNames, setGroupUsers,
       };
       fetchUsers(gid);
     }
-  }, [currGroup]);
+  }, [currGroup, isGroupChanged]);
   return (
     <div id="group-users">
       <div className="top_bar">

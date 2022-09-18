@@ -13,11 +13,14 @@ const API_POST_SETTLE = `${API_HOST}/debt/settle`;
 
 //Group
 const API_GET_GROUP_USERS = `${API_HOST}/group/users`;
+const API_POST_GROUP = `${API_HOST}/group/group`;
+const API_PUT_GROUP = `${API_HOST}/group/group`;
 
 //User
 const API_POST_SIGNIN = `${API_HOST}/user/signin`;
 const API_POST_SIGNUP = `${API_HOST}/user/signup`;
 const API_GET_USER_GROUPS = `${API_HOST}/user/groups`;
+const API_GET_User_EXIST = `${API_HOST}/user/user-exist`;
 
 export default {
   API_HOST,
@@ -34,4 +37,7 @@ export default {
   API_POST_SIGNUP,
   API_GET_USER_GROUPS,
   API_POST_SETTLE,
+  API_GET_User_EXIST,
+  API_POST_GROUP,
+  API_PUT_GROUP,
 };

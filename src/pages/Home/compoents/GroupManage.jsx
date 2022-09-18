@@ -4,7 +4,6 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import constants from '../../../global/constants';
 import { CurrUser } from '../../App';
-// import { CurrGroupInfo } from './Home';
 
 const GroupManageButton = ({ currGroup, groupUsers, groupUserNames, groupUserEmails, setGroupUsers, setGroupUserNames, setGroupUserEmails, setIsGroupChanged }) => {
   const [editingShow, setEditingShow] = useState(false);
@@ -12,7 +11,7 @@ const GroupManageButton = ({ currGroup, groupUsers, groupUserNames, groupUserEma
   return (
     <div className="blog__controller">
       <Button variant="outline-success" onClick={() => setEditingShow(true)}>
-        {currGroup ? '編輯' : '新增'} {/* FIXME:這邊要再改 */}
+        {currGroup ? 'Setting' : '+'} {/* FIXME:這邊要再改 */}
       </Button>
       {editingShow && (
         <GroupManageWindow
@@ -32,37 +31,31 @@ const GroupManageButton = ({ currGroup, groupUsers, groupUserNames, groupUserEma
   );
 };
 
-const GroupManageWindow = ({ currGroup, groupUsers, groupUserNames, groupUserEmails, setGroupUsers, setGroupUserNames, setGroupUserEmails, setIsGroupChanged, show, onHide }) => {
+// , setGroupUserNames, setGroupUsers, setGroupUserEmails,
+const GroupManageWindow = ({ currGroup, groupUsers = [], groupUserNames, groupUserEmails, setIsGroupChanged, show, onHide }) => {
   console.log('Editing Group....');
-  // const currGroupInfo = useContext(CurrGroupInfo);
-  // console.log(currGroupInfo);
-  // const currGroup = currGroupInfo.currGroup;
-  // const groupUsers = currGroupInfo.groupUser;
-  // const groupUserNames = currGroupInfo.groupUserNames;
-  // const groupUserEmails = currGroupInfo.groupUserEmails;
 
   let currUser = useContext(CurrUser);
   // let currUserId = currUser.id;
-  let currUserName = currUser.name; //FIXME:要再套上去
-  console.log(currUserName);
-  console.log(groupUsers);
+  // let currUserName = currUser.name; //FIXME:要再套上去
+  console.log('currUser', currUser);
+  console.log('groupUsers', groupUsers);
 
   //帳的初始值 判斷是新增or編輯
 
   //設定state
-  const [editedGroupUserIds, setEditedGroupUserIds] = useState(currGroup ? groupUsers : []);
-  const [editedGroupUserNames, setEditedGroupUserNames] = useState(groupUserNames);
+  const [editedGroupUserIds, setEditedGroupUserIds] = useState(groupUsers);
   const [editedGroupUserEmails, setEditedGroupUserEmails] = useState(groupUserEmails);
   console.log('editedGroupUserIds', editedGroupUserIds);
-  console.log('editedGroupUserNames', editedGroupUserNames);
   console.log('editedGroupUserEmails', editedGroupUserEmails);
+  // const [editedGroupUserNames, setEditedGroupUserNames] = useState(groupUserNames);
+  // console.log('editedGroupUserNames', editedGroupUserNames);
 
   //設定ref
   const inputGroupName = useRef();
   const inputGroupType = useRef();
-  const inputUserName = useRef();
   const inputUserEmail = useRef();
-  console.log(setGroupUsers, setGroupUserNames, setGroupUserEmails);
+  // const inputUserName = useRef();
 
   //EventHandle
   const handleDeleteUser = (e) => {
@@ -70,11 +63,11 @@ const GroupManageWindow = ({ currGroup, groupUsers, groupUserNames, groupUserEma
     setEditedGroupUserIds((prev) => {
       return prev.filter((user) => user !== uid);
     });
-    setEditedGroupUserNames(() => {
-      const copy = { ...editedGroupUserNames };
-      delete copy[uid];
-      return copy;
-    });
+    // setEditedGroupUserNames(() => {
+    //   const copy = { ...editedGroupUserNames };
+    //   delete copy[uid];
+    //   return copy;
+    // });
     setEditedGroupUserEmails(() => {
       const copy = { ...editedGroupUserEmails };
       delete copy[uid];
@@ -82,33 +75,52 @@ const GroupManageWindow = ({ currGroup, groupUsers, groupUserNames, groupUserEma
     });
   };
   const handleAddUser = () => {
-    //查使用者存在
-    const insertId = 14; //FIXME:先寫死
-    //新增id到array
-    setEditedGroupUserIds([...editedGroupUserIds, insertId]);
-    setEditedGroupUserNames({ ...editedGroupUserNames, [insertId]: inputUserName.current.value });
-    setEditedGroupUserEmails({ ...editedGroupUserEmails, [insertId]: inputUserEmail.current.value });
+    const token = localStorage.getItem('accessToken');
+    const fetchUser = async () => {
+      const { data } = await axios.get(`${constants.API_GET_User_EXIST}?email=${inputUserEmail.current.value}`, {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      });
+      //查使用者存在
+      const insertId = data.data.id;
+      //新增id到array
+      setEditedGroupUserIds([...editedGroupUserIds, insertId]);
+      // setEditedGroupUserNames({ ...editedGroupUserNames, [insertId]: inputUserName.current.value });
+      setEditedGroupUserEmails({ ...editedGroupUserEmails, [insertId]: inputUserEmail.current.value });
+      // inputUserName.current.value = '';
+      inputUserEmail.current.value = '';
+    };
+    fetchUser();
   };
 
   //儲存DB
   const handleSubmit = async () => {
     try {
       //整理送後端格式
-      const data = { group_name: inputGroupName.current.value, group_type: inputGroupType.current.value, groupUsers: { uid: 'uid', role: 'role' } }; //FIXME:現在是假的
+      const newGroupUsers = { group_name: inputGroupName.current.value, group_type: inputGroupType.current.value, groupUsers: [] };
       //[{uid:1,name:,email:a@a.com,role:2}]
+      editedGroupUserIds.map((userId) => {
+        if (!groupUsers.includes(userId)) {
+          const newGroupUser = { uid: userId, email: editedGroupUserEmails[userId], role: 2 };
+          console.log(newGroupUser);
+          newGroupUsers.groupUsers.push(newGroupUser);
+        }
+      });
 
       //傳給後端
       const token = localStorage.getItem('accessToken');
+      console.log('data for backend:', newGroupUsers);
       let result;
       if (!currGroup) {
-        result = await axios.post(`${constants.API_POST_DEBT}`, data, {
+        result = await axios.post(`${constants.API_POST_GROUP}`, newGroupUsers, {
           headers: {
             authorization: `Bearer ${token}`,
           },
         });
       } else {
         console.log(token, 'put');
-        result = await axios.put(`${constants.API_PUT_DEBT}/${currGroup.gid}`, data, {
+        result = await axios.put(`${constants.API_PUT_GROUP}/${currGroup.gid}`, newGroupUsers, {
           headers: {
             authorization: `Bearer ${token}`,
           },
@@ -116,29 +128,11 @@ const GroupManageWindow = ({ currGroup, groupUsers, groupUserNames, groupUserEma
       }
       console.log(result.data);
 
-      // //確認有成功後更新state
-      // if (result.status === 200) {
-      //   setInfo((prev) => {
-      //     console.log(prev['id']);
-      //     prev['id'] = result.data.data.debtId; //儲存之後會有新的debtId, 要額外更新上去
-      //   });
-
-      //   //整理state data的格式
-      //   info.isOwned = info.lender === currUserId ? true : false;
-      //   //FIXME: 要取表單裡的值;
-      //   info.ownAmount = info.lender === currUserId ? info.total - (split[currUserId] ? split[currUserId] : 0) : split[currUserId] ? split[currUserId] : 0;
-      //   //FIXME: 要取表單裡的值;
-      //   setDebt((prev) => {
-      //     console.log(prev);
-      //     return [info, ...prev];
-      // });
-      // if (details) {
-      //   setDetail(split); //FIXME:要確認
-      // }
-      // setIsDebtChanged(true);
-      setIsGroupChanged(true);
-      onHide();
-      // }
+      //確認有成功後更新state
+      if (result.status === 200) {
+        setIsGroupChanged(true);
+        onHide();
+      }
     } catch (err) {
       console.log(err);
     }
@@ -151,15 +145,18 @@ const GroupManageWindow = ({ currGroup, groupUsers, groupUserNames, groupUserEma
       </Modal.Header>
       <Modal.Body>
         <div>
-          <h4>群組的名字</h4>
+          <h4>群組名稱</h4>
           <div id="group_name">
             <input ref={inputGroupName} type="text" defaultValue={currGroup ? currGroup.name : ''}></input>
           </div>
-          {/* <h4>哪種群組呢</h4>
-          <div id="group_name">
-            群組類型
-            <input ref={inputGroupType} type="text" defaultValue={currGroup ? currGroup.type : ''}></input>
-          </div> */}
+          <h4>群組類型</h4>
+          <div id="group_type">
+            {currGroup ? (
+              <input ref={inputGroupType} type="text" defaultValue={currGroup ? currGroup.type : ''} disabled />
+            ) : (
+              <input ref={inputGroupType} type="text" defaultValue={currGroup ? currGroup.type : ''} />
+            )}
+          </div>
           <h4>成員們</h4>
           <div id="group_members">
             <ul>
@@ -167,13 +164,15 @@ const GroupManageWindow = ({ currGroup, groupUsers, groupUserNames, groupUserEma
                 editedGroupUserIds.map((uid) => {
                   return (
                     <div key={uid}>
-                      <div>{`${editedGroupUserNames[uid]} (${editedGroupUserEmails[uid]})`}</div>
                       {!groupUsers.includes(uid) ? (
-                        <button id={uid} onClick={handleDeleteUser}>
-                          x
-                        </button>
+                        <div>
+                          <div>{`${editedGroupUserEmails[uid]}`}</div>
+                          <button id={uid} onClick={handleDeleteUser}>
+                            x
+                          </button>
+                        </div>
                       ) : (
-                        ''
+                        <div>{`${groupUserNames[uid]} ${groupUserEmails[uid]}`}</div>
                       )}
                     </div>
                   );
@@ -184,14 +183,14 @@ const GroupManageWindow = ({ currGroup, groupUsers, groupUserNames, groupUserEma
             </ul>
             <div id="add_user">
               <h4>新增成員</h4>
-              <input ref={inputUserName} id="add_user_name" type="text" placeholder="取個名吧" />
+              {/* <input ref={inputUserName} id="add_user_name" type="text" placeholder="取個名吧" /> */}
               <input ref={inputUserEmail} id="add_user_email" type="email" placeholder="成員的信箱" />
               {/* <input id="add_user_email" type="text" placeholder="成員的權限" /> */}
               <button onClick={handleAddUser}>+</button>
             </div>
           </div>
         </div>
-        {currGroup ? <button>delete group</button> : ''}
+        {/* {currGroup ? <button>delete group</button> : ''} */}
       </Modal.Body>
       <Modal.Footer>
         <Button variant="outline-secondary" onClick={onHide}>
@@ -206,3 +205,11 @@ const GroupManageWindow = ({ currGroup, groupUsers, groupUserNames, groupUserEma
 };
 
 export default { GroupManageWindow, GroupManageButton };
+
+// FIXME:usecontext fail
+// import { CurrGroupInfo } from './Home';
+// const currGroupInfo = useContext(CurrGroupInfo);
+// const currGroup = currGroupInfo.currGroup;
+// const groupUsers = currGroupInfo.groupUser;
+// const groupUserNames = currGroupInfo.groupUserNames;
+// const groupUserEmails = currGroupInfo.groupUserEmails;

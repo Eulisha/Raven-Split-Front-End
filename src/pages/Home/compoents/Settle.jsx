@@ -9,7 +9,7 @@ const SettleButton = ({ gid, setIsDebtChanged }) => {
   return (
     <div className="blog__controller">
       <Button variant="outline-success" onClick={() => setEditingShow(true)}>
-        結帳
+        Settle
       </Button>
       {editingShow && <SettleWindow gid={gid} setIsDebtChanged={setIsDebtChanged} show={editingShow} onHide={() => setEditingShow(false)} state="editing" />}
     </div>
