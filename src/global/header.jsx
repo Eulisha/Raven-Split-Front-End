@@ -2,6 +2,7 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
+import constants from './constants';
 
 const Header = () => {
   //profile
@@ -15,12 +16,12 @@ const Header = () => {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             <NavDropdown title="My Account" id="basic-nav-dropdown">
-              <NavDropdown.Item href="#action/3.1">Account Setting</NavDropdown.Item>
+              {/* <NavDropdown.Item href="#action/3.1">Account Setting</NavDropdown.Item> */}
               <NavDropdown.Divider />
               <NavDropdown.Item
                 onClick={() => {
                   localStorage.removeItem('accessToken');
-                  window.location.assign('http://localhost:3001/login');
+                  window.location.assign(`${constants.HOST}/login`);
                 }}
               >
                 Logout

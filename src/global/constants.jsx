@@ -1,4 +1,5 @@
-const API_HOST = 'http://localhost:3000/api';
+const HOST = 'http://54.193.193.49';
+const API_HOST = 'http://54.193.193.49/api';
 
 //Debt
 const API_GET_DEBTS = `${API_HOST}/debt/debts`;
