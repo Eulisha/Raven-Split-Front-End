@@ -1,10 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import constants from '../../../global/constants';
 import { ListGroup } from 'react-bootstrap';
+import { GroupInfo } from './Home';
 
-const Balance = ({ gid, groupUserNames, currGroup, isDebtChanged }) => {
+const Balance = ({ isDebtChanged }) => {
   console.log('@balance');
+  let CurrGroupInfo = useContext(GroupInfo);
+  let { currGroup, groupUserNames } = CurrGroupInfo;
+  let gid = currGroup.gid;
   const [balances, setBalance] = useState([]);
   useEffect(() => {
     const fetchBalance = async (gid) => {

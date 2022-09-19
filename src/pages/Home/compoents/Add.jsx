@@ -4,8 +4,9 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import constants from '../../../global/constants';
 import { User } from '../../App';
+import { GroupInfo } from './Home';
 
-const AddButton = ({ gid, groupUsers, groupUserNames, debtInfo, details, setDebt, setDetail, setIsDebtChanged }) => {
+const AddButton = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged }) => {
   const [editingShow, setEditingShow] = useState(false);
   return (
     <div className="blog__controller">
@@ -14,9 +15,6 @@ const AddButton = ({ gid, groupUsers, groupUserNames, debtInfo, details, setDebt
       </Button>
       {editingShow && (
         <AddingWindow /** 編輯視窗 */
-          gid={gid}
-          groupUsers={groupUsers}
-          groupUserNames={groupUserNames}
           debtInfo={debtInfo}
           details={details}
           setDebt={setDebt}
@@ -31,12 +29,15 @@ const AddButton = ({ gid, groupUsers, groupUserNames, debtInfo, details, setDebt
   );
 };
 
-const AddingWindow = ({ gid, groupUsers, groupUserNames, debtInfo, details, setDebt, setDetail, setIsDebtChanged, onHide, show }) => {
+const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged, onHide, show }) => {
   console.log('Editing....');
+  let CurrGroupInfo = useContext(GroupInfo);
   let CurrUser = useContext(User);
   console.log('currUser', CurrUser);
   let currUserId = CurrUser.id;
   let currUserName = CurrUser.name;
+  let gid = CurrGroupInfo.currGroup.gid;
+  let { groupUsers, groupUserNames } = CurrGroupInfo;
 
   //帳的初始值 判斷是新增or編輯
   const initialInfo = details

@@ -8,7 +8,7 @@ import Dashboard from './Dashboard';
 import { useContext } from 'react';
 import { User } from '../../App';
 
-export const CurrGroupInfo = React.createContext();
+export const GroupInfo = React.createContext();
 
 const Home = () => {
   console.log('@Home');
@@ -24,7 +24,7 @@ const Home = () => {
   const [debts, setDebt] = useState([]);
   // console.log('@home log currgroup', currGroup, 'gid', currGroup.gid, currGroup.name);
   return (
-    <CurrGroupInfo.Provider value={{ currGroup, groupUsers, groupUserNames, groupUserEmails }}>
+    <GroupInfo.Provider value={{ currGroup, groupUsers, groupUserNames, groupUserEmails }}>
       <div id="Home">
         <div id="left_sidebar">
           <UserGroups setCurrGroup={setCurrGroup} isGroupChanged={isGroupChanged} setIsGroupChanged={setIsGroupChanged} />
@@ -33,10 +33,6 @@ const Home = () => {
           <GroupTopBar currGroup={currGroup} groupUsers={groupUsers} groupUserNames={groupUserNames} setDebt={setDebt} setIsDebtChanged={setIsDebtChanged} />
           {currGroup.gid ? (
             <Debts
-              currGroup={currGroup}
-              // currUserId={currUserId} //可以用jwt代替(?)
-              groupUsers={groupUsers}
-              groupUserNames={groupUserNames}
               debts={debts}
               setDebt={setDebt}
               isDebtChanged={isDebtChanged} //傳給debt跟detail
@@ -49,11 +45,6 @@ const Home = () => {
         <div id="right_sidebar">
           {currGroup.gid ? (
             <GroupUsers
-              gid={currGroup.gid}
-              currGroup={currGroup}
-              groupUsers={groupUsers}
-              groupUserNames={groupUserNames}
-              groupUserEmails={groupUserEmails}
               setGroupUsers={setGroupUsers}
               setGroupUserNames={setGroupUserNames}
               setGroupUserEmails={setGroupUserEmails}
@@ -66,7 +57,7 @@ const Home = () => {
           )}
         </div>
       </div>
-    </CurrGroupInfo.Provider>
+    </GroupInfo.Provider>
   );
 };
 export default Home;

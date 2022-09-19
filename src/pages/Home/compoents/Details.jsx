@@ -1,12 +1,16 @@
 import axios from 'axios';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import constants from '../../../global/constants';
 import DetailList from './DetailList';
 // import Edit from './Edit';
 import Add from './Add';
+import { GroupInfo } from './Home';
 
-const Details = ({ gid, groupUsers, groupUserNames, debtInfo, setDebt, setIsDebtChanged }) => {
+const Details = ({ debtInfo, setDebt, setIsDebtChanged }) => {
   console.log('@Details');
+  let CurrGroupInfo = useContext(GroupInfo);
+  let { currGroup, groupUsers } = CurrGroupInfo;
+  let gid = currGroup.gid;
   const debtId = debtInfo.id;
   const [details, setDetail] = useState({});
 
@@ -47,19 +51,8 @@ const Details = ({ gid, groupUsers, groupUserNames, debtInfo, setDebt, setIsDebt
 
   return (
     <div>
-      <DetailList key="detail-list" details={details} groupUserNames={groupUserNames} />
-      <Add.AddButton
-        key="update"
-        className="edit"
-        gid={gid}
-        groupUsers={groupUsers}
-        groupUserNames={groupUserNames}
-        debtInfo={debtInfo}
-        details={details}
-        setDebt={setDebt}
-        setDetail={setDetail}
-        setIsDebtChanged={setIsDebtChanged}
-      />
+      <DetailList key="detail-list" details={details} />
+      <Add.AddButton key="update" className="edit" debtInfo={debtInfo} details={details} setDebt={setDebt} setDetail={setDetail} setIsDebtChanged={setIsDebtChanged} />
     </div>
   );
 };

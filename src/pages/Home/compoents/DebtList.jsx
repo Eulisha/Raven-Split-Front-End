@@ -1,10 +1,12 @@
 // import axios from 'axios';
 // import constants from '../../../global/constants';
 // import Button from 'react-bootstrap/Button';
+import { useContext } from 'react';
+import { GroupInfo } from './Home';
 
-// , setExtend
-// gid, setDebt,
-const DebtList = ({ groupUserNames, debtInfo }) => {
+const DebtList = ({ debtInfo }) => {
+  let CurrGroupInfo = useContext(GroupInfo);
+  let { groupUserNames } = CurrGroupInfo;
   const { date, title, total, lender, isOwned, ownAmount } = debtInfo;
   // const debtId = debtInfo.id;
 

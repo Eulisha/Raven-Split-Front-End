@@ -1,10 +1,13 @@
 import axios from 'axios';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useContext } from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
 import constants from '../../../global/constants';
+import { GroupInfo } from './Home';
 
-// const SettleButton = ({ gid, setIsDebtChanged, debtInfo,
-const SettleButton = ({ gid, setIsDebtChanged }) => {
+const SettleButton = ({ setIsDebtChanged }) => {
+  let CurrGroupInfo = useContext(GroupInfo);
+  let { currGroup } = CurrGroupInfo;
+  let gid = currGroup.gid;
   const [editingShow, setEditingShow] = useState(false);
   return (
     <div className="blog__controller">

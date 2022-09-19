@@ -1,8 +1,10 @@
-import { useEffect } from 'react';
+import { useContext } from 'react';
 import { ListGroup } from 'react-bootstrap';
+import { GroupInfo } from './Home';
 
-useEffect;
-const DetailList = ({ details, groupUserNames }) => {
+const DetailList = ({ details }) => {
+  let CurrGroupInfo = useContext(GroupInfo);
+
   return (
     <>
       <ListGroup>
@@ -11,7 +13,7 @@ const DetailList = ({ details, groupUserNames }) => {
           return (
             <ListGroup.Item key={borrowerId} className="item">
               {/* <div key={borrowerId} className="item"> */}
-              {`${groupUserNames[borrowerId]} owns ${details[borrowerId]}`}
+              {`${CurrGroupInfo.groupUserNames[borrowerId]} owns ${details[borrowerId]}`}
               {/* </div> */}
             </ListGroup.Item>
           );

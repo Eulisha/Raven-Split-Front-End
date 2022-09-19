@@ -4,11 +4,15 @@ import constants from '../../../global/constants';
 import Balance from './Balance';
 import GroupManage from './GroupManage';
 import { User } from '../../App';
+import { GroupInfo } from './Home';
 
-const GroupUsers = ({ gid, currGroup, groupUsers, groupUserNames, setGroupUsers, groupUserEmails, setGroupUserNames, setGroupUserEmails, isDebtChanged, isGroupChanged }) => {
+const GroupUsers = ({ setGroupUsers, setGroupUserNames, setGroupUserEmails, isDebtChanged, isGroupChanged }) => {
   console.log('@groupUsers');
   let CurrUser = useContext(User);
-  console.log(CurrUser);
+  let CurrGroupInfo = useContext(GroupInfo);
+  console.log(CurrUser.user);
+  let { currGroup } = CurrGroupInfo;
+  let gid = currGroup.gid;
 
   useEffect(() => {
     if (gid) {
@@ -42,22 +46,14 @@ const GroupUsers = ({ gid, currGroup, groupUsers, groupUserNames, setGroupUsers,
     <div id="group-users">
       <div className="top_bar">
         <div>成員列表</div>
-        <GroupManage.GroupManageButton
-          currGroup={currGroup}
-          groupUsers={groupUsers}
-          groupUserNames={groupUserNames}
-          groupUserEmails={groupUserEmails}
-          setGroupUsers={setGroupUsers}
-          setGroupUserNames={setGroupUserNames}
-          setGroupUserEmails={setGroupUserEmails}
-        />
+        <GroupManage.GroupManageButton setGroupUsers={setGroupUsers} setGroupUserNames={setGroupUserNames} setGroupUserEmails={setGroupUserEmails} />
       </div>
       {/* <ul>
         {groupUsers.map((item) => {
           return <li key={item.uid}>{item.name}</li>;
         })}
       </ul> */}
-      <Balance id="balance" gid={gid} groupUserNames={groupUserNames} currGroup={currGroup} isDebtChanged={isDebtChanged} />
+      <Balance id="balance" isDebtChanged={isDebtChanged} />
     </div>
   );
 };

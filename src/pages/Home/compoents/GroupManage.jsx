@@ -4,21 +4,20 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import constants from '../../../global/constants';
 import { User } from '../../App';
+import { GroupInfo } from './Home';
 
-const GroupManageButton = ({ currGroup, groupUsers, groupUserNames, groupUserEmails, setGroupUsers, setGroupUserNames, setGroupUserEmails, setIsGroupChanged }) => {
+const GroupManageButton = ({ setGroupUsers, setGroupUserNames, setGroupUserEmails, setIsGroupChanged }) => {
   const [editingShow, setEditingShow] = useState(false);
-
+  let CurrGroupInfo = useContext(GroupInfo);
+  let { currGroup } = CurrGroupInfo;
   return (
     <div className="blog__controller">
       <Button variant="outline-success" onClick={() => setEditingShow(true)}>
-        {currGroup ? 'Setting' : '+'} {/* FIXME:這邊要再改 */}
+        {currGroup.gid ? 'Setting' : '+'} {/* FIXME:這邊要再改 */}
       </Button>
       {editingShow && (
         <GroupManageWindow
-          /** 編輯視窗 */ currGroup={currGroup}
-          groupUsers={groupUsers}
-          groupUserNames={groupUserNames}
-          groupUserEmails={groupUserEmails}
+          /** 編輯視窗 */
           setGroupUsers={setGroupUsers}
           setGroupUserNames={setGroupUserNames}
           setGroupUserEmails={setGroupUserEmails}
@@ -31,13 +30,15 @@ const GroupManageButton = ({ currGroup, groupUsers, groupUserNames, groupUserEma
   );
 };
 
-// , setGroupUserNames, setGroupUsers, setGroupUserEmails,
-const GroupManageWindow = ({ currGroup, groupUsers = [], groupUserNames, groupUserEmails, setIsGroupChanged, show, onHide }) => {
+const GroupManageWindow = ({ setIsGroupChanged, show, onHide }) => {
   console.log('Editing Group....');
 
   let CurrUser = useContext(User);
+  let CurrGroupInfo = useContext(GroupInfo);
+  let { currGroup, groupUsers = [], groupUserNames, groupUserEmails } = CurrGroupInfo;
+
   // let currUserId = currUser.id;
-  // let currUserName = currUser.name; //FIXME:要再套上去
+  // let currUserName = currUser.name;
   console.log('currUser', CurrUser);
   console.log('groupUsers', groupUsers);
 
@@ -112,7 +113,7 @@ const GroupManageWindow = ({ currGroup, groupUsers = [], groupUserNames, groupUs
       const token = localStorage.getItem('accessToken');
       console.log('data for backend:', newGroupUsers);
       let result;
-      if (!currGroup) {
+      if (!currGroup.gid) {
         result = await axios.post(`${constants.API_POST_GROUP}`, newGroupUsers, {
           headers: {
             authorization: `Bearer ${token}`,
@@ -151,7 +152,7 @@ const GroupManageWindow = ({ currGroup, groupUsers = [], groupUserNames, groupUs
           </div>
           <h4>群組類型</h4>
           <div id="group_type">
-            {currGroup ? (
+            {currGroup.gid ? (
               <input ref={inputGroupType} type="text" defaultValue={currGroup ? currGroup.type : ''} disabled />
             ) : (
               <input ref={inputGroupType} type="text" defaultValue={currGroup ? currGroup.type : ''} />
@@ -205,11 +206,3 @@ const GroupManageWindow = ({ currGroup, groupUsers = [], groupUserNames, groupUs
 };
 
 export default { GroupManageWindow, GroupManageButton };
-
-// FIXME:usecontext fail
-// import { CurrGroupInfo } from './Home';
-// const currGroupInfo = useContext(CurrGroupInfo);
-// const currGroup = currGroupInfo.currGroup;
-// const groupUsers = currGroupInfo.groupUser;
-// const groupUserNames = currGroupInfo.groupUserNames;
-// const groupUserEmails = currGroupInfo.groupUserEmails;

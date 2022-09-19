@@ -1,18 +1,21 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import constants from '../../../global/constants';
 import Details from './Details';
 import DebtList from './DebtList';
 import { Accordion } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
+import { GroupInfo } from './Home';
 
-const Debts = ({ currGroup, groupUsers, groupUserNames, debts, setDebt, isDebtChanged, setIsDebtChanged }) => {
+const Debts = ({ debts, setDebt, isDebtChanged, setIsDebtChanged }) => {
+  let CurrGroupInfo = useContext(GroupInfo);
+  let { currGroup } = CurrGroupInfo;
+
   // const [extend, setExtend] = useState({}); //FIXME:應該要是一個陣列記錄所有的extend state
   const [extend, setExtend] = useState(false);
-  console.log('@Debts*********************');
+  console.log('@Debts');
   //撈debts
   useEffect(() => {
-    console.log('@Debts*********************CurrGroup');
     const fetchDebts = async (gid) => {
       try {
         const token = localStorage.getItem('accessToken');
@@ -94,20 +97,10 @@ const Debts = ({ currGroup, groupUsers, groupUserNames, debts, setDebt, isDebtCh
                 }}
               >
                 <Accordion.Header id={debt.id}>
-                  <DebtList gid={currGroup.gid} groupUserNames={groupUserNames} debtInfo={debt} setDebt={setDebt} setExtend={setExtend} />
+                  <DebtList debtInfo={debt} setDebt={setDebt} setExtend={setExtend} />
                 </Accordion.Header>
                 <Accordion.Body>
-                  <Details
-                    id="details"
-                    gid={currGroup.gid}
-                    groupUsers={groupUsers}
-                    groupUserNames={groupUserNames}
-                    debts={debts}
-                    debtInfo={debt}
-                    extend={extend}
-                    setDebt={setDebt}
-                    setIsDebtChanged={setIsDebtChanged}
-                  />
+                  <Details id="details" debts={debts} debtInfo={debt} extend={extend} setDebt={setDebt} setIsDebtChanged={setIsDebtChanged} />
                   <Button variant="outline-secondary" id={debt.id} onClick={handleDeleteDebt}>
                     x
                   </Button>
