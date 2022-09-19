@@ -8,7 +8,7 @@ import { User } from '../../App';
 const UserGroups = ({ setCurrGroup, setGroupUsers, setGroupUserNames, setGroupUserEmails, isGroupChanged, setIsGroupChanged }) => {
   console.log('@UserGroups');
   let CurrUser = useContext(User);
-  console.log(CurrUser);
+  console.log('curruser.user', CurrUser.user);
 
   const [userGroups, setUserGroups] = useState([]);
   console.log('userGroups', userGroups);
@@ -40,7 +40,6 @@ const UserGroups = ({ setCurrGroup, setGroupUsers, setGroupUserNames, setGroupUs
         <div className="top_bar">
           <div>Groups</div>
         </div>
-        {/* <ul id="group_list"> */}
         <Nav defaultActiveKey="/home" className="flex-column">
           {userGroups.map((group) => {
             if (group.type === '1') {
@@ -55,13 +54,11 @@ const UserGroups = ({ setCurrGroup, setGroupUsers, setGroupUserNames, setGroupUs
             }
           })}
         </Nav>
-        {/* </ul> */}
       </div>
       <div id="group_pair_type">
         <div className="top_bar">
           <div>Pair</div>
         </div>
-        {/* <ul id="group_list"> */}
         <Nav defaultActiveKey="/home" className="flex-column">
           {userGroups.map((group) => {
             if (group.type === '2') {
@@ -69,20 +66,15 @@ const UserGroups = ({ setCurrGroup, setGroupUsers, setGroupUserNames, setGroupUs
                 <Nav.Link key={group.gid} onClick={() => setCurrGroup({ gid: group.gid, name: group.name, type: group.type })}>
                   {group.name}
                 </Nav.Link>
-                // <button key={group.gid} onClick={() => setCurrGroup({ gid: group.gid, name: group.name })}>
-                //   {group.name}
-                // </button>
               );
             }
           })}
         </Nav>
-        {/* </ul> */}
       </div>
       <div id="group_buying_type">
         <div className="top_bar">
           <div>Group Buying</div>
         </div>
-        {/* <ul id="group_list"> */}
         <Nav defaultActiveKey="/home" className="flex-column">
           {userGroups.map((group) => {
             if (group.type === '3') {
@@ -90,14 +82,10 @@ const UserGroups = ({ setCurrGroup, setGroupUsers, setGroupUserNames, setGroupUs
                 <Nav.Link key={group.gid} onClick={() => setCurrGroup({ gid: group.gid, name: group.name, type: group.type })}>
                   {group.name}
                 </Nav.Link>
-                // <button key={group.gid} onClick={() => setCurrGroup({ gid: group.gid, name: group.name })}>
-                //   {group.name}
-                // </button>
               );
             }
           })}
         </Nav>
-        {/* </ul> */}
       </div>
     </div>
   );

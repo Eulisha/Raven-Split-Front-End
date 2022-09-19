@@ -3,16 +3,30 @@ import { Route, Routes } from 'react-router-dom';
 import Login from './Login/compoents/Login';
 import Home from './Home/compoents/Home';
 import Header from '../global/Header';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import constants from '../global/constants';
+import axios from 'axios';
 
 export const User = React.createContext();
 
 const App = () => {
   console.log('@App');
-  // if (!localStorage.getItem('accessToken')) {
   const [user, setUser] = useState({});
-  console.log('user from setUser:', user);
-  // }
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      const token = localStorage.getItem('accessToken');
+      const result = await axios.get(constants.API_GET_USER_INFO, {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      });
+      console.log('fetch data userInfo for setUser: ', result.data.data);
+      setUser(result.data.data);
+    };
+    fetchUserInfo();
+  }, []);
+
   return (
     <User.Provider value={{ user, setUser }}>
       <div className="App">

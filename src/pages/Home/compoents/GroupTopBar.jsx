@@ -10,7 +10,7 @@ const GroupTopBar = ({ setDebt, setIsDebtChanged }) => {
 
   return (
     <Navbar id="top_bar">
-      <Navbar.Brand id="group_name">Dashboard</Navbar.Brand>
+      <Navbar.Brand id="group_name">{currGroup.gid ? currGroup.name : 'Dashboard'}</Navbar.Brand>
       {currGroup.gid ? (
         <Navbar.Collapse className="justify-content-end">
           <Add.AddButton setDebt={setDebt} setIsDebtChanged={setIsDebtChanged} />

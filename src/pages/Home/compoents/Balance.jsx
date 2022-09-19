@@ -6,10 +6,15 @@ import { GroupInfo } from './Home';
 
 const Balance = ({ isDebtChanged }) => {
   console.log('@balance');
+
+  //useContext
   let CurrGroupInfo = useContext(GroupInfo);
-  let { currGroup, groupUserNames } = CurrGroupInfo;
-  let gid = currGroup.gid;
+  let { currGroup, groupUsers, groupUserNames } = CurrGroupInfo;
+  let { gid } = currGroup;
+
+  //useState
   const [balances, setBalance] = useState([]);
+
   useEffect(() => {
     const fetchBalance = async (gid) => {
       const token = localStorage.getItem('accessToken');
@@ -26,24 +31,33 @@ const Balance = ({ isDebtChanged }) => {
         console.log(err);
       }
     };
-    fetchBalance(gid);
+    if (gid) {
+      fetchBalance(gid);
+    }
   }, [currGroup, isDebtChanged]);
 
+  console.log(CurrGroupInfo);
+  console.log(balances);
   return (
     <div id="balance">
       <ListGroup>
-        {balances.map((balance) => {
-          if (balance.borrower !== balance.lender)
-            return (
-              // <div key={balance.id}>
-              <ListGroup.Item key={balance.id} className="item">
-                <li>
-                  {groupUserNames[balance.borrower]} 欠 {groupUserNames[balance.lender]} ${balance.amount}
-                </li>
-              </ListGroup.Item>
-              // </div>
-            );
-        })}
+        {balances.length === 0 && groupUsers
+          ? groupUsers.map((user) => {
+              console.log(user);
+              return (
+                <ListGroup.Item key={user} className="item">
+                  {groupUserNames[user]}
+                </ListGroup.Item>
+              );
+            })
+          : balances.map((balance) => {
+              if (balance.borrower !== balance.lender)
+                return (
+                  <ListGroup.Item key={balance.id} className="item">
+                    {groupUserNames[balance.borrower]} 欠 {groupUserNames[balance.lender]} ${balance.amount}
+                  </ListGroup.Item>
+                );
+            })}
       </ListGroup>
     </div>
   );

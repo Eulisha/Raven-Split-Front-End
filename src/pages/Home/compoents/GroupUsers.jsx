@@ -10,9 +10,9 @@ const GroupUsers = ({ setGroupUsers, setGroupUserNames, setGroupUserEmails, isDe
   console.log('@groupUsers');
   let CurrUser = useContext(User);
   let CurrGroupInfo = useContext(GroupInfo);
-  console.log(CurrUser.user);
   let { currGroup } = CurrGroupInfo;
-  let gid = currGroup.gid;
+  let { gid } = currGroup;
+  console.log(CurrUser.user);
 
   useEffect(() => {
     if (gid) {
@@ -38,7 +38,9 @@ const GroupUsers = ({ setGroupUsers, setGroupUserNames, setGroupUserEmails, isDe
         setGroupUserNames(userNames);
         setGroupUserEmails(userEmails);
       };
-      fetchUsers(gid);
+      if (gid) {
+        fetchUsers(gid);
+      }
     }
   }, [isGroupChanged]);
   // currGroup,
@@ -48,11 +50,6 @@ const GroupUsers = ({ setGroupUsers, setGroupUserNames, setGroupUserEmails, isDe
         <div>成員列表</div>
         <GroupManage.GroupManageButton setGroupUsers={setGroupUsers} setGroupUserNames={setGroupUserNames} setGroupUserEmails={setGroupUserEmails} />
       </div>
-      {/* <ul>
-        {groupUsers.map((item) => {
-          return <li key={item.uid}>{item.name}</li>;
-        })}
-      </ul> */}
       <Balance id="balance" isDebtChanged={isDebtChanged} />
     </div>
   );

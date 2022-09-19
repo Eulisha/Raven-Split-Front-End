@@ -35,7 +35,7 @@ const GroupManageWindow = ({ setIsGroupChanged, show, onHide }) => {
 
   let CurrUser = useContext(User);
   let CurrGroupInfo = useContext(GroupInfo);
-  let { currGroup, groupUsers = [], groupUserNames, groupUserEmails } = CurrGroupInfo;
+  let { currGroup, groupUsers, groupUserNames, groupUserEmails } = CurrGroupInfo;
 
   // let currUserId = currUser.id;
   // let currUserName = currUser.name;
