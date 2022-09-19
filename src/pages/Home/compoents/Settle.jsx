@@ -69,6 +69,7 @@ const SettleWindow = ({ gid, setIsDebtChanged, onHide, show, state }) => {
           return !prev;
         });
       }
+      onHide();
     } catch (err) {
       console.log(err);
     }
