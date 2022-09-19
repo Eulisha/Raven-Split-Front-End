@@ -1,5 +1,5 @@
 import '../index.css';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import Login from './Login/compoents/Login';
 import Home from './Home/compoents/Home';
 import Header from '../global/Header';
@@ -11,18 +11,25 @@ export const User = React.createContext();
 
 const App = () => {
   console.log('@App');
+  const navigate = useNavigate();
   const [user, setUser] = useState({});
 
   useEffect(() => {
     const fetchUserInfo = async () => {
-      const token = localStorage.getItem('accessToken');
-      const result = await axios.get(constants.API_GET_USER_INFO, {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-      });
-      console.log('fetch data userInfo for setUser: ', result.data.data);
-      setUser(result.data.data);
+      try {
+        const token = localStorage.getItem('accessToken');
+        const result = await axios.get(constants.API_GET_USER_INFO, {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        });
+        console.log('fetch data userInfo for setUser: ', result.data.data);
+        setUser(result.data.data);
+      } catch (err) {
+        console.log(err);
+        alert(err.response.data.err);
+        navigate('/login');
+      }
     };
     fetchUserInfo();
   }, []);
