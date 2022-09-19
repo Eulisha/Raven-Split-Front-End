@@ -41,7 +41,7 @@ const Details = ({ debtInfo, setDebt, setIsDebtChanged }) => {
       console.log('set details: ', oriSplit);
     };
     let detailsKeys = Object.keys(details);
-    console.log('**********@Details', 'groupUsers.len:', groupUsers.length, 'detailsKeys.len:', detailsKeys.length);
+    // console.log('@Details', 'groupUsers.len:', groupUsers.length, 'detailsKeys.len:', detailsKeys.length);
     if (groupUsers.length > 0 && detailsKeys.length === 0) {
       console.log('@Details', 'fetchDetail', debtId);
       fetchDetail(debtId);

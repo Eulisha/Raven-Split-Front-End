@@ -8,7 +8,6 @@ const DetailList = ({ details }) => {
   return (
     <>
       <ListGroup>
-        <div>length: {Object.keys(details).length}</div>
         {Object.keys(details).map((borrowerId) => {
           return (
             <ListGroup.Item key={borrowerId} className="item">
