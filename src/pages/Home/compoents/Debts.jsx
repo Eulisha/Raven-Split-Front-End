@@ -7,13 +7,14 @@ import { Accordion } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import { GroupInfo } from './Home';
 
-const Debts = ({ debts, setDebt, isDebtChanged, setIsDebtChanged }) => {
+const Debts = ({ debts, setDebt, setIsDebtChanged }) => {
+  console.log('@Debts');
+
   let CurrGroupInfo = useContext(GroupInfo);
   let { currGroup } = CurrGroupInfo;
 
-  // const [extend, setExtend] = useState({}); //FIXME:應該要是一個陣列記錄所有的extend state
   const [extend, setExtend] = useState(false);
-  console.log('@Debts');
+
   //撈debts
   useEffect(() => {
     const fetchDebts = async (gid) => {
@@ -33,26 +34,16 @@ const Debts = ({ debts, setDebt, isDebtChanged, setIsDebtChanged }) => {
         console.log(err);
       }
     };
-    fetchDebts(currGroup.gid);
+    if (currGroup.gid) {
+      fetchDebts(currGroup.gid);
+    }
   }, [currGroup]);
 
   //控制細目開合
-  useEffect(() => {
-    setExtend(false);
-  }, [isDebtChanged]);
-
   const handleExtend = (e, id) => {
     console.log(id);
-    // setExtend((prev) => !prev);
-    // setExtend(() => {
-    //   const debtId = Number(id);
-    //   let extendStatus = {};
-    //   extendStatus[debtId] = true;
-    //   console.log(extendStatus);
-    //   return extendStatus; //true-false交換
-    // return { [debtId]: !prev[debtId] }; //true-false交換
-    // });
   };
+
   //刪除debt列
   const handleDeleteDebt = async (e) => {
     const debtId = Number(e.target.id);
@@ -76,11 +67,15 @@ const Debts = ({ debts, setDebt, isDebtChanged, setIsDebtChanged }) => {
       setDebt((prev) => {
         return prev.filter((item) => item.id !== debtId);
       });
+      setIsDebtChanged((prev) => {
+        return !prev;
+      });
     } catch (err) {
       console.log(err);
       return alert(' Something wrong ˊˋ Please try again..');
     }
   };
+  console.log('at Debts log debts:', debts);
   return (
     <div id="debts_column">
       {debts.length > 0 &&

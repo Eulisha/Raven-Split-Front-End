@@ -47,3 +47,9 @@
   padding: 20px;
   border: solid 1px #979797;
 }
+
+/* Dashboard */
+#negatives, #possitives{
+  margin: 0;
+  width: 100%;
+}

@@ -25,6 +25,9 @@ const SettleWindow = ({ gid, setIsDebtChanged, onHide, show, state }) => {
   const inputDate = useRef();
   const inputTitle = useRef();
 
+  let CurrGroupInfo = useContext(GroupInfo);
+  let { groupUserNames } = CurrGroupInfo;
+
   useEffect(() => {
     const fetchGetSettle = async () => {
       try {
@@ -95,7 +98,7 @@ const SettleWindow = ({ gid, setIsDebtChanged, onHide, show, state }) => {
               {settle.map((ele, ind) => {
                 return (
                   <li key={ind}>
-                    {ele.borrower} 還 {ele.lender} ${ele.amount}
+                    {groupUserNames[ele.borrower]} 還 {groupUserNames[ele.lender]} ${ele.amount}
                   </li>
                 );
               })}
@@ -106,7 +109,6 @@ const SettleWindow = ({ gid, setIsDebtChanged, onHide, show, state }) => {
           <Button variant="primary" type="submit">
             Submit
           </Button>
-          <Button variant="outline-secondary">Close</Button>
         </Modal.Footer>
       </Form>
     </Modal>

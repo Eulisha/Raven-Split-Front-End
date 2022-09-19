@@ -120,18 +120,16 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
           },
         });
       } else {
-        console.log(token, 'put');
         result = await axios.put(`${constants.API_PUT_DEBT}/${gid}/${info.id}`, data, {
           headers: {
             authorization: `Bearer ${token}`,
           },
         });
       }
-      console.log(result.data);
+      console.log('fetched update debt: ', result.data);
 
-      // //確認有成功後更新state
+      //確認有成功後更新state
       if (result.status === 200) {
-        console.log(result.status);
         //要把debtId改成新的
         info.id = result.data.data.debtId;
         //整理state data的格式
@@ -139,12 +137,31 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
         info.ownAmount = info.lender === currUserId ? info.total - (split[currUserId] ? split[currUserId] : 0) : split[currUserId] ? split[currUserId] : 0;
         console.log('info: ', info);
         console.log('split: ', split);
-        setDebt((prev) => {
-          console.log(prev);
-          return [info, ...prev];
-        });
         if (details) {
+          setDebt((prev) => {
+            console.log('prev', prev, 'info', info, 'debtInfo', debtInfo);
+            let newArr = prev.map((item) => {
+              if (item.id === debtInfo.id) {
+                return info;
+              } else {
+                return item;
+              }
+            });
+            let sorted = newArr.sort((a, b) => {
+              return new Date(b.date) - new Date(a.date);
+            });
+            return sorted;
+          });
           setDetail(split);
+        } else {
+          setDebt((prev) => {
+            console.log('prev', prev, 'info', info);
+            prev.push(info);
+            let sorted = prev.sort((a, b) => {
+              return new Date(b.date) - new Date(a.date);
+            });
+            return sorted;
+          });
         }
         setIsDebtChanged((prev) => {
           return !prev;
