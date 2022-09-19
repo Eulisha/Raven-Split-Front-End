@@ -34,7 +34,7 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
   let CurrGroupInfo = useContext(GroupInfo);
   let CurrUser = useContext(User);
   console.log('currUser', CurrUser);
-  let currUserId = CurrUser.id;
+  let currUserId = CurrUser.user.id;
   let currUserName = CurrUser.name;
   let gid = CurrGroupInfo.currGroup.gid;
   let { groupUsers, groupUserNames } = CurrGroupInfo;
@@ -44,7 +44,7 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
     ? debtInfo
     : {
         gid,
-        date: `${new Date(Date.now()).getFullYear()}-${new Date(Date.now()).getMonth() + 1}-${new Date(Date.now()).getDate()}`,
+        date: `${new Date(Date.now()).getFullYear()}-${new Date(Date.now()).getMonth() + 1 < 10 ? 0 : ''}${new Date(Date.now()).getMonth() + 1}-${new Date(Date.now()).getDate()}`,
         title: '',
         total: 0,
         lender: currUserId,
@@ -172,10 +172,6 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
     }
   };
 
-  // test
-  // useEffect(() => {
-  //   console.log('i m info : ', info);
-  // }, [info]);
   console.log(info);
 
   return (
