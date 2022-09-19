@@ -85,7 +85,7 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
 
   //EventHandle
   const handleInfoChange = (prop) => (e) => {
-    if (e.target.name === 'total' || e.target.name === 'amount') {
+    if (e.target.name === 'total' || e.target.name === 'amount' || e.target.name === 'lender') {
       setInfo({ ...info, [prop]: Number(e.target.value) });
     } else {
       setInfo({ ...info, [prop]: e.target.value });
@@ -102,7 +102,6 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
       //整理送後端格式
       const newDetails = [];
       groupUsers.map((uid) => {
-        console.log('uid type', split[uid], typeof split[uid]);
         if (split[uid]) {
           newDetails.push({ borrower: Number(uid), amount: Number(split[uid]) });
         }
@@ -133,8 +132,8 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
         //要把debtId改成新的
         info.id = result.data.data.debtId;
         //整理state data的格式
-        info.isOwned = info.lender === currUserId ? true : false;
-        info.ownAmount = info.lender === currUserId ? info.total - (split[currUserId] ? split[currUserId] : 0) : split[currUserId] ? split[currUserId] : 0;
+        info.isOwned = Number(info.lender) === currUserId ? true : false;
+        info.ownAmount = Number(info.lender) === currUserId ? info.total - (split[currUserId] ? split[currUserId] : 0) : split[currUserId] ? split[currUserId] : 0;
         console.log('info: ', info);
         console.log('split: ', split);
         if (details) {
