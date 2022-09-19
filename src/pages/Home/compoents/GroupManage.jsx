@@ -6,18 +6,18 @@ import constants from '../../../global/constants';
 import { User } from '../../App';
 import { GroupInfo } from './Home';
 
-const GroupManageButton = ({ setGroupUsers, setGroupUserNames, setGroupUserEmails, setIsGroupChanged }) => {
+const GroupManageButton = ({ location, setGroupUsers, setGroupUserNames, setGroupUserEmails, setIsGroupChanged }) => {
   const [editingShow, setEditingShow] = useState(false);
-  let CurrGroupInfo = useContext(GroupInfo);
-  let { currGroup } = CurrGroupInfo;
+
   return (
     <div className="blog__controller">
       <Button variant="outline-success" onClick={() => setEditingShow(true)}>
-        {currGroup.gid ? 'Setting' : '+'} {/* FIXME:這邊要再改 */}
+        {location === 'group_users' ? 'Setting' : '+'}
       </Button>
       {editingShow && (
         <GroupManageWindow
           /** 編輯視窗 */
+          location={location}
           setGroupUsers={setGroupUsers}
           setGroupUserNames={setGroupUserNames}
           setGroupUserEmails={setGroupUserEmails}
@@ -30,51 +30,47 @@ const GroupManageButton = ({ setGroupUsers, setGroupUserNames, setGroupUserEmail
   );
 };
 
-const GroupManageWindow = ({ setIsGroupChanged, show, onHide }) => {
+const GroupManageWindow = ({ location, setIsGroupChanged, show, onHide }) => {
   console.log('Editing Group....');
 
   let CurrUser = useContext(User);
   let CurrGroupInfo = useContext(GroupInfo);
+  let { id, name, email } = CurrUser.user;
   let { currGroup, groupUsers, groupUserNames, groupUserEmails } = CurrGroupInfo;
 
-  // let currUserId = currUser.id;
-  // let currUserName = currUser.name;
   console.log('currUser', CurrUser);
   console.log('groupUsers', groupUsers);
+  console.log('currGroup', currGroup);
+  console.log(location);
+  let group_type;
 
-  //帳的初始值 判斷是新增or編輯
+  switch (location) {
+    case 'group_normal':
+      group_type = '1';
+      break;
+    case 'group_pair':
+      group_type = '2';
+      break;
+    case 'group_buying':
+      group_type = '3';
+      break;
+    case 'group_users':
+      group_type = currGroup.type;
+      break;
+  }
+  console.log(group_type);
 
   //設定state
-  const [editedGroupUserIds, setEditedGroupUserIds] = useState(groupUsers);
-  const [editedGroupUserEmails, setEditedGroupUserEmails] = useState(groupUserEmails);
+  const [editedGroupUserIds, setEditedGroupUserIds] = useState(location === 'group_users' ? groupUsers : [id]);
+  const [editedGroupUserEmails, setEditedGroupUserEmails] = useState(location === 'group_users' ? groupUserEmails : { [id]: email });
   console.log('editedGroupUserIds', editedGroupUserIds);
   console.log('editedGroupUserEmails', editedGroupUserEmails);
-  // const [editedGroupUserNames, setEditedGroupUserNames] = useState(groupUserNames);
-  // console.log('editedGroupUserNames', editedGroupUserNames);
 
   //設定ref
   const inputGroupName = useRef();
-  const inputGroupType = useRef();
   const inputUserEmail = useRef();
-  // const inputUserName = useRef();
 
   //EventHandle
-  const handleDeleteUser = (e) => {
-    const uid = Number(e.target.id);
-    setEditedGroupUserIds((prev) => {
-      return prev.filter((user) => user !== uid);
-    });
-    // setEditedGroupUserNames(() => {
-    //   const copy = { ...editedGroupUserNames };
-    //   delete copy[uid];
-    //   return copy;
-    // });
-    setEditedGroupUserEmails(() => {
-      const copy = { ...editedGroupUserEmails };
-      delete copy[uid];
-      return copy;
-    });
-  };
   const handleAddUser = () => {
     const token = localStorage.getItem('accessToken');
     const fetchUser = async () => {
@@ -87,23 +83,39 @@ const GroupManageWindow = ({ setIsGroupChanged, show, onHide }) => {
       const insertId = data.data.id;
       //新增id到array
       setEditedGroupUserIds([...editedGroupUserIds, insertId]);
-      // setEditedGroupUserNames({ ...editedGroupUserNames, [insertId]: inputUserName.current.value });
       setEditedGroupUserEmails({ ...editedGroupUserEmails, [insertId]: inputUserEmail.current.value });
-      // inputUserName.current.value = '';
       inputUserEmail.current.value = '';
     };
     fetchUser();
+  };
+
+  const handleDeleteUser = (e) => {
+    const uid = Number(e.target.id);
+    setEditedGroupUserIds((prev) => {
+      return prev.filter((user) => user !== uid);
+    });
+    setEditedGroupUserEmails(() => {
+      const copy = { ...editedGroupUserEmails };
+      delete copy[uid];
+      return copy;
+    });
   };
 
   //儲存DB
   const handleSubmit = async () => {
     try {
       //整理送後端格式
-      const newGroupUsers = { group_name: inputGroupName.current.value, group_type: inputGroupType.current.value, groupUsers: [] };
-      //[{uid:1,name:,email:a@a.com,role:2}]
+      const newGroupUsers = { group_name: inputGroupName.current.value, group_type, groupUsers: [] };
+      //[{uid:1,email:a@a.com,role:2}]
+
+      if (location === 'group_users') {
+        //新增群組時需將自己加入arr
+        newGroupUsers.groupUsers.push({ uid: id, email, role: '4' });
+      }
       editedGroupUserIds.map((userId) => {
         if (!groupUsers.includes(userId)) {
-          const newGroupUser = { uid: userId, email: editedGroupUserEmails[userId], role: 2 };
+          //將新增的加入arr
+          const newGroupUser = { uid: userId, email: editedGroupUserEmails[userId], role: group_type === '1' ? 2 : group_type === '2' ? 4 : 1 };
           console.log(newGroupUser);
           newGroupUsers.groupUsers.push(newGroupUser);
         }
@@ -113,7 +125,7 @@ const GroupManageWindow = ({ setIsGroupChanged, show, onHide }) => {
       const token = localStorage.getItem('accessToken');
       console.log('data for backend:', newGroupUsers);
       let result;
-      if (!currGroup.gid) {
+      if (location !== 'group_users') {
         result = await axios.post(`${constants.API_POST_GROUP}`, newGroupUsers, {
           headers: {
             authorization: `Bearer ${token}`,
@@ -142,7 +154,7 @@ const GroupManageWindow = ({ setIsGroupChanged, show, onHide }) => {
   return (
     <Modal className="window" size="lg" aria-labelledby="contained-modal-title-vcenter" centered {...{ onHide, show }}>
       <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">{currGroup === 'editing' ? '你正在編輯' : '你正在新增'}</Modal.Title>
+        <Modal.Title id="contained-modal-title-vcenter">{location === 'group_users' ? '你正在編輯' : `你正在新增${location}`}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <div>
@@ -150,18 +162,10 @@ const GroupManageWindow = ({ setIsGroupChanged, show, onHide }) => {
           <div id="group_name">
             <input ref={inputGroupName} type="text" defaultValue={currGroup ? currGroup.name : ''}></input>
           </div>
-          <h4>群組類型</h4>
-          <div id="group_type">
-            {currGroup.gid ? (
-              <input ref={inputGroupType} type="text" defaultValue={currGroup ? currGroup.type : ''} disabled />
-            ) : (
-              <input ref={inputGroupType} type="text" defaultValue={currGroup ? currGroup.type : ''} />
-            )}
-          </div>
           <h4>成員們</h4>
           <div id="group_members">
             <ul>
-              {editedGroupUserIds.length > 0 ? (
+              {editedGroupUserIds.length > 1 ? (
                 editedGroupUserIds.map((uid) => {
                   return (
                     <div key={uid}>
@@ -179,14 +183,12 @@ const GroupManageWindow = ({ setIsGroupChanged, show, onHide }) => {
                   );
                 })
               ) : (
-                <div>You</div>
+                <div>{`${name} ${email}`}</div>
               )}
             </ul>
             <div id="add_user">
               <h4>新增成員</h4>
-              {/* <input ref={inputUserName} id="add_user_name" type="text" placeholder="取個名吧" /> */}
               <input ref={inputUserEmail} id="add_user_email" type="email" placeholder="成員的信箱" />
-              {/* <input id="add_user_email" type="text" placeholder="成員的權限" /> */}
               <button onClick={handleAddUser}>+</button>
             </div>
           </div>

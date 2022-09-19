@@ -31,15 +31,16 @@ const UserGroups = ({ setCurrGroup, setGroupUsers, setGroupUserNames, setGroupUs
     <div id="group_area">
       <div id="group_normal_type">
         My Groups
+        <div className="top_bar">
+          <div>Groups</div>
+        </div>
         <GroupManage.GroupManageButton
+          location="group_normal"
           setGroupUsers={setGroupUsers}
           setGroupUserNames={setGroupUserNames}
           setGroupUserEmails={setGroupUserEmails}
           setIsGroupChanged={setIsGroupChanged}
         />
-        <div className="top_bar">
-          <div>Groups</div>
-        </div>
         <Nav defaultActiveKey="/home" className="flex-column">
           {userGroups.map((group) => {
             if (group.type === '1') {
@@ -59,6 +60,13 @@ const UserGroups = ({ setCurrGroup, setGroupUsers, setGroupUserNames, setGroupUs
         <div className="top_bar">
           <div>Pair</div>
         </div>
+        <GroupManage.GroupManageButton
+          location="group_pair"
+          setGroupUsers={setGroupUsers}
+          setGroupUserNames={setGroupUserNames}
+          setGroupUserEmails={setGroupUserEmails}
+          setIsGroupChanged={setIsGroupChanged}
+        />
         <Nav defaultActiveKey="/home" className="flex-column">
           {userGroups.map((group) => {
             if (group.type === '2') {
@@ -75,6 +83,13 @@ const UserGroups = ({ setCurrGroup, setGroupUsers, setGroupUserNames, setGroupUs
         <div className="top_bar">
           <div>Group Buying</div>
         </div>
+        <GroupManage.GroupManageButton
+          location="group_buying"
+          setGroupUsers={setGroupUsers}
+          setGroupUserNames={setGroupUserNames}
+          setGroupUserEmails={setGroupUserEmails}
+          setIsGroupChanged={setIsGroupChanged}
+        />
         <Nav defaultActiveKey="/home" className="flex-column">
           {userGroups.map((group) => {
             if (group.type === '3') {

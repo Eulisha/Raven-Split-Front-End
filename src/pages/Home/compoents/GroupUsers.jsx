@@ -47,7 +47,7 @@ const GroupUsers = ({ setGroupUsers, setGroupUserNames, setGroupUserEmails, isDe
     <div id="group-users">
       <div className="top_bar">
         <div>成員列表</div>
-        <GroupManage.GroupManageButton setGroupUsers={setGroupUsers} setGroupUserNames={setGroupUserNames} setGroupUserEmails={setGroupUserEmails} />
+        <GroupManage.GroupManageButton location="group_users" setGroupUsers={setGroupUsers} setGroupUserNames={setGroupUserNames} setGroupUserEmails={setGroupUserEmails} />
       </div>
       <Balance id="balance" isDebtChanged={isDebtChanged} />
     </div>
