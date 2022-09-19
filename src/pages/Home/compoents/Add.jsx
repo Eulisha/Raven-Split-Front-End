@@ -34,7 +34,7 @@ const AddButton = ({ gid, groupUsers, groupUserNames, debtInfo, details, setDebt
 const AddingWindow = ({ gid, groupUsers, groupUserNames, debtInfo, details, setDebt, setDetail, setIsDebtChanged, onHide, show }) => {
   console.log('Editing....');
   let currUser = useContext(CurrUser);
-  console.log(currUser);
+  console.log('currUser#######', currUser);
   let currUserId = currUser.id;
   let currUserName = currUser.name;
 
@@ -130,16 +130,12 @@ const AddingWindow = ({ gid, groupUsers, groupUserNames, debtInfo, details, setD
 
       // //確認有成功後更新state
       if (result.status === 200) {
-        setInfo((prev) => {
-          console.log(prev['id']);
-          prev['id'] = result.data.data.debtId; //儲存之後會有新的debtId, 要額外更新上去
-        });
-
+        console.log(result.status);
+        //要把debtId改成新的
+        info.id = result.data.data.debtId;
         //整理state data的格式
         info.isOwned = info.lender === currUserId ? true : false;
-        //FIXME: 要取表單裡的值;
         info.ownAmount = info.lender === currUserId ? info.total - (split[currUserId] ? split[currUserId] : 0) : split[currUserId] ? split[currUserId] : 0;
-        //FIXME: 要取表單裡的值;
         console.log('info: ', info);
         console.log('split: ', split);
         setDebt((prev) => {
@@ -147,10 +143,7 @@ const AddingWindow = ({ gid, groupUsers, groupUserNames, debtInfo, details, setD
           return [info, ...prev];
         });
         if (details) {
-          setDetail((prev) => {
-            console.log(prev);
-            split;
-          }); //FIXME:要確認
+          setDetail(split);
         }
         setIsDebtChanged((prev) => {
           return !prev;
@@ -161,6 +154,12 @@ const AddingWindow = ({ gid, groupUsers, groupUserNames, debtInfo, details, setD
       console.log(err);
     }
   };
+
+  // test
+  // useEffect(() => {
+  //   console.log('i m info : ', info);
+  // }, [info]);
+  console.log(info);
 
   return (
     <Modal className="window" size="lg" aria-labelledby="contained-modal-title-vcenter" centered {...{ onHide, show }}>

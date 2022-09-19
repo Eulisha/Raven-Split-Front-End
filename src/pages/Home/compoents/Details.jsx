@@ -5,7 +5,7 @@ import DetailList from './DetailList';
 // import Edit from './Edit';
 import Add from './Add';
 
-const Details = ({ gid, groupUsers, groupUserNames, debtInfo, extend, setDebt, setIsDebtChanged }) => {
+const Details = ({ gid, groupUsers, groupUserNames, debtInfo, setDebt, setIsDebtChanged }) => {
   console.log('@Details');
   const debtId = debtInfo.id;
   const [details, setDetail] = useState({});
@@ -24,14 +24,10 @@ const Details = ({ gid, groupUsers, groupUserNames, debtInfo, extend, setDebt, s
       //整理成快速查找的object, oriSplit = {1:50, 2:50}
       console.log(data.data);
 
-      console.log('debug map');
       const oriSplit = {};
       data.data.map((detail) => {
-        console.log('borrow', detail.borrower);
         for (let uid of groupUsers) {
-          console.log('uid', uid);
           if (uid === detail.borrower) {
-            console.log('true');
             oriSplit[uid] = detail.amount;
             break;
           }
@@ -40,9 +36,14 @@ const Details = ({ gid, groupUsers, groupUserNames, debtInfo, extend, setDebt, s
       setDetail(oriSplit);
       console.log('set details: ', oriSplit);
     };
-    fetchDetail(debtId);
+    let detailsKeys = Object.keys(details);
+    console.log('**********@Details', 'groupUsers.len:', groupUsers.length, 'detailsKeys.len:', detailsKeys.length);
+    if (groupUsers.length > 0 && detailsKeys.length === 0) {
+      console.log('@Details', 'fetchDetail', debtId);
+      fetchDetail(debtId);
+    }
     // }
-  }, [extend]);
+  }, [groupUsers]);
 
   return (
     <div>
