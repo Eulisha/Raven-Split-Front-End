@@ -34,7 +34,7 @@ const DebtList = ({ debtInfo }) => {
           <span>{`Paid By: ${groupUserNames[lender]}`}</span>
           <span>{`$NT: ${total} `}</span>
         </div>
-        <div className="you">{`${isOwned ? 'You Paid' : 'You Own'} $NT: ${isOwned ? ownAmount : ownAmount}`}</div>
+        <div className="you">{`${isOwned ? 'You Paid' : 'You Own'} $NT: ${ownAmount}`}</div>
       </div>
       {/* <button id={debtId} onClick={handleExtend}>
         V

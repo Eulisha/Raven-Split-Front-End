@@ -9,7 +9,7 @@ const Dashboard_list = ({ selfBalance }) => {
               return (
                 <li key={user.uid}>
                   <div className="balance_total">
-                    {user.uid} $NT{user.total}
+                    {user.user_name} $NT{user.total}
                   </div>
                   <div>
                     <div className="balance_pair">{user.pair ? <div>Non-Group $NT{user.pair}</div> : ''}</div>
@@ -47,7 +47,7 @@ const Dashboard_list = ({ selfBalance }) => {
               return (
                 <li key={user.uid}>
                   <div className="balance_total">
-                    {user.uid} $NT{user.total}
+                    {user.user_name} $NT{user.total}
                   </div>
                   <div>
                     <div className="balance_pair">{user.pair ? <div>Non-Group $NT{user.pair}</div> : ''}</div>
