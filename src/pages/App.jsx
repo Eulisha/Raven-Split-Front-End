@@ -4,9 +4,8 @@ import Login from './Login/compoents/Login';
 import Home from './Home/compoents/Home';
 import Header from '../global/Header';
 import React, { useState } from 'react';
-// import { useEffect } from 'react';
 
-export const CurrUser = React.createContext();
+export const User = React.createContext();
 
 const App = () => {
   console.log('@App');
@@ -15,15 +14,15 @@ const App = () => {
   console.log('user from setUser:', user);
   // }
   return (
-    <CurrUser.Provider value={user}>
+    <User.Provider value={{ user, setUser }}>
       <div className="App">
         <Header />
         <Routes className="App">
           <Route id="home_container" element={<Home />} path="/dashboard" />
-          <Route element={<Login setUser={setUser} />} path="/login" />
+          <Route element={<Login />} path="/login" />
         </Routes>
       </div>
-    </CurrUser.Provider>
+    </User.Provider>
   );
 };
 export default App;

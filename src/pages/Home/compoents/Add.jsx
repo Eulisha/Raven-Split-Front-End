@@ -3,7 +3,7 @@ import { useState, useEffect, useContext } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import constants from '../../../global/constants';
-import { CurrUser } from '../../App';
+import { User } from '../../App';
 
 const AddButton = ({ gid, groupUsers, groupUserNames, debtInfo, details, setDebt, setDetail, setIsDebtChanged }) => {
   const [editingShow, setEditingShow] = useState(false);
@@ -33,10 +33,10 @@ const AddButton = ({ gid, groupUsers, groupUserNames, debtInfo, details, setDebt
 
 const AddingWindow = ({ gid, groupUsers, groupUserNames, debtInfo, details, setDebt, setDetail, setIsDebtChanged, onHide, show }) => {
   console.log('Editing....');
-  let currUser = useContext(CurrUser);
-  console.log('currUser#######', currUser);
-  let currUserId = currUser.id;
-  let currUserName = currUser.name;
+  let CurrUser = useContext(User);
+  console.log('currUser', CurrUser);
+  let currUserId = CurrUser.id;
+  let currUserName = CurrUser.name;
 
   //帳的初始值 判斷是新增or編輯
   const initialInfo = details

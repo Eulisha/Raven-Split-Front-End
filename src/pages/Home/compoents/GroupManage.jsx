@@ -3,7 +3,7 @@ import { useState, useRef, useContext } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import constants from '../../../global/constants';
-import { CurrUser } from '../../App';
+import { User } from '../../App';
 
 const GroupManageButton = ({ currGroup, groupUsers, groupUserNames, groupUserEmails, setGroupUsers, setGroupUserNames, setGroupUserEmails, setIsGroupChanged }) => {
   const [editingShow, setEditingShow] = useState(false);
@@ -35,10 +35,10 @@ const GroupManageButton = ({ currGroup, groupUsers, groupUserNames, groupUserEma
 const GroupManageWindow = ({ currGroup, groupUsers = [], groupUserNames, groupUserEmails, setIsGroupChanged, show, onHide }) => {
   console.log('Editing Group....');
 
-  let currUser = useContext(CurrUser);
+  let CurrUser = useContext(User);
   // let currUserId = currUser.id;
   // let currUserName = currUser.name; //FIXME:要再套上去
-  console.log('currUser', currUser);
+  console.log('currUser', CurrUser);
   console.log('groupUsers', groupUsers);
 
   //帳的初始值 判斷是新增or編輯

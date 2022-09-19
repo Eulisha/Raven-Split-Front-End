@@ -2,8 +2,13 @@ import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import constants from '../../../global/constants';
+import { useContext } from 'react';
+import { User } from '../../App';
 
-const SignIn = ({ setUser }) => {
+const SignIn = () => {
+  console.log('@Signin');
+  const CurrUser = useContext(User);
+
   const [inputValues, setinputValues] = useState({
     email: '',
     password: '',
@@ -22,7 +27,7 @@ const SignIn = ({ setUser }) => {
     try {
       const { data } = await axios.post(`${constants.API_POST_SIGNIN}`, inputValues);
       localStorage.setItem('accessToken', data.data.accessToken);
-      setUser(data.data.user);
+      CurrUser.setUser(data.data.user);
       navigate('/dashboard');
     } catch (err) {
       console.log(err);

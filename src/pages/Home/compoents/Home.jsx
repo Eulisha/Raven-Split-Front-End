@@ -6,14 +6,15 @@ import Debts from './Debts';
 import GroupTopBar from './GroupTopBar';
 import Dashboard from './Dashboard';
 import { useContext } from 'react';
-import { CurrUser } from '../../App';
+import { User } from '../../App';
 
 export const CurrGroupInfo = React.createContext();
 
 const Home = () => {
   console.log('@Home');
-  const user = useContext(CurrUser);
-  console.log('user form context', user);
+  const CurrUser = useContext(User);
+  console.log('user form context', CurrUser);
+
   const [currGroup, setCurrGroup] = useState({ gid: null, name: null, type: null });
   const [groupUsers, setGroupUsers] = useState([]); //array of Ids of groupUsers
   const [groupUserNames, setGroupUserNames] = useState({}); //{1:Euli}
@@ -23,49 +24,49 @@ const Home = () => {
   const [debts, setDebt] = useState([]);
   // console.log('@home log currgroup', currGroup, 'gid', currGroup.gid, currGroup.name);
   return (
-    // <CurrGroupInfo.Provider value={{ currGroup, groupUsers, groupUserNames, groupUserEmails }}>
-    <div id="Home">
-      <div id="left_sidebar">
-        <UserGroups setCurrGroup={setCurrGroup} isGroupChanged={isGroupChanged} setIsGroupChanged={setIsGroupChanged} />
+    <CurrGroupInfo.Provider value={{ currGroup, groupUsers, groupUserNames, groupUserEmails }}>
+      <div id="Home">
+        <div id="left_sidebar">
+          <UserGroups setCurrGroup={setCurrGroup} isGroupChanged={isGroupChanged} setIsGroupChanged={setIsGroupChanged} />
+        </div>
+        <div id="center_column">
+          <GroupTopBar currGroup={currGroup} groupUsers={groupUsers} groupUserNames={groupUserNames} setDebt={setDebt} setIsDebtChanged={setIsDebtChanged} />
+          {currGroup.gid ? (
+            <Debts
+              currGroup={currGroup}
+              // currUserId={currUserId} //可以用jwt代替(?)
+              groupUsers={groupUsers}
+              groupUserNames={groupUserNames}
+              debts={debts}
+              setDebt={setDebt}
+              isDebtChanged={isDebtChanged} //傳給debt跟detail
+              setIsDebtChanged={setIsDebtChanged} //要傳給settle頁
+            />
+          ) : (
+            <Dashboard />
+          )}
+        </div>
+        <div id="right_sidebar">
+          {currGroup.gid ? (
+            <GroupUsers
+              gid={currGroup.gid}
+              currGroup={currGroup}
+              groupUsers={groupUsers}
+              groupUserNames={groupUserNames}
+              groupUserEmails={groupUserEmails}
+              setGroupUsers={setGroupUsers}
+              setGroupUserNames={setGroupUserNames}
+              setGroupUserEmails={setGroupUserEmails}
+              isDebtChanged={isDebtChanged}
+              isGroupChanged={isGroupChanged}
+              setIsGroupChanged={setIsGroupChanged}
+            />
+          ) : (
+            '尚未選取群組'
+          )}
+        </div>
       </div>
-      <div id="center_column">
-        <GroupTopBar currGroup={currGroup} groupUsers={groupUsers} groupUserNames={groupUserNames} setDebt={setDebt} setIsDebtChanged={setIsDebtChanged} />
-        {currGroup.gid ? (
-          <Debts
-            currGroup={currGroup}
-            // currUserId={currUserId} //可以用jwt代替(?)
-            groupUsers={groupUsers}
-            groupUserNames={groupUserNames}
-            debts={debts}
-            setDebt={setDebt}
-            isDebtChanged={isDebtChanged} //傳給debt跟detail
-            setIsDebtChanged={setIsDebtChanged} //要傳給settle頁
-          />
-        ) : (
-          <Dashboard />
-        )}
-      </div>
-      <div id="right_sidebar">
-        {currGroup.gid ? (
-          <GroupUsers
-            gid={currGroup.gid}
-            currGroup={currGroup}
-            groupUsers={groupUsers}
-            groupUserNames={groupUserNames}
-            groupUserEmails={groupUserEmails}
-            setGroupUsers={setGroupUsers}
-            setGroupUserNames={setGroupUserNames}
-            setGroupUserEmails={setGroupUserEmails}
-            isDebtChanged={isDebtChanged}
-            isGroupChanged={isGroupChanged}
-            setIsGroupChanged={setIsGroupChanged}
-          />
-        ) : (
-          '尚未選取群組'
-        )}
-      </div>
-    </div>
-    // </CurrGroupInfo.Provider>
+    </CurrGroupInfo.Provider>
   );
 };
 export default Home;

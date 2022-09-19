@@ -1,11 +1,14 @@
 import axios from 'axios';
-import { useEffect } from 'react';
+import { useEffect, useContext } from 'react';
 import constants from '../../../global/constants';
 import Balance from './Balance';
 import GroupManage from './GroupManage';
+import { User } from '../../App';
 
 const GroupUsers = ({ gid, currGroup, groupUsers, groupUserNames, setGroupUsers, groupUserEmails, setGroupUserNames, setGroupUserEmails, isDebtChanged, isGroupChanged }) => {
   console.log('@groupUsers');
+  let CurrUser = useContext(User);
+  console.log(CurrUser);
 
   useEffect(() => {
     if (gid) {

@@ -1,11 +1,15 @@
 import axios from 'axios';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import constants from '../../../global/constants';
 import { Nav } from 'react-bootstrap';
 import GroupManage from './GroupManage';
+import { User } from '../../App';
 
 const UserGroups = ({ setCurrGroup, setGroupUsers, setGroupUserNames, setGroupUserEmails, isGroupChanged, setIsGroupChanged }) => {
   console.log('@UserGroups');
+  let CurrUser = useContext(User);
+  console.log(CurrUser);
+
   const [userGroups, setUserGroups] = useState([]);
   console.log('userGroups', userGroups);
 
