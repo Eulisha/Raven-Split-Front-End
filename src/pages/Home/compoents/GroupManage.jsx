@@ -108,18 +108,37 @@ const GroupManageWindow = ({ location, setIsGroupChanged, show, onHide }) => {
       const newGroupUsers = { group_name: inputGroupName.current.value, group_type, groupUsers: [] };
       //[{uid:1,email:a@a.com,role:2}]
 
-      if (location === 'group_users') {
-        //新增群組時需將自己加入arr
+      if (location !== 'group_users') {
+        //新增群組時
+        console.log('add self');
+        //加自己
         newGroupUsers.groupUsers.push({ uid: id, email, role: '4' });
+        console.log(newGroupUsers);
+        //加其他人
+        editedGroupUserIds.map((userId) => {
+          console.log('editedGroupUserId map');
+          console.log(userId, groupUsers);
+          if (userId != id) {
+            const newGroupUser = { uid: userId, email: editedGroupUserEmails[userId], role: group_type === 'group_normal' ? 2 : group_type === 'group_pair' ? 4 : 1 };
+            console.log(newGroupUser);
+            newGroupUsers.groupUsers.push(newGroupUser);
+            console.log(newGroupUsers);
+          }
+        });
+      } else {
+        //編輯群組時
+        editedGroupUserIds.map((userId) => {
+          console.log('editedGroupUserId map');
+          console.log(userId, groupUsers);
+          if (!groupUsers.includes(userId)) {
+            //將新增的加入arr
+            const newGroupUser = { uid: userId, email: editedGroupUserEmails[userId], role: group_type === 'group_normal' ? 2 : group_type === 'group_pair' ? 4 : 1 };
+            console.log(newGroupUser);
+            newGroupUsers.groupUsers.push(newGroupUser);
+            console.log(newGroupUsers);
+          }
+        });
       }
-      editedGroupUserIds.map((userId) => {
-        if (!groupUsers.includes(userId)) {
-          //將新增的加入arr
-          const newGroupUser = { uid: userId, email: editedGroupUserEmails[userId], role: group_type === '1' ? 2 : group_type === '2' ? 4 : 1 };
-          console.log(newGroupUser);
-          newGroupUsers.groupUsers.push(newGroupUser);
-        }
-      });
 
       //傳給後端
       const token = localStorage.getItem('accessToken');
@@ -160,7 +179,7 @@ const GroupManageWindow = ({ location, setIsGroupChanged, show, onHide }) => {
         <div>
           <h4>群組名稱</h4>
           <div id="group_name">
-            <input ref={inputGroupName} type="text" defaultValue={currGroup ? currGroup.name : ''}></input>
+            <input ref={inputGroupName} type="text" defaultValue={editedGroupUserIds.length > 1 ? currGroup.name : ''}></input>
           </div>
           <h4>成員們</h4>
           <div id="group_members">
@@ -169,7 +188,9 @@ const GroupManageWindow = ({ location, setIsGroupChanged, show, onHide }) => {
                 editedGroupUserIds.map((uid) => {
                   return (
                     <div key={uid}>
-                      {!groupUsers.includes(uid) ? (
+                      {uid === id ? (
+                        <div>{`${name} ${email}`}</div>
+                      ) : !groupUsers.includes(uid) ? (
                         <div>
                           <div>{`${editedGroupUserEmails[uid]}`}</div>
                           <button id={uid} onClick={handleDeleteUser}>
