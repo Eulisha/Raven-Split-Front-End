@@ -12,9 +12,7 @@ const DetailList = ({ details }) => {
         {Object.keys(details).map((borrowerId) => {
           return (
             <ListGroup.Item key={borrowerId} className="item">
-              {/* <div key={borrowerId} className="item"> */}
               {`${CurrGroupInfo.groupUserNames[borrowerId]} owns ${details[borrowerId]}`}
-              {/* </div> */}
             </ListGroup.Item>
           );
         })}

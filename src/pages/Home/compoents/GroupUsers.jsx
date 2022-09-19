@@ -3,16 +3,15 @@ import { useEffect, useContext } from 'react';
 import constants from '../../../global/constants';
 import Balance from './Balance';
 import GroupManage from './GroupManage';
-import { User } from '../../App';
+// import { User } from '../../App';
 import { GroupInfo } from './Home';
 
 const GroupUsers = ({ setGroupUsers, setGroupUserNames, setGroupUserEmails, isDebtChanged, isGroupChanged }) => {
   console.log('@groupUsers');
-  let CurrUser = useContext(User);
+  // let CurrUser = useContext(User);
   let CurrGroupInfo = useContext(GroupInfo);
   let { currGroup } = CurrGroupInfo;
   let { gid } = currGroup;
-  console.log(CurrUser.user);
 
   useEffect(() => {
     if (gid) {
