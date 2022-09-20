@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import constants from '../../../global/constants';
 
 const SignIn = () => {
@@ -12,7 +12,7 @@ const SignIn = () => {
     provider: 'native',
   });
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   //event handler
   const handleInput = (prop) => (e) => {
@@ -24,7 +24,8 @@ const SignIn = () => {
     try {
       const { data } = await axios.post(`${constants.API_POST_SIGNIN}`, inputValues);
       localStorage.setItem('accessToken', data.data.accessToken);
-      navigate('/dashboard');
+      // navigate('/dashboard');
+      window.location.assign(`${constants.HOST}/dashboard`);
     } catch (err) {
       console.log(err);
     }

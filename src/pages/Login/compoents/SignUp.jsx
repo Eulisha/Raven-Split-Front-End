@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import constants from '../../../global/constants';
 
 const SignUp = () => {
@@ -13,7 +12,6 @@ const SignUp = () => {
     cellphone: '',
     provider: 'native',
   });
-  const navigate = useNavigate();
   // const [submitted, setSubmitted] = useState(false);
 
   //event handler
@@ -26,7 +24,7 @@ const SignUp = () => {
     try {
       const { data } = await axios.post(`${constants.API_POST_SIGNUP}`, inputValues);
       localStorage.setItem('accessToken', data.data.accessToken);
-      navigate('/dashboard');
+      window.location.assign(`${constants.HOST}/dashboard`);
     } catch (err) {
       console.log(err);
     }
