@@ -3,17 +3,21 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import constants from './constants';
+import { FaCrow } from 'react-icons/fa';
 
 const Header = () => {
   //profile
   //log out
   //create group=
   return (
-    <Navbar bg="light" expand="lg">
+    <Navbar className="header" bg="light" expand="lg">
       <Container>
-        <Navbar.Brand href="/dashboard">Ravent-Split</Navbar.Brand>
+        <div className="header-logo">
+          <Navbar.Brand href="/dashboard">Ravent Split</Navbar.Brand>
+          <FaCrow size={40} />
+        </div>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
+        <Navbar.Collapse className="header-navbar">
           <Nav className="me-auto">
             <NavDropdown title="My Account" id="basic-nav-dropdown">
               {/* <NavDropdown.Item href="#action/3.1">Account Setting</NavDropdown.Item> */}
