@@ -13,7 +13,7 @@ export const GroupInfo = React.createContext();
 const Home = () => {
   console.log('@Home');
   const CurrUser = useContext(User);
-  console.log('user form context', CurrUser);
+  console.log('user form context', CurrUser.user);
 
   const [currGroup, setCurrGroup] = useState({ gid: null, name: null, type: null });
   const [groupUsers, setGroupUsers] = useState([]); //array of Ids of groupUsers
@@ -23,8 +23,11 @@ const Home = () => {
   const [isGroupChanged, setIsGroupChanged] = useState(false);
   const [debts, setDebt] = useState([]);
   // console.log('@home log currgroup', currGroup, 'gid', currGroup.gid, currGroup.name);
+
   return (
-    <GroupInfo.Provider value={{ currGroup, groupUsers, groupUserNames, groupUserEmails }}>
+    <GroupInfo.Provider
+      value={{ currGroup, groupUsers, groupUserNames, groupUserEmails, setIsGroupChanged, setGroupUsers, setGroupUserNames, setGroupUserEmails, isDebtChanged, isGroupChanged }}
+    >
       <div id="Home">
         <div id="left_sidebar">
           <UserGroups setCurrGroup={setCurrGroup} isGroupChanged={isGroupChanged} setIsGroupChanged={setIsGroupChanged} />
@@ -50,7 +53,6 @@ const Home = () => {
               setGroupUserEmails={setGroupUserEmails}
               isDebtChanged={isDebtChanged}
               isGroupChanged={isGroupChanged}
-              setIsGroupChanged={setIsGroupChanged}
             />
           ) : (
             '尚未選取群組'

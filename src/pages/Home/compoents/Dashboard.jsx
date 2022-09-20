@@ -6,7 +6,6 @@ import Dashboard_list from './Dashboard_list';
 
 const Dashboard = () => {
   const [selfBalance, setSelfBalance] = useState({});
-  // let currUser = useContext(CurrUser);
   console.log(selfBalance);
 
   //撈balances

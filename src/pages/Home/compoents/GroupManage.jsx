@@ -1,19 +1,22 @@
 import axios from 'axios';
 import { useState, useRef, useContext } from 'react';
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
+import { Modal, Form, Button, ListGroup, InputGroup } from 'react-bootstrap';
 import constants from '../../../global/constants';
 import { User } from '../../App';
 import { GroupInfo } from './Home';
+import { MdDelete, MdGroupAdd } from 'react-icons/md';
+// import { GrUserSettings } from 'react-icons/Gr';
 
-const GroupManageButton = ({ location, setGroupUsers, setGroupUserNames, setGroupUserEmails, setIsGroupChanged }) => {
+const GroupManageButton = ({ location, setGroupUsers, setGroupUserNames, setGroupUserEmails }) => {
   const [editingShow, setEditingShow] = useState(false);
 
   return (
     <div className="blog__controller">
-      <Button variant="outline-success" onClick={() => setEditingShow(true)}>
+      <MdGroupAdd onClick={() => setEditingShow(true)}>
+        {/* <Button variant="outline-success" onClick={() => setEditingShow(true)}> */}
         {location === 'group_users' ? 'Setting' : '+'}
-      </Button>
+      </MdGroupAdd>
+      {/* </Button> */}
       {editingShow && (
         <GroupManageWindow
           /** 編輯視窗 */
@@ -21,7 +24,6 @@ const GroupManageButton = ({ location, setGroupUsers, setGroupUserNames, setGrou
           setGroupUsers={setGroupUsers}
           setGroupUserNames={setGroupUserNames}
           setGroupUserEmails={setGroupUserEmails}
-          setIsGroupChanged={setIsGroupChanged}
           show={editingShow}
           onHide={() => setEditingShow(false)}
         />
@@ -30,13 +32,13 @@ const GroupManageButton = ({ location, setGroupUsers, setGroupUserNames, setGrou
   );
 };
 
-const GroupManageWindow = ({ location, setIsGroupChanged, show, onHide }) => {
+const GroupManageWindow = ({ location, show, onHide }) => {
   console.log('Editing Group....');
 
   let CurrUser = useContext(User);
   let CurrGroupInfo = useContext(GroupInfo);
   let { id, name, email } = CurrUser.user;
-  let { currGroup, groupUsers, groupUserNames, groupUserEmails } = CurrGroupInfo;
+  let { currGroup, groupUsers, groupUserNames, groupUserEmails, setIsGroupChanged } = CurrGroupInfo;
 
   console.log('currUser', CurrUser);
   console.log('groupUsers', groupUsers);
@@ -63,6 +65,8 @@ const GroupManageWindow = ({ location, setIsGroupChanged, show, onHide }) => {
   //設定state
   const [editedGroupUserIds, setEditedGroupUserIds] = useState(location === 'group_users' ? groupUsers : [id]);
   const [editedGroupUserEmails, setEditedGroupUserEmails] = useState(location === 'group_users' ? groupUserEmails : { [id]: email });
+  const [editedGroupUserNames, setEditedGroupUserNames] = useState(location === 'group_users' ? groupUserNames : { [id]: name });
+
   console.log('editedGroupUserIds', editedGroupUserIds);
   console.log('editedGroupUserEmails', editedGroupUserEmails);
 
@@ -72,6 +76,10 @@ const GroupManageWindow = ({ location, setIsGroupChanged, show, onHide }) => {
 
   //EventHandle
   const handleAddUser = () => {
+    if (Object.values(editedGroupUserEmails).includes(inputUserEmail.current.value)) {
+      alert('Member already in list above .');
+      inputUserEmail.current.value = '';
+    }
     const token = localStorage.getItem('accessToken');
     const fetchUser = async () => {
       const { data } = await axios.get(`${constants.API_GET_User_EXIST}?email=${inputUserEmail.current.value}`, {
@@ -81,16 +89,18 @@ const GroupManageWindow = ({ location, setIsGroupChanged, show, onHide }) => {
       });
       //查使用者存在
       const insertId = data.data.id;
+      const userNameFromDb = data.data.name;
+
       //新增id到array
       setEditedGroupUserIds([...editedGroupUserIds, insertId]);
+      setEditedGroupUserNames({ ...editedGroupUserNames, [insertId]: userNameFromDb });
       setEditedGroupUserEmails({ ...editedGroupUserEmails, [insertId]: inputUserEmail.current.value });
       inputUserEmail.current.value = '';
     };
     fetchUser();
   };
 
-  const handleDeleteUser = (e) => {
-    const uid = Number(e.target.id);
+  const handleDeleteUser = (e, uid) => {
     setEditedGroupUserIds((prev) => {
       return prev.filter((user) => user !== uid);
     });
@@ -176,50 +186,59 @@ const GroupManageWindow = ({ location, setIsGroupChanged, show, onHide }) => {
         <Modal.Title id="contained-modal-title-vcenter">{location === 'group_users' ? '你正在編輯' : `你正在新增${location}`}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <div>
-          <h4>群組名稱</h4>
-          <div id="group_name">
-            <input ref={inputGroupName} type="text" defaultValue={editedGroupUserIds.length > 1 ? currGroup.name : ''}></input>
-          </div>
-          <h4>成員們</h4>
-          <div id="group_members">
-            <ul>
-              {editedGroupUserIds.length > 1 ? (
-                editedGroupUserIds.map((uid) => {
-                  return (
-                    <div key={uid}>
-                      {uid === id ? (
-                        <div>{`${name} ${email}`}</div>
-                      ) : !groupUsers.includes(uid) ? (
-                        <div>
-                          <div>{`${editedGroupUserEmails[uid]}`}</div>
-                          <button id={uid} onClick={handleDeleteUser}>
-                            x
-                          </button>
-                        </div>
-                      ) : (
-                        <div>{`${groupUserNames[uid]} ${groupUserEmails[uid]}`}</div>
-                      )}
-                    </div>
-                  );
-                })
-              ) : (
-                <div>{`${name} ${email}`}</div>
-              )}
-            </ul>
+        <Form>
+          <Form.Group id="group_name">
+            <Form.Label>群組名稱</Form.Label>
+            <Form.Control ref={inputGroupName} type="text" defaultValue={editedGroupUserIds.length > 1 ? currGroup.name : ''} />
+          </Form.Group>
+          <Form.Group id="group_members">
+            <Form.Label>成員們</Form.Label>
+            {editedGroupUserIds.length > 1 ? (
+              editedGroupUserIds.map((uid) => {
+                return (
+                  <ListGroup key={uid}>
+                    {uid === id ? (
+                      <ListGroup.Item>{`${name} ${email}`}</ListGroup.Item>
+                    ) : !groupUsers.includes(uid) ? (
+                      <div>
+                        <ListGroup.Item>
+                          {`${editedGroupUserNames[uid]} ${editedGroupUserEmails[uid]}`}
+                          <MdDelete
+                            id={uid}
+                            onClick={(event) => {
+                              handleDeleteUser(event, uid);
+                            }} // 刪除icon
+                          />
+                        </ListGroup.Item>
+                      </div>
+                    ) : (
+                      <ListGroup.Item>{`${groupUserNames[uid]} ${groupUserEmails[uid]}`}</ListGroup.Item>
+                    )}
+                  </ListGroup>
+                );
+              })
+            ) : (
+              <ListGroup>
+                <ListGroup.Item>{`${name} ${email}`}</ListGroup.Item>
+              </ListGroup>
+            )}
+          </Form.Group>
+          <Form.Group>
             <div id="add_user">
-              <h4>新增成員</h4>
-              <input ref={inputUserEmail} id="add_user_email" type="email" placeholder="成員的信箱" />
-              <button onClick={handleAddUser}>+</button>
+              <Form.Label>受邀人的信箱</Form.Label>
+              <InputGroup>
+                {/* <InputGroup.Text>受邀人的信箱</InputGroup.Text> */}
+                <Form.Control ref={inputUserEmail} id="add_user_email" type="email"></Form.Control>
+                <Button variant="outline-secondary" id="button-add" onClick={handleAddUser}>
+                  Add
+                </Button>
+              </InputGroup>
+              {/* <MdAdd onClick={handleAddUser} /> */}
             </div>
-          </div>
-        </div>
-        {/* {currGroup ? <button>delete group</button> : ''} */}
+          </Form.Group>
+        </Form>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="outline-secondary" onClick={onHide}>
-          Close
-        </Button>
         <Button variant="outline-primary" onClick={handleSubmit}>
           Save
         </Button>

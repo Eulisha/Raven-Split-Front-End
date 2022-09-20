@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { useState, useEffect, useContext } from 'react';
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
+import { Button, Modal, Form, InputGroup } from 'react-bootstrap';
 import constants from '../../../global/constants';
 import { User } from '../../App';
 import { GroupInfo } from './Home';
@@ -33,11 +32,13 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
   console.log('Editing....');
   let CurrGroupInfo = useContext(GroupInfo);
   let CurrUser = useContext(User);
-  console.log('currUser', CurrUser);
+  console.log('currUser', CurrUser.user);
   let currUserId = CurrUser.user.id;
   let currUserName = CurrUser.name;
   let gid = CurrGroupInfo.currGroup.gid;
   let { groupUsers, groupUserNames } = CurrGroupInfo;
+  console.log(groupUsers);
+  console.log(currUserName);
 
   //帳的初始值 判斷是新增or編輯
   const initialInfo = details
@@ -177,46 +178,55 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
   return (
     <Modal className="window" size="lg" aria-labelledby="contained-modal-title-vcenter" centered {...{ onHide, show }}>
       <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">{details ? '你正在編輯' : '你正在新增'}</Modal.Title>
+        <Modal.Title>帳怎麼分呢？</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <div>
-          <h3>帳怎麼分呢？</h3>
-          <h4>費用</h4>
-          <ul>
-            <li>
-              Date: <input type="date" defaultValue={debtInfo ? debtInfo.date : info.date} onChange={handleInfoChange('date')}></input>
-            </li>
-            <li>
-              Title: <input type="text" name="title" defaultValue={debtInfo ? debtInfo.title : ''} onChange={handleInfoChange('title')}></input>
-            </li>
-            <li>
-              Total: <input type="number" name="total" defaultValue={debtInfo ? debtInfo.total : 0} onChange={handleInfoChange('total')}></input>
-            </li>
-            <li>
-              Paid By: <input type="text" defaultValue={debtInfo ? debtInfo.lender : currUserName} onChange={handleInfoChange('lender')}></input>
-            </li>
-            <li>
-              Split Method<input type="number" defaultValue={debtInfo ? debtInfo.split_method : 1} onChange={handleInfoChange('split_method')}></input>
-            </li>
-          </ul>
-          <h4>費用拆分</h4>
-          <div>
+        <Form>
+          <Form.Group>
+            <Form.Label>
+              Date: <Form.Control type="date" defaultValue={debtInfo ? debtInfo.date : info.date} onChange={handleInfoChange('date')} />
+            </Form.Label>
+            <Form.Label>
+              Title: <Form.Control type="text" name="title" defaultValue={debtInfo ? debtInfo.title : ''} onChange={handleInfoChange('title')} />
+            </Form.Label>
+            <Form.Label>
+              Total: <Form.Control type="number" name="total" defaultValue={debtInfo ? debtInfo.total : 0} onChange={handleInfoChange('total')} />
+            </Form.Label>
+            <Form.Label>
+              Paid By:
+              <Form.Select aria-label="Default select example">
+                <option>選擇付款的人</option>
+                {groupUsers.map((userId) => {
+                  return <option value="userId">{groupUserNames[userId]}</option>;
+                })}
+              </Form.Select>
+              {/* <input type="text" defaultValue={debtInfo ? debtInfo.lender : currUserName} onChange={handleInfoChange('lender')}></input> */}
+            </Form.Label>
+            <Form.Label>
+              Split Method
+              <Form.Control type="number" defaultValue={debtInfo ? debtInfo.split_method : 1} onChange={handleInfoChange('split_method')} />
+            </Form.Label>
+          </Form.Group>
+        </Form>
+        <Form>
+          <Form.Label>Split Debt</Form.Label>
+          <Form.Group>
             <ul>
               {groupUsers.map((uid) => {
                 return (
-                  <li key={uid}>
-                    {`${groupUserNames[uid]} ${'owns'} `}
-                    <input id={Number(uid)} type="number" defaultValue={split[uid] ? Number(split[uid]) : null} onChange={handleSplitChange(Number(uid))}></input>
-                  </li>
+                  <InputGroup key={uid} id={uid} className="debt-input">
+                    <InputGroup.Text>{groupUserNames[uid]}</InputGroup.Text>
+                    <InputGroup.Text>$</InputGroup.Text>
+                    <Form.Control id={Number(uid)} aria-label="Amount" defaultValue={split[uid] ? Number(split[uid]) : null} onChange={handleSplitChange(Number(uid))} />
+                  </InputGroup>
                 );
               })}
             </ul>
-            <ul>
-              總共{currSum.total}，還剩{currSum.total - currSum.sum}
-            </ul>
-          </div>
-        </div>
+            <Form.Label>Total $ {currSum.total}</Form.Label>
+            <br />
+            <Form.Label>$ {currSum.total - currSum.sum} Left</Form.Label>
+          </Form.Group>
+        </Form>
       </Modal.Body>
       <Modal.Footer>
         <Button variant="outline-secondary" onClick={onHide}>
