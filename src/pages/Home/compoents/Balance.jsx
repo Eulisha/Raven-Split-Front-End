@@ -4,6 +4,7 @@ import constants from '../../../global/constants';
 import { ListGroup, Accordion } from 'react-bootstrap';
 import { GroupInfo } from './Home';
 import Icons from '../../../global/Icons';
+import SettleOne from './SettleOne';
 
 const Balance = ({ isDebtChanged }) => {
   console.log('@balance');
@@ -71,6 +72,7 @@ const Balance = ({ isDebtChanged }) => {
                           </>
                         )}
                       </div>
+                      <SettleOne.SettleOneButton settleWithId={userBalance.uid} settleWithName={groupUserNames[userBalance.uid]} />
                     </Accordion.Header>
                     <Accordion.Body>
                       <ListGroup variant="flush" className="group-balance-detail-list">

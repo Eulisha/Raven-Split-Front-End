@@ -195,9 +195,14 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
             <Form.Label>
               Paid By:
               <Form.Select aria-label="Default select example">
-                <option>選擇付款的人</option>
+                {/* {debtInfo ? <option> {groupUserNames[debtInfo.lender]}</option> : <option>選擇付款的人</option>} */}
+                <option>{debtInfo ? groupUserNames[debtInfo.lender] : 'Select payer'}</option>
                 {groupUsers.map((userId) => {
-                  return <option value="userId">{groupUserNames[userId]}</option>;
+                  if (debtInfo) {
+                    if (userId !== debtInfo.lender) return <option value="userId">{groupUserNames[userId]}</option>;
+                  } else {
+                    return <option value="userId">{groupUserNames[userId]}</option>;
+                  }
                 })}
               </Form.Select>
               {/* <input type="text" defaultValue={debtInfo ? debtInfo.lender : currUserName} onChange={handleInfoChange('lender')}></input> */}

@@ -202,7 +202,7 @@ font-size: 28px !important;
   border-radius: 5px;
   color:rgba(139, 144, 150, 0.95);
 }
-.self-balance-owe-person-card, .self-balance-owed-person-card{
+.self-balance-own-person-card, .self-balance-owned-person-card{
   border:solid #ffff 5px;
   border-radius: 5px; 
 }
@@ -213,7 +213,7 @@ font-size: 28px !important;
   font-weight: 800;
   margin: 20px 0;
 }
-.self-balance-owed-person-title{
+.self-balance-own-person-title, .self-balance-owned-person-title{
   display: flex;
   justify-content: flex-start;
   font-size: 24px;
@@ -385,6 +385,10 @@ margin-right:24px
   padding: 0 20px ;
   font-size: 20px;
 }
+.group-balance-list-settle-button{
+  margin-right: 20px !important;
+}
+
 .group-balance-detail-item{
   display: flex !important;
   justify-content: space-between;

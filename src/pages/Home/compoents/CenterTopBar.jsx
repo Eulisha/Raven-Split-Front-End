@@ -6,7 +6,6 @@ import { Navbar, Button } from 'react-bootstrap';
 import { GroupInfo } from './Home';
 
 const CenterTopBar = ({ setGroupUsers, setGroupUserNames, setGroupUserEmails, setIsGroupChanged, setDebt, setIsDebtChanged }) => {
-  console.log('################', EditGroup);
   let CurrGroupInfo = useContext(GroupInfo);
   let { currGroup } = CurrGroupInfo;
   const [editShow, setEditShow] = useState(false);
