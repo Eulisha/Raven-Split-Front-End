@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useState, useEffect, useContext } from 'react';
 import constants from '../../../global/constants';
 import DetailList from './DetailList';
+import Button from 'react-bootstrap/Button';
 // import Edit from './Edit';
 import Add from './Add';
 import { GroupInfo } from './Home';
@@ -49,10 +50,48 @@ const Details = ({ debtInfo, setDebt, setIsDebtChanged }) => {
     // }
   }, [groupUsers]);
 
+  //刪除debt列
+  const handleDeleteDebt = async () => {
+    // const debtId = Number(e.target.id);
+    const confirm = prompt('被刪除的帳將無法復原，若真要刪除，請輸入「刪除」');
+    if (confirm !== '刪除') {
+      return alert(' 輸入錯誤，再考慮看看唄 ');
+    }
+
+    try {
+      const token = localStorage.getItem('accessToken');
+      const result = await axios.delete(`${constants.API_DELETE_DEBT}/${currGroup.gid}/${debtId}`, {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      });
+      console.log('fetch delete debt: ', result);
+      if (result.status !== 200) {
+        console.log(result);
+        return alert(' Something wrong ˊˋ Please try again..');
+      }
+      //刪除成功，set debt
+      setDebt((prev) => {
+        return prev.filter((item) => item.id !== debtId);
+      });
+      setIsDebtChanged((prev) => {
+        return !prev;
+      });
+    } catch (err) {
+      console.log(err);
+      return alert(' Something wrong ˊˋ Please try again..');
+    }
+  };
+
   return (
     <div>
       <DetailList key="detail-list" details={details} />
-      <Add.AddButton key="update" className="edit" debtInfo={debtInfo} details={details} setDebt={setDebt} setDetail={setDetail} setIsDebtChanged={setIsDebtChanged} />
+      <div className="detail-list-buttons">
+        <Add.AddButton key="update" className="edit" debtInfo={debtInfo} details={details} setDebt={setDebt} setDetail={setDetail} setIsDebtChanged={setIsDebtChanged} />
+        <Button variant="outline-danger" id={debtId} onClick={handleDeleteDebt}>
+          Delete
+        </Button>
+      </div>
     </div>
   );
 };

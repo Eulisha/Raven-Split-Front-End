@@ -4,46 +4,22 @@ import { Modal, Form, Button, ListGroup, InputGroup } from 'react-bootstrap';
 import constants from '../../../global/constants';
 import { User } from '../../App';
 import { GroupInfo } from './Home';
-import { MdDelete, MdGroupAdd } from 'react-icons/md';
-// import { GrUserSettings } from 'react-icons/Gr';
+import { MdDelete } from 'react-icons/md';
 
-const GroupManageButton = ({ location, setGroupUsers, setGroupUserNames, setGroupUserEmails }) => {
-  const [editingShow, setEditingShow] = useState(false);
-
-  return (
-    <div className="blog__controller">
-      <MdGroupAdd onClick={() => setEditingShow(true)}>
-        {/* <Button variant="outline-success" onClick={() => setEditingShow(true)}> */}
-        {location === 'group_users' ? 'Setting' : '+'}
-      </MdGroupAdd>
-      {/* </Button> */}
-      {editingShow && (
-        <GroupManageWindow
-          /** 編輯視窗 */
-          location={location}
-          setGroupUsers={setGroupUsers}
-          setGroupUserNames={setGroupUserNames}
-          setGroupUserEmails={setGroupUserEmails}
-          show={editingShow}
-          onHide={() => setEditingShow(false)}
-        />
-      )}
-    </div>
-  );
-};
-
-const GroupManageWindow = ({ location, show, onHide }) => {
+const CreateGroup = ({ location, setEditingShow, editingShow }) => {
   console.log('Editing Group....');
 
   let CurrUser = useContext(User);
-  let CurrGroupInfo = useContext(GroupInfo);
+  let CurrGroupInfo = useContext(GroupInfo) || {};
   let { id, name, email } = CurrUser.user;
+
   let { currGroup, groupUsers, groupUserNames, groupUserEmails, setIsGroupChanged } = CurrGroupInfo;
 
-  console.log('currUser', CurrUser);
-  console.log('groupUsers', groupUsers);
-  console.log('currGroup', currGroup);
-  console.log(location);
+  // console.log('currUser', CurrUser);
+  // console.log('groupUsers', groupUsers);
+  // console.log('currGroup', currGroup);
+  // console.log(location);
+  console.log('GMW', editingShow);
   let group_type;
 
   switch (location) {
@@ -67,8 +43,8 @@ const GroupManageWindow = ({ location, show, onHide }) => {
   const [editedGroupUserEmails, setEditedGroupUserEmails] = useState(location === 'group_users' ? groupUserEmails : { [id]: email });
   const [editedGroupUserNames, setEditedGroupUserNames] = useState(location === 'group_users' ? groupUserNames : { [id]: name });
 
-  console.log('editedGroupUserIds', editedGroupUserIds);
-  console.log('editedGroupUserEmails', editedGroupUserEmails);
+  // console.log('editedGroupUserIds', editedGroupUserIds);
+  // console.log('editedGroupUserEmails', editedGroupUserEmails);
 
   //設定ref
   const inputGroupName = useRef();
@@ -173,7 +149,9 @@ const GroupManageWindow = ({ location, show, onHide }) => {
       //確認有成功後更新state
       if (result.status === 200) {
         setIsGroupChanged((prev) => !prev);
-        onHide();
+        // onHide(() => {
+        setEditingShow(false);
+        // });
       }
     } catch (err) {
       console.log(err);
@@ -181,7 +159,16 @@ const GroupManageWindow = ({ location, show, onHide }) => {
   };
 
   return (
-    <Modal className="window" size="lg" aria-labelledby="contained-modal-title-vcenter" centered {...{ onHide, show }}>
+    <Modal
+      show={editingShow}
+      onHide={() => {
+        console.log('onhide', editingShow);
+        // setEditingShow(false);
+        setEditingShow(false);
+      }}
+      size="lg"
+      aria-labelledby="contained-modal-title-vcenter"
+    >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">{location === 'group_users' ? '你正在編輯' : `你正在新增${location}`}</Modal.Title>
       </Modal.Header>
@@ -247,4 +234,4 @@ const GroupManageWindow = ({ location, show, onHide }) => {
   );
 };
 
-export default { GroupManageWindow, GroupManageButton };
+export default CreateGroup;

@@ -1,20 +1,25 @@
 import axios from 'axios';
 import { useState, useEffect, useContext } from 'react';
 import constants from '../../../global/constants';
-import { Nav } from 'react-bootstrap';
-import GroupManage from './GroupManage';
+import CreateGroup from './CreateGroup';
 import { User } from '../../App';
-import { CSidebar, CSidebarBrand, CSidebarNav, CSidebarToggler } from '@coreui/react';
+import { FaCrow } from 'react-icons/fa';
+// CNavTitle, CBadge,  CSidebarToggler
+import { CSidebar, CSidebarBrand, CSidebarNav, CNavGroup, CNavItem, CSidebarFooter } from '@coreui/react';
 import CIcon from '@coreui/icons-react';
-import SimpleBar from 'simplebar-react';
+import { cilAccountLogout, cilPlus } from '@coreui/icons';
+import Icons from '../../../global/Icons';
 
-const UserGroups = ({ setCurrGroup, setGroupUsers, setGroupUserNames, setGroupUserEmails, isGroupChanged, setIsGroupChanged }) => {
+const UserGroups = ({ setCurrGroup, isGroupChanged, setGroupUsers, setGroupUserNames, setGroupUserEmails, setIsGroupChanged }) => {
   console.log('@UserGroups');
+
   let CurrUser = useContext(User);
   console.log('curruser.user', CurrUser.user);
 
   const [userGroups, setUserGroups] = useState([]);
+  const [editingShow, setEditingShow] = useState(false);
   console.log('userGroups', userGroups);
+  console.log('UG', editingShow);
 
   useEffect(() => {
     const fetchuserGroups = async () => {
@@ -31,91 +36,91 @@ const UserGroups = ({ setCurrGroup, setGroupUsers, setGroupUserNames, setGroupUs
   }, [isGroupChanged]);
 
   return (
-    <CSidebar position="fixed">
-      <CSidebarBrand className="d-none d-md-flex" to="/">
-        <CIcon className="sidebar-brand-full" height={35} />
-        <CIcon className="sidebar-brand-narrow" height={35} />
+    <CSidebar id="group_area" position="fixed">
+      <CSidebarBrand
+      // onClick={() => {
+      //   window.location.assign = `${constants.HOST}/dashboard`;
+      // }}
+      >
+        <a className="logo" href={`${constants.HOST}/dashboard`}>
+          <FaCrow size={40} />
+          <span style={{ fontSize: '20px', marginLeft: '30px' }}>Raven Split</span>
+        </a>
       </CSidebarBrand>
+      <CSidebarBrand>
+        <Icons.UserIcon />
+        <span style={{ fontSize: '20px', marginLeft: '30px' }}>{CurrUser.user.name}</span>
+      </CSidebarBrand>
+      {/* <CSidebarHeader>{CurrUser.users.name}</CSidebarHeader> */}
       <CSidebarNav>
-        <SimpleBar></SimpleBar>
-      </CSidebarNav>
-      <CSidebarToggler className="d-none d-lg-flex" />
-
-      <div id="group_area">
-        <div id="group_normal_type">
-          My Groups
-          <div className="top_bar">
-            <div>Groups</div>
-          </div>
-          <GroupManage.GroupManageButton
+        <CNavGroup toggler="Groups">
+          {userGroups.map((group) => {
+            if (group.type === '1') {
+              return (
+                <CNavItem href="#" key={group.gid} onClick={() => setCurrGroup({ gid: group.gid, name: group.name, type: group.type })}>
+                  {group.name}
+                </CNavItem>
+              );
+            }
+          })}
+          <CNavItem href="#" onClick={() => setEditingShow(true)}>
+            <CIcon icon={cilPlus} style={{ marginRight: '10px' }} />
+            新增群組
+          </CNavItem>
+        </CNavGroup>
+        <CNavGroup toggler="Pairs">
+          {userGroups.map((group) => {
+            if (group.type === '2') {
+              return (
+                <CNavItem her="#" key={group.gid} onClick={() => setCurrGroup({ gid: group.gid, name: group.name, type: group.type })}>
+                  {group.name}
+                </CNavItem>
+              );
+            }
+          })}
+          <CNavItem href="#" onClick={() => setEditingShow(true)}>
+            <CIcon icon={cilPlus} style={{ marginRight: '10px' }} />
+            新增群組
+          </CNavItem>
+        </CNavGroup>
+        <CNavGroup toggler="Group Buying">
+          {userGroups.map((group) => {
+            if (group.type === '3') {
+              return (
+                <CNavItem key={group.gid} onClick={() => setCurrGroup({ gid: group.gid, name: group.name, type: group.type })}>
+                  {group.name}
+                </CNavItem>
+              );
+            }
+          })}
+          <CNavItem href="#" onClick={() => setEditingShow(true)}>
+            <CIcon icon={cilPlus} style={{ marginRight: '10px' }} />
+            新增群組
+          </CNavItem>
+        </CNavGroup>
+        <div>
+          <CreateGroup
             location="group_normal"
+            editingShow={editingShow}
+            setEditingShow={setEditingShow}
             setGroupUsers={setGroupUsers}
             setGroupUserNames={setGroupUserNames}
             setGroupUserEmails={setGroupUserEmails}
             setIsGroupChanged={setIsGroupChanged}
           />
-          <Nav defaultActiveKey="/home" className="flex-column">
-            {userGroups.map((group) => {
-              if (group.type === '1') {
-                return (
-                  <Nav.Link key={group.gid} onClick={() => setCurrGroup({ gid: group.gid, name: group.name, type: group.type })}>
-                    {group.name}
-                  </Nav.Link>
-                  // <button key={group.gid} onClick={() => setCurrGroup({ gid: group.gid, name: group.name })}>
-                  //   {group.name}
-                  // </button>
-                );
-              }
-            })}
-          </Nav>
         </div>
-        <div id="group_pair_type">
-          <div className="top_bar">
-            <div>Pair</div>
-          </div>
-          <GroupManage.GroupManageButton
-            location="group_pair"
-            setGroupUsers={setGroupUsers}
-            setGroupUserNames={setGroupUserNames}
-            setGroupUserEmails={setGroupUserEmails}
-            setIsGroupChanged={setIsGroupChanged}
-          />
-          <Nav defaultActiveKey="/home" className="flex-column">
-            {userGroups.map((group) => {
-              if (group.type === '2') {
-                return (
-                  <Nav.Link key={group.gid} onClick={() => setCurrGroup({ gid: group.gid, name: group.name, type: group.type })}>
-                    {group.name}
-                  </Nav.Link>
-                );
-              }
-            })}
-          </Nav>
-        </div>
-        <div id="group_buying_type">
-          <div className="top_bar">
-            <div>Group Buying</div>
-          </div>
-          <GroupManage.GroupManageButton
-            location="group_buying"
-            setGroupUsers={setGroupUsers}
-            setGroupUserNames={setGroupUserNames}
-            setGroupUserEmails={setGroupUserEmails}
-            setIsGroupChanged={setIsGroupChanged}
-          />
-          <Nav defaultActiveKey="/home" className="flex-column">
-            {userGroups.map((group) => {
-              if (group.type === '3') {
-                return (
-                  <Nav.Link key={group.gid} onClick={() => setCurrGroup({ gid: group.gid, name: group.name, type: group.type })}>
-                    {group.name}
-                  </Nav.Link>
-                );
-              }
-            })}
-          </Nav>
-        </div>
-      </div>
+        <CSidebarFooter>
+          <CNavItem
+            href="/login"
+            onClick={() => {
+              localStorage.removeItem('accessToken');
+            }}
+          >
+            <CIcon customClassName="nav-icon" icon={cilAccountLogout} />
+            Logout
+          </CNavItem>
+        </CSidebarFooter>
+      </CSidebarNav>
     </CSidebar>
   );
 };

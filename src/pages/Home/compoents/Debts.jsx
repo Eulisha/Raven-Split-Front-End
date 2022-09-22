@@ -4,11 +4,12 @@ import constants from '../../../global/constants';
 import Details from './Details';
 import DebtList from './DebtList';
 import { Accordion } from 'react-bootstrap';
-import Button from 'react-bootstrap/Button';
+// import Button from 'react-bootstrap/Button';
 import { GroupInfo } from './Home';
 
-const Debts = ({ debts, setDebt, setIsDebtChanged }) => {
+const Debts = ({ setIsDebtChanged }) => {
   console.log('@Debts');
+  const [debts, setDebt] = useState([]);
 
   let CurrGroupInfo = useContext(GroupInfo);
   let { currGroup } = CurrGroupInfo;
@@ -44,40 +45,13 @@ const Debts = ({ debts, setDebt, setIsDebtChanged }) => {
     console.log(id);
   };
 
-  //刪除debt列
-  const handleDeleteDebt = async (e) => {
-    const debtId = Number(e.target.id);
-    const confirm = prompt('被刪除的帳將無法復原，若真要刪除，請輸入「刪除」');
-    if (confirm !== '刪除') {
-      return alert(' 輸入錯誤，再考慮看看唄 ');
-    }
-    try {
-      const token = localStorage.getItem('accessToken');
-      const result = await axios.delete(`${constants.API_DELETE_DEBT}/${currGroup.gid}/${debtId}`, {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-      });
-      console.log('fetch delete debt: ', result);
-      if (result.status !== 200) {
-        console.log(result);
-        return alert(' Something wrong ˊˋ Please try again..');
-      }
-      //刪除成功，set debt
-      setDebt((prev) => {
-        return prev.filter((item) => item.id !== debtId);
-      });
-      setIsDebtChanged((prev) => {
-        return !prev;
-      });
-    } catch (err) {
-      console.log(err);
-      return alert(' Something wrong ˊˋ Please try again..');
-    }
-  };
   console.log('at Debts log debts:', debts);
   return (
     <div id="debts_column">
+      <div className="debt-top-bar">
+        Expense List
+        {/* <RiUserSettingsLine style={{ marginLeft: '10px' }} /> */}
+      </div>
       {debts.length > 0 &&
         debts.map((debt) => {
           return (
@@ -96,9 +70,6 @@ const Debts = ({ debts, setDebt, setIsDebtChanged }) => {
                 </Accordion.Header>
                 <Accordion.Body>
                   <Details id="details" debts={debts} debtInfo={debt} extend={extend} setDebt={setDebt} setIsDebtChanged={setIsDebtChanged} />
-                  <Button variant="outline-secondary" id={debt.id} onClick={handleDeleteDebt}>
-                    x
-                  </Button>
                 </Accordion.Body>
               </Accordion.Item>
             </Accordion>

@@ -9,8 +9,8 @@ const AddButton = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged }) 
   const [editingShow, setEditingShow] = useState(false);
   return (
     <div className="blog__controller">
-      <Button variant="outline-success" onClick={() => setEditingShow(true)}>
-        {details ? 'Edit' : 'Add'}
+      <Button variant="outline-info" onClick={() => setEditingShow(true)}>
+        {details ? 'Edit' : 'Add Expense'}
       </Button>
       {editingShow && (
         <AddingWindow /** 編輯視窗 */

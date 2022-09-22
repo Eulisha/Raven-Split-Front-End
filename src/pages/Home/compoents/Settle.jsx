@@ -11,8 +11,8 @@ const SettleButton = ({ setIsDebtChanged }) => {
   const [editingShow, setEditingShow] = useState(false);
   return (
     <div className="blog__controller">
-      <Button variant="outline-success" onClick={() => setEditingShow(true)}>
-        Settle
+      <Button variant="outline-info" onClick={() => setEditingShow(true)}>
+        Settle Up
       </Button>
       {editingShow && <SettleWindow gid={gid} setIsDebtChanged={setIsDebtChanged} show={editingShow} onHide={() => setEditingShow(false)} state="editing" />}
     </div>

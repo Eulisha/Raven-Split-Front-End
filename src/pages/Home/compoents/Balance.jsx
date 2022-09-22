@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import constants from '../../../global/constants';
-import { ListGroup } from 'react-bootstrap';
+import { ListGroup, Accordion } from 'react-bootstrap';
 import { GroupInfo } from './Home';
 
 const Balance = ({ isDebtChanged }) => {
@@ -51,12 +51,29 @@ const Balance = ({ isDebtChanged }) => {
               );
             })
           : balances.map((balance) => {
-              if (balance.borrower !== balance.lender)
-                return (
-                  <ListGroup.Item key={balance.id} className="item">
-                    {groupUserNames[balance.borrower]} 欠 {groupUserNames[balance.lender]} ${balance.amount}
-                  </ListGroup.Item>
-                );
+              return (
+                <Accordion>
+                  <Accordion.Item
+                    key={balance.id}
+                    id={balance.id}
+                    className="item"
+                    eventKey="1"
+                    // onClick={(event) => {
+                    //   handleExtend(event, balance.id);
+                    // }}
+                  >
+                    <Accordion.Header id={balance.id}>
+                      <div className="group-balance-list">
+                        <span>{groupUserNames[balance.borrower]} </span>
+                        <span>own </span>
+                        <span>{groupUserNames[balance.lender]} </span>
+                        <span>${balance.amount}</span>
+                      </div>
+                    </Accordion.Header>
+                    <Accordion.Body></Accordion.Body>
+                  </Accordion.Item>
+                </Accordion>
+              );
             })}
       </ListGroup>
     </div>

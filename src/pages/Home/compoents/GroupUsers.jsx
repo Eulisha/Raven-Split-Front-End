@@ -2,9 +2,12 @@ import axios from 'axios';
 import { useEffect, useContext } from 'react';
 import constants from '../../../global/constants';
 import Balance from './Balance';
-import GroupManage from './GroupManage';
 // import { User } from '../../App';
 import { GroupInfo } from './Home';
+// import { RiUserSettingsLine } from 'react-icons/ri';
+{
+  /* <RiUserSettingsLine style={{ marginLeft: '10px' }} /> */
+}
 
 const GroupUsers = ({ setGroupUsers, setGroupUserNames, setGroupUserEmails, isDebtChanged, isGroupChanged }) => {
   console.log('@groupUsers');
@@ -45,9 +48,8 @@ const GroupUsers = ({ setGroupUsers, setGroupUserNames, setGroupUserEmails, isDe
   // currGroup,
   return (
     <div id="group-users">
-      <div className="top_bar">
-        <div>成員列表</div>
-        <GroupManage.GroupManageButton location="group_users" setGroupUsers={setGroupUsers} setGroupUserNames={setGroupUserNames} setGroupUserEmails={setGroupUserEmails} />
+      <div className="group-users-top-bar">
+        <div style={{ width: '80%', display: 'flex', justifyContent: 'center' }}> Group Balance</div>
       </div>
       <Balance id="balance" isDebtChanged={isDebtChanged} />
     </div>

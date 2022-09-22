@@ -2,10 +2,12 @@ import '../index.css';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import Login from './Login/compoents/Login';
 import Home from './Home/compoents/Home';
-import Header from '../global/Header';
+// import Header from '../global/Header';
 import React, { useState, useEffect } from 'react';
 import constants from '../global/constants';
 import axios from 'axios';
+// import './style.scss';
+import '@coreui/coreui/dist/css/coreui.min.css';
 
 export const User = React.createContext();
 
@@ -37,7 +39,7 @@ const App = () => {
   return (
     <User.Provider value={{ user, setUser }}>
       <div className="App">
-        <Header />
+        {/* <Header /> */}
         <Routes className="App">
           <Route id="home_container" element={<Home />} path="/dashboard" />
           <Route element={<Login />} path="/login" />

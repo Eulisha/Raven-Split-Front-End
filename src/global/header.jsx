@@ -13,7 +13,7 @@ const Header = () => {
     <Navbar className="header" bg="light" expand="lg">
       <Container>
         <div className="header-logo">
-          <Navbar.Brand href="/dashboard">Ravent Split</Navbar.Brand>
+          <Navbar.Brand href="/dashboard">Raven Split</Navbar.Brand>
           <FaCrow size={40} />
         </div>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />

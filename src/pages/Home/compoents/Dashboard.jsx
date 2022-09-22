@@ -30,8 +30,7 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <div id="self_balance">
-      <div id="summary"></div>
+    <div className="self-balance-area">
       <Dashboard_list selfBalance={selfBalance} />
     </div>
   );
