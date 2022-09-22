@@ -36,21 +36,21 @@
 
   /* 色系 */
   /* 字 */
-  .own-font{
+  .owned-font{
     color: rgb(66 170 182) !important;
   }
-  .owned-font{
+  .own-font{
     color: rgb(209 140 125) !important;
   }
   .total-font{
     color: #e1ce95 !important;
   }
   /* 背景 */
-  .own-bg{
+  .owned-bg{
     /* background-color: rgb(66 170 182) !important; */
     background-color: #a9d6d6 !important;
   }
-  .owned-bg{
+  .own-bg{
     /* background-color: rgb(209 140 125) !important; */
     background-color: #eabcb2 !important;
   }
@@ -315,7 +315,7 @@ margin-right:24px
   width: 40%;
   justify-content: space-between;
   align-items: center;
-  font-size: 20px;
+  font-size: 26px;
   height: 100%;
 }
 .debt-items-right{
@@ -383,6 +383,11 @@ margin-right:24px
   justify-content: space-between;
   width: 100%;
   padding: 0 20px ;
+  font-size: 20px;
+}
+.group-balance-detail-item{
+  display: flex !important;
+  justify-content: space-between;
   font-size: 20px;
 }
 
