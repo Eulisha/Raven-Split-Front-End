@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, useRef } from 'react';
 import { Button, Modal, Form, InputGroup } from 'react-bootstrap';
 import constants from '../../../global/constants';
 import { User } from '../../App';
@@ -32,6 +32,8 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
   console.log('Editing....');
   let CurrGroupInfo = useContext(GroupInfo);
   let CurrUser = useContext(User);
+  const inputSplitMethod = useRef();
+
   console.log('currUser', CurrUser.user);
   let currUserId = CurrUser.user.id;
   let currUserName = CurrUser.name;
@@ -49,7 +51,7 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
         title: '',
         total: 0,
         lender: currUserId,
-        split_method: 1,
+        split_method: '1',
       };
   const oriSum = details ? { total: debtInfo.total, sum: debtInfo.total } : { total: 0, sum: 0 };
   const oriSplit = details ? details : {};
@@ -88,6 +90,8 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
   const handleInfoChange = (prop) => (e) => {
     if (e.target.name === 'total' || e.target.name === 'amount' || e.target.name === 'lender') {
       setInfo({ ...info, [prop]: Number(e.target.value) });
+    } else if (e.target.name === 'split_method') {
+      setInfo({ ...info, [prop]: inputSplitMethod.current.value });
     } else {
       setInfo({ ...info, [prop]: e.target.value });
     }
@@ -194,22 +198,21 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
             </Form.Label>
             <Form.Label>
               Paid By:
-              <Form.Select aria-label="Default select example">
-                {/* {debtInfo ? <option> {groupUserNames[debtInfo.lender]}</option> : <option>選擇付款的人</option>} */}
-                <option>{debtInfo ? groupUserNames[debtInfo.lender] : 'Select payer'}</option>
+              <Form.Select aria-label="dropdown paid by" onChange={handleInfoChange('lender')}>
+                <option selected>{groupUserNames[info.lender]}</option>
                 {groupUsers.map((userId) => {
-                  if (debtInfo) {
-                    if (userId !== debtInfo.lender) return <option value="userId">{groupUserNames[userId]}</option>;
-                  } else {
-                    return <option value="userId">{groupUserNames[userId]}</option>;
-                  }
+                  if (userId !== info.lender) return <option value={userId}>{groupUserNames[userId]}</option>;
                 })}
               </Form.Select>
-              {/* <input type="text" defaultValue={debtInfo ? debtInfo.lender : currUserName} onChange={handleInfoChange('lender')}></input> */}
             </Form.Label>
             <Form.Label>
               Split Method
-              <Form.Control type="number" defaultValue={debtInfo ? debtInfo.split_method : 1} onChange={handleInfoChange('split_method')} />
+              <Form.Select aria-label="drop dwon split method" onChange={handleInfoChange('split_method')}>
+                <option value={info.split_method}>{constants.SPLIT_METHOD[info.split_method]}</option>
+                {Object.keys(constants.SPLIT_METHOD).map((method) => {
+                  if (method !== info.split_method) return <option value={method}>{constants.SPLIT_METHOD[method]}</option>;
+                })}
+              </Form.Select>
             </Form.Label>
           </Form.Group>
         </Form>
