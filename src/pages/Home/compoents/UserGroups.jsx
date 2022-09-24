@@ -96,17 +96,21 @@ const UserGroups = ({ setCurrGroup, isGroupChanged, setGroupUsers, setGroupUserN
             新增群組
           </CNavItem>
         </CNavGroup>
-        <div>
-          <CreateGroup
-            location="group_normal"
-            editingShow={editingShow}
-            setEditingShow={setEditingShow}
-            setGroupUsers={setGroupUsers}
-            setGroupUserNames={setGroupUserNames}
-            setGroupUserEmails={setGroupUserEmails}
-            setIsGroupChanged={setIsGroupChanged}
-          />
-        </div>
+        {editingShow ? (
+          <div>
+            <CreateGroup
+              location="group_normal"
+              editingShow={editingShow}
+              setEditingShow={setEditingShow}
+              setGroupUsers={setGroupUsers}
+              setGroupUserNames={setGroupUserNames}
+              setGroupUserEmails={setGroupUserEmails}
+              setIsGroupChanged={setIsGroupChanged}
+            />
+          </div>
+        ) : (
+          ''
+        )}
         <CSidebarFooter>
           <CNavItem
             href="/login"
