@@ -20,16 +20,16 @@ const App = () => {
     const fetchUserInfo = async () => {
       try {
         const token = localStorage.getItem('accessToken');
-        const result = await axios.get(constants.API_GET_USER_INFO, {
+        const { data } = await axios.get(constants.API_GET_USER_INFO, {
           headers: {
             authorization: `Bearer ${token}`,
           },
         });
-        console.log('fetch data userInfo for setUser: ', result.data.data);
-        setUser(result.data.data);
+        console.log('BACKEND for setUser: ', data.data);
+        setUser(data.data);
       } catch (err) {
-        console.log(err);
-        alert(err.response.data.err);
+        console.log(err.response);
+        alert(err.response);
         navigate('/login');
       }
     };
@@ -41,9 +41,8 @@ const App = () => {
   return (
     <User.Provider value={{ user, setUser }}>
       <div className="App">
-        {/* <Header /> */}
         <Routes className="App">
-          <Route id="home_container" element={<Home />} path="/dashboard" />
+          {user.id && <Route id="home_container" element={<Home user={user} />} path="/dashboard" />}
           <Route element={<Login />} path="/login" />
         </Routes>
       </div>

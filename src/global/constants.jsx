@@ -13,6 +13,7 @@ const API_POST_DEBT = `${API_HOST}/debt/debt`;
 const API_PUT_DEBT = `${API_HOST}/debt/debt`;
 const API_DELETE_DEBT = `${API_HOST}/debt/debt`;
 const API_POST_SETTLE = `${API_HOST}/debt/settle`;
+const API_POST_SETTLE_PAIR = `${API_HOST}/debt/settle`;
 
 //Group
 const API_GET_GROUP_USERS = `${API_HOST}/group/users`;
@@ -47,6 +48,7 @@ export default {
   API_POST_SIGNUP,
   API_GET_USER_GROUPS,
   API_POST_SETTLE,
+  API_POST_SETTLE_PAIR,
   API_GET_USER_INFO,
   API_GET_User_EXIST,
   API_POST_GROUP,

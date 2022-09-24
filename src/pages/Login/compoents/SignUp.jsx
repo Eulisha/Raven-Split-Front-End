@@ -30,29 +30,6 @@ const SignUp = () => {
     }
   };
 
-  // const hanldleSubmit = (e) => {
-  //   e.preventDefault();
-  //   setSubmitted(true);
-  // };
-
-  // //submit form
-  // useEffect(() => {
-  //   try {
-  //     if (submitted) {
-  //       //fetch sigin
-  //       const fetchSigIn = async () => {
-  //         console.log(inputValues);
-  //         const { data } = await axios.post(`${constants.API_POST_SIGNUP}`, inputValues);
-  //         //set local storage
-  //         localStorage.setItem('accessToken', data.data.accessToken);
-  //       };
-  //       fetchSigIn();
-  //     }
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // }, [submitted]);
-
   return (
     <form id="sign-up">
       SignUp

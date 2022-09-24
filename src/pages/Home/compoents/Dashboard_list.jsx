@@ -31,18 +31,18 @@ const Dashboard_list = ({ selfBalance }) => {
         </Col>
       </Row>
       <div className="self-balance-list">
-        <div className="self-balance-list-own">
+        <div key="self-balance-list-own" className="self-balance-list-own">
           <div className="self-balance-list-title">YOU OWE</div>
           {Object.keys(selfBalance).length > 0 &&
             selfBalance.borrow.map((user) => {
               return (
                 <div key={user.uid} className="self-balance-own-person-card">
-                  <div className="balance_total self-balance-own-person-title">
+                  <div key={`self-balance-own-person-title-${user.uid}`} className="balance_total self-balance-own-person-title">
                     <div>{user.user_name} </div>
                     <div>paid</div>
                     <div className="own-font">$NT{user.total}</div>
                   </div>
-                  <ListGroup>
+                  <ListGroup key={`self-balance-own-${user.uid}`}>
                     {user.pair ? <ListGroup.Item className="balance_pair self-balance-detail-item">Non-Group $NT{user.pair}</ListGroup.Item> : ''}
                     {user.group_normal.map((group) => {
                       return (
@@ -75,18 +75,18 @@ const Dashboard_list = ({ selfBalance }) => {
               );
             })}
         </div>
-        <div className="self-balance-list-owned">
+        <div key="self-balance-list-owned" className="self-balance-list-owned">
           <div className="self-balance-list-title">YOU ARE OWED</div>
           {Object.keys(selfBalance).length > 0 &&
             selfBalance.lend.map((user) => {
               return (
                 <div key={user.uid} className="self-balance-owned-person-card">
-                  <div className="balance_total self-balance-owned-person-title">
+                  <div key={`self-balance-owned-person-title-${user.uid}`} className="balance_total self-balance-owned-person-title">
                     <div>{user.user_name} </div>
                     <div>owns you</div>
                     <div className="owned-font">$NT{user.total}</div>
                   </div>
-                  <ListGroup>
+                  <ListGroup key={`self-balance-owned-${user.uid}`}>
                     {user.pair ? <ListGroup.Item className="balance_pair self-balance-detail-item">Non-Group $NT{user.pair}</ListGroup.Item> : ''}
                     {user.group_normal.map((group) => {
                       return (

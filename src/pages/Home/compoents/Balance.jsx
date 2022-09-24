@@ -11,7 +11,7 @@ const Balance = ({ isDebtChanged }) => {
 
   //useContext
   let CurrGroupInfo = useContext(GroupInfo);
-  let { currGroup, groupUsers, groupUserNames } = CurrGroupInfo;
+  let { currGroup, groupUsers, groupUserNames, isGroupChanged } = CurrGroupInfo;
   let { gid } = currGroup;
 
   //useState
@@ -26,26 +26,23 @@ const Balance = ({ isDebtChanged }) => {
             authorization: `Bearer ${token}`,
           },
         });
-        console.log('fetch data balance: ', data);
+        console.log('BACKEND for setbalance: ', data);
         setBalance(data.data);
-        console.log('set balance:', data.data);
       } catch (err) {
-        console.log(err);
+        console.log(err.response);
+        return alert(err.response);
       }
     };
     if (gid) {
       fetchBalance(gid);
     }
-  }, [currGroup, isDebtChanged]);
+  }, [currGroup, isDebtChanged, isGroupChanged]);
 
-  console.log(CurrGroupInfo);
-  console.log(balances);
   return (
     <div id="balance">
       <ListGroup>
-        {balances.length === 0 && groupUsers
+        {balances.length === 0 && groupUsers //FIXME:會不會兩個都沒有?!
           ? groupUsers.map((user) => {
-              console.log(user);
               return (
                 <ListGroup.Item key={user} className="item">
                   {groupUserNames[user]}

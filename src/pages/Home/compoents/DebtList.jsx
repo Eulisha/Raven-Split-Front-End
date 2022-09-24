@@ -9,7 +9,6 @@ const DebtList = ({ debtInfo }) => {
   let CurrGroupInfo = useContext(GroupInfo);
   let { groupUserNames } = CurrGroupInfo;
   const { date, title, total, lender, isOwned, ownAmount } = debtInfo;
-  console.log('total:', total, 'isOwned', isOwned, 'ownAmount', ownAmount);
 
   return (
     <div className="debt-header">

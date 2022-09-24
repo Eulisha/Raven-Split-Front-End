@@ -10,22 +10,22 @@ import { GroupInfo } from './Home';
 }
 
 const GroupUsers = ({ setGroupUsers, setGroupUserNames, setGroupUserEmails, isDebtChanged, isGroupChanged }) => {
-  console.log('@groupUsers');
+  console.log('@GroupUsers');
   // let CurrUser = useContext(User);
   let CurrGroupInfo = useContext(GroupInfo);
   let { currGroup } = CurrGroupInfo;
   let { gid } = currGroup;
 
   useEffect(() => {
-    if (gid) {
-      const token = localStorage.getItem('accessToken');
-      const fetchUsers = async (gid) => {
+    const token = localStorage.getItem('accessToken');
+    const fetchUsers = async (gid) => {
+      try {
         const { data } = await axios.get(`${constants.API_GET_GROUP_USERS}/${gid}`, {
           headers: {
             authorization: `Bearer ${token}`,
           },
         });
-        console.log('fetch data groupUsers:  ', data);
+        console.log('BACKEND for setGroup..:  ', data.data);
 
         //整理成適合的格式
         const groupUsers = []; //array of Ids of groupUsers
@@ -39,17 +39,20 @@ const GroupUsers = ({ setGroupUsers, setGroupUserNames, setGroupUserEmails, isDe
         setGroupUsers(groupUsers);
         setGroupUserNames(userNames);
         setGroupUserEmails(userEmails);
-      };
-      if (gid) {
-        fetchUsers(gid);
+      } catch (err) {
+        console.log(err.response);
+        return alert(err.response);
       }
+    };
+    if (gid) {
+      fetchUsers(gid);
     }
   }, [isGroupChanged]);
   // currGroup,
   return (
     <div id="group-users">
       <div className="group-users-top-bar">
-        <div style={{ width: '80%', display: 'flex', justifyContent: 'center' }}> Group Balance</div>
+        <div> Group Balance</div>
       </div>
       <Balance id="balance" isDebtChanged={isDebtChanged} />
     </div>

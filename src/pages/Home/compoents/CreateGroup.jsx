@@ -5,24 +5,16 @@ import constants from '../../../global/constants';
 import { User } from '../../App';
 import { GroupInfo } from './Home';
 import { MdDelete } from 'react-icons/md';
-import { useEffect } from 'react';
 
 const CreateGroup = ({ location, setEditingShow, editingShow }) => {
-  console.log('Editing Group....');
+  console.log('@Creat Group');
 
   let CurrUser = useContext(User);
   let CurrGroupInfo = useContext(GroupInfo) || {};
   let { id, name, email } = CurrUser.user;
-  console.log('id, name, email', id, name, email);
-
   let { currGroup, groupUsers, groupUserNames, groupUserEmails, setIsGroupChanged } = CurrGroupInfo;
-
-  console.log('currUser', CurrUser);
-  // console.log('groupUsers', groupUsers);
-  // console.log('currGroup', currGroup);
-  // console.log(location);
-  console.log('GMW', editingShow);
   let group_type;
+  console.log('id, name, email, currGroup, groupUsers: ', id, name, email, currGroup, groupUsers);
 
   switch (location) {
     case 'group_normal':
@@ -44,17 +36,17 @@ const CreateGroup = ({ location, setEditingShow, editingShow }) => {
   const initialGroupUserId = [id];
   const initialGroupUserEmail = { id: email };
   const initialGroupUserName = { id: name };
-  console.log(initialGroupUserId, initialGroupUserEmail, initialGroupUserName);
+  console.log('initial: ', initialGroupUserId, initialGroupUserEmail, initialGroupUserName);
 
   const [editedGroupUserIds, setEditedGroupUserIds] = useState(location === 'group_users' ? groupUsers : initialGroupUserId);
   const [editedGroupUserEmails, setEditedGroupUserEmails] = useState(location === 'group_users' ? groupUserEmails : initialGroupUserEmail);
   const [editedGroupUserNames, setEditedGroupUserNames] = useState(location === 'group_users' ? groupUserNames : initialGroupUserName);
 
-  useEffect(() => {
-    //debugonly
-    console.log('editedGroupUserIds', editedGroupUserIds);
-    console.log('editedGroupUserEmails', editedGroupUserEmails);
-  }, [editedGroupUserIds, editedGroupUserEmails]);
+  // useEffect(() => {
+  //   //debugonly
+  //   console.log('editedGroupUserIds', editedGroupUserIds);
+  //   console.log('editedGroupUserEmails', editedGroupUserEmails);
+  // }, [editedGroupUserIds, editedGroupUserEmails]);
 
   //設定ref
   const inputGroupName = useRef();
@@ -65,24 +57,30 @@ const CreateGroup = ({ location, setEditingShow, editingShow }) => {
     console.log(Object.values(editedGroupUserEmails), inputUserEmail.current.value);
     if (Object.values(editedGroupUserEmails).includes(inputUserEmail.current.value)) {
       inputUserEmail.current.value = '';
-      return alert('Member already in list above .');
+      return alert('Member already in list above.');
     }
     const token = localStorage.getItem('accessToken');
     const fetchUser = async () => {
-      const { data } = await axios.get(`${constants.API_GET_User_EXIST}?email=${inputUserEmail.current.value}`, {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-      });
-      //查使用者存在
-      const insertId = data.data.id;
-      const userNameFromDb = data.data.name;
+      try {
+        const { data } = await axios.get(`${constants.API_GET_User_EXIST}?email=${inputUserEmail.current.value}`, {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        });
+        console.log('BACKEND for setEditedGroup: ', data.data);
+        //查使用者存在
+        const insertId = data.data.id;
+        const userNameFromDb = data.data.name;
 
-      //新增id到array
-      setEditedGroupUserIds([...editedGroupUserIds, insertId]);
-      setEditedGroupUserNames({ ...editedGroupUserNames, [insertId]: userNameFromDb });
-      setEditedGroupUserEmails({ ...editedGroupUserEmails, [insertId]: inputUserEmail.current.value });
-      inputUserEmail.current.value = '';
+        //新增id到array
+        setEditedGroupUserIds([...editedGroupUserIds, insertId]);
+        setEditedGroupUserNames({ ...editedGroupUserNames, [insertId]: userNameFromDb });
+        setEditedGroupUserEmails({ ...editedGroupUserEmails, [insertId]: inputUserEmail.current.value });
+        inputUserEmail.current.value = '';
+      } catch (err) {
+        console.log(err.response);
+        return alert(err.response);
+      }
     };
     fetchUser();
   };

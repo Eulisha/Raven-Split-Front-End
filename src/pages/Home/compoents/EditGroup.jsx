@@ -6,21 +6,15 @@ import { User } from '../../App';
 import { GroupInfo } from './Home';
 import { MdDelete } from 'react-icons/md';
 
-const EditGroup = ({ testId, location, setEditingShow, editingShow }) => {
-  console.log('Editing Group....');
+const EditGroup = ({ location, setEditingShow, editingShow }) => {
+  console.log('@Edit Group');
 
   let CurrUser = useContext(User);
   let CurrGroupInfo = useContext(GroupInfo) || {};
   let { id, name, email } = CurrUser.user;
-
   let { currGroup, groupUsers, groupUserNames, groupUserEmails, setIsGroupChanged } = CurrGroupInfo;
-
-  // console.log('currUser', CurrUser);
-  // console.log('groupUsers', groupUsers);
-  // console.log('currGroup', currGroup);
-  // console.log(location);
-  console.log('GMW', testId, editingShow);
   let group_type;
+  console.log('id, name, email, currGroup, groupUsers: ', id, name, email, currGroup, groupUsers);
 
   switch (location) {
     case 'group_normal':
@@ -53,25 +47,32 @@ const EditGroup = ({ testId, location, setEditingShow, editingShow }) => {
   //EventHandle
   const handleAddUser = () => {
     if (Object.values(editedGroupUserEmails).includes(inputUserEmail.current.value)) {
-      alert('Member already in list above .');
       inputUserEmail.current.value = '';
+      return alert('Member already in list above .');
     }
     const token = localStorage.getItem('accessToken');
     const fetchUser = async () => {
-      const { data } = await axios.get(`${constants.API_GET_User_EXIST}?email=${inputUserEmail.current.value}`, {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-      });
-      //查使用者存在
-      const insertId = data.data.id;
-      const userNameFromDb = data.data.name;
+      try {
+        const { data } = await axios.get(`${constants.API_GET_User_EXIST}?email=${inputUserEmail.current.value}`, {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        });
+        console.log('BACKEND for setEditedGroup..:', data.data);
 
-      //新增id到array
-      setEditedGroupUserIds([...editedGroupUserIds, insertId]);
-      setEditedGroupUserNames({ ...editedGroupUserNames, [insertId]: userNameFromDb });
-      setEditedGroupUserEmails({ ...editedGroupUserEmails, [insertId]: inputUserEmail.current.value });
-      inputUserEmail.current.value = '';
+        //查使用者存在
+        const insertId = data.data.id;
+        const userNameFromDb = data.data.name;
+
+        //新增id到array
+        setEditedGroupUserIds([...editedGroupUserIds, insertId]);
+        setEditedGroupUserNames({ ...editedGroupUserNames, [insertId]: userNameFromDb });
+        setEditedGroupUserEmails({ ...editedGroupUserEmails, [insertId]: inputUserEmail.current.value });
+        inputUserEmail.current.value = '';
+      } catch (err) {
+        console.log(err.response);
+        return alert(err.response);
+      }
     };
     fetchUser();
   };

@@ -14,23 +14,25 @@ const UserGroups = ({ setCurrGroup, isGroupChanged, setGroupUsers, setGroupUserN
   console.log('@UserGroups');
 
   let CurrUser = useContext(User);
-  console.log('curruser.user', CurrUser.user);
 
   const [userGroups, setUserGroups] = useState([]);
   const [editingShow, setEditingShow] = useState(false);
-  console.log('userGroups', userGroups);
-  console.log('UG', editingShow);
 
   useEffect(() => {
     const fetchuserGroups = async () => {
-      const token = localStorage.getItem('accessToken');
-      const { data } = await axios(`${constants.API_GET_USER_GROUPS}`, {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-      });
-      console.log('fetch data userGroups:  ', data);
-      setUserGroups(data.data);
+      try {
+        const token = localStorage.getItem('accessToken');
+        const { data } = await axios(`${constants.API_GET_USER_GROUPS}`, {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        });
+        console.log('BACKEND for setUserGroups: ', data.data);
+        setUserGroups(data.data);
+      } catch (err) {
+        console.log(err.response);
+        return alert(err.response);
+      }
     };
     fetchuserGroups();
   }, [isGroupChanged]);
@@ -49,7 +51,6 @@ const UserGroups = ({ setCurrGroup, isGroupChanged, setGroupUsers, setGroupUserN
           <div className="logo-title">{CurrUser.user.name}</div>
         </div>
       </CSidebarBrand>
-      {/* <CSidebarHeader>{CurrUser.users.name}</CSidebarHeader> */}
       <CSidebarNav>
         <CNavGroup toggler="Groups">
           {userGroups.map((group) => {
@@ -96,7 +97,7 @@ const UserGroups = ({ setCurrGroup, isGroupChanged, setGroupUsers, setGroupUserN
             新增群組
           </CNavItem>
         </CNavGroup>
-        {editingShow ? (
+        {editingShow && (
           <div>
             <CreateGroup
               location="group_normal"
@@ -108,8 +109,6 @@ const UserGroups = ({ setCurrGroup, isGroupChanged, setGroupUsers, setGroupUserN
               setIsGroupChanged={setIsGroupChanged}
             />
           </div>
-        ) : (
-          ''
         )}
         <CSidebarFooter>
           <CNavItem

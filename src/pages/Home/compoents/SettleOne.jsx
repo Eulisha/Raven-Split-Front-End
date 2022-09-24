@@ -2,30 +2,43 @@ import axios from 'axios';
 import { useState, useEffect, useRef, useContext } from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
 import constants from '../../../global/constants';
+import { User } from '../../App';
 import { GroupInfo } from './Home';
 
-const SettleButton = ({ setIsDebtChanged }) => {
+const SettleOneButton = ({ settleWithId, settleWithName, setIsDebtChanged }) => {
   let CurrGroupInfo = useContext(GroupInfo);
-  let { groupUsers } = CurrGroupInfo;
+  let { currGroup } = CurrGroupInfo;
+  let gid = currGroup.gid;
   const [editingShow, setEditingShow] = useState(false);
+  console.log('settleWithId, settleWithName, gid: ', settleWithId, settleWithName, gid);
+
   return (
     <div>
-      <Button size="sm" variant="outline-info" onClick={() => setEditingShow(true)}>
-        Settle All
+      <Button size="sm" variant="outline-info" className="group-balance-list-settle-button" onClick={() => setEditingShow(true)}>
+        Settle
       </Button>
-      {groupUsers && editingShow && <SettleWindow setIsDebtChanged={setIsDebtChanged} show={editingShow} onHide={() => setEditingShow(false)} state="editing" />}
+      {editingShow && (
+        <SettleOneWindow
+          gid={gid}
+          settleWithId={settleWithId}
+          settleWithName={settleWithName}
+          setIsDebtChanged={setIsDebtChanged}
+          show={editingShow}
+          onHide={() => setEditingShow(false)}
+        />
+      )}
     </div>
   );
 };
 
-const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
-  console.log('@Settle');
+const SettleOneWindow = ({ gid, settleWithId, settleWithName, setIsDebtChanged, onHide, show }) => {
+  console.log('@Settle pair');
 
   //Context
+  let CurrUser = useContext(User);
   let CurrGroupInfo = useContext(GroupInfo);
-  let { currGroup, groupUserNames } = CurrGroupInfo;
-  let gid = currGroup.gid;
-  console.log('currGroup, groupUserNames, gid: ', currGroup, groupUserNames, gid);
+  let { id, name, email } = CurrUser.user;
+  let { groupUserNames } = CurrGroupInfo;
 
   //Ref
   const inputDate = useRef();
@@ -33,6 +46,7 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
 
   //state
   const [settle, setSettle] = useState([]);
+  console.log('user id, name, email, settleWithId, settleWithName, groupUserNames: ', id, name, email, settleWithId, settleWithName, groupUserNames);
 
   //撈settle資料
   useEffect(() => {
@@ -44,12 +58,10 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
             authorization: `Bearer ${token}`,
           },
         });
-        console.log('BACKEND for setSettle: ', data.data);
-
+        console.log('BACKEND for setSettle:  ', data.data);
         setSettle(data.data);
       } catch (err) {
-        console.log(err);
-        console.log(err.response.data.err);
+        console.log(err.response);
         return alert(err.response);
       }
     };
@@ -57,8 +69,7 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
   }, []);
 
   const handleSubmit = async () => {
-    console.log('@handle settle submit group');
-
+    console.log('@handle submit settle pair');
     try {
       const token = localStorage.getItem('accessToken');
       const body = {
@@ -69,13 +80,13 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
         },
         settle_detail: settle,
       };
-      console.log('FRONT for settle group: ', body);
-      const { data } = await axios.post(`${constants.API_POST_SETTLE}/${gid}`, body, {
+      console.log('FRONT for settle pair: ', body);
+      const { data } = await axios.post(`${constants.API_POST_SETTLE_PAIR}/${gid}/${id}/${settleWithId}`, body, {
         headers: {
           authorization: `Bearer ${token}`,
         },
       });
-      console.log('BACKEND settle result: ', data);
+      console.log('BACKEND settle pair result: ', data);
 
       setSettle([]);
       setIsDebtChanged((prev) => {
@@ -92,11 +103,10 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
   return (
     <Modal size="lg" aria-labelledby="contained-modal-title-vcenter" centered {...{ onHide, show }}>
       <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">還錢囉！</Modal.Title>
+        <Modal.Title id="contained-modal-title-vcenter">{`Settle Up With ${settleWithName}`}</Modal.Title>
       </Modal.Header>
       <Form>
         <Modal.Body>
-          最佳結帳方式：
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label>Date</Form.Label>
             <Form.Control
@@ -108,7 +118,7 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
               ).getDate()}`}
             />
             <Form.Label>Title</Form.Label>
-            <Form.Control ref={inputTitle} type="text" name="title" defaultValue="Settle Group All Balances"></Form.Control>
+            <Form.Control ref={inputTitle} type="text" name="title" defaultValue={`Settle Balances Between ${name} And ${settleWithName}`}></Form.Control>
           </Form.Group>
           <div>
             <ul>
@@ -132,4 +142,4 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
   );
 };
 
-export default { SettleWindow, SettleButton };
+export default { SettleOneWindow, SettleOneButton };

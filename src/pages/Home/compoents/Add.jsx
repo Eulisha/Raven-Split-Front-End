@@ -7,13 +7,15 @@ import { GroupInfo } from './Home';
 
 const AddButton = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged }) => {
   const [editingShow, setEditingShow] = useState(false);
+  let CurrGroupInfo = useContext(GroupInfo);
+  let { groupUsers } = CurrGroupInfo;
   return (
-    <div className="blog__controller">
-      <Button variant="outline-info" onClick={() => setEditingShow(true)}>
+    <div>
+      <Button size="sm" variant="outline-info" onClick={() => setEditingShow(true)}>
         {details ? 'Edit' : 'Add Expense'}
       </Button>
-      {editingShow && (
-        <AddingWindow /** 編輯視窗 */
+      {groupUsers && editingShow && (
+        <AddingWindow
           debtInfo={debtInfo}
           details={details}
           setDebt={setDebt}
@@ -21,7 +23,6 @@ const AddButton = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged }) 
           setIsDebtChanged={setIsDebtChanged}
           show={editingShow}
           onHide={() => setEditingShow(false)}
-          state="editing"
         />
       )}
     </div>
@@ -29,19 +30,22 @@ const AddButton = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged }) 
 };
 
 const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged, onHide, show }) => {
-  console.log('Editing....');
+  console.log('@ Debt add/edit');
+
+  //Context
   let CurrGroupInfo = useContext(GroupInfo);
   let CurrUser = useContext(User);
-  const inputSplitMethod = useRef();
 
-  console.log('currUser', CurrUser.user);
   let currUserId = CurrUser.user.id;
-  let currUserName = CurrUser.name;
+  let currUserName = CurrUser.user.name;
   let gid = CurrGroupInfo.currGroup.gid;
   let { groupUsers, groupUserNames } = CurrGroupInfo;
-  console.log(groupUsers);
-  console.log(currUserName);
+  console.log('groupUsers, groupUserNames, currUserId, currUserName, gid: ', groupUsers, groupUserNames, currUserId, currUserName, gid);
 
+  //Ref
+  const inputSplitMethod = useRef();
+
+  //設定state for 編輯時暫存的值
   //帳的初始值 判斷是新增or編輯
   const initialInfo = details
     ? debtInfo
@@ -56,16 +60,9 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
   const oriSum = details ? { total: debtInfo.total, sum: debtInfo.total } : { total: 0, sum: 0 };
   const oriSplit = details ? details : {};
 
-  //設定state
-  //編輯時暫存的值
   const [info, setInfo] = useState(initialInfo);
   const [split, setSplit] = useState(oriSplit); //{uid:amount}
   const [currSum, setSum] = useState(oriSum);
-  // const [isSave, setIsSave] = useState(false);
-
-  console.log('set info: ', info);
-  console.log('set splitValue: ', split);
-  console.log('set splitsummarize: ', currSum);
 
   //Re-Render currSum
   //total
@@ -95,7 +92,6 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
     } else {
       setInfo({ ...info, [prop]: e.target.value });
     }
-    console.log('updated info:', info);
   };
   const handleSplitChange = (prop) => (e) => {
     setSplit({ ...split, [prop]: Number(e.target.value) });
@@ -112,72 +108,71 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
         }
       });
       const data = { debt_main: info, debt_detail: newDetails };
-      console.log('data for fetch:', data);
+      console.log('FRONTEND for post debt :', data);
 
       //傳給後端
       const token = localStorage.getItem('accessToken');
       let result;
       if (!details) {
+        //Add debt
         result = await axios.post(`${constants.API_POST_DEBT}/${gid}`, data, {
           headers: {
             authorization: `Bearer ${token}`,
           },
         });
       } else {
+        //Edit debt
         result = await axios.put(`${constants.API_PUT_DEBT}/${gid}/${info.id}`, data, {
           headers: {
             authorization: `Bearer ${token}`,
           },
         });
       }
-      console.log('fetched update debt: ', result.data);
+      console.log('BACKEND for new info debtId: ', result.data);
 
-      //確認有成功後更新state
-      if (result.status === 200) {
-        //要把debtId改成新的
-        info.id = result.data.data.debtId;
-        //整理state data的格式
-        info.isOwned = Number(info.lender) === currUserId ? true : false;
-        info.ownAmount = Number(info.lender) === currUserId ? info.total - (split[currUserId] ? split[currUserId] : 0) : split[currUserId] ? split[currUserId] : 0;
-        console.log('info: ', info);
-        console.log('split: ', split);
-        if (details) {
-          setDebt((prev) => {
-            console.log('prev', prev, 'info', info, 'debtInfo', debtInfo);
-            let newArr = prev.map((item) => {
-              if (item.id === debtInfo.id) {
-                return info;
-              } else {
-                return item;
-              }
-            });
-            let sorted = newArr.sort((a, b) => {
-              return new Date(b.date) - new Date(a.date);
-            });
-            return sorted;
+      //要把debtId改成新的
+      info.id = result.data.data.debtId;
+      //整理state data的格式
+      info.isOwned = Number(info.lender) === currUserId ? true : false;
+      info.ownAmount = Number(info.lender) === currUserId ? info.total - (split[currUserId] ? split[currUserId] : 0) : split[currUserId] ? split[currUserId] : 0;
+      if (details) {
+        //Edit
+        setDebt((prev) => {
+          //找到本來的那筆更新
+          let newArr = prev.map((item) => {
+            if (item.id === debtInfo.id) {
+              return info;
+            } else {
+              return item;
+            }
           });
-          setDetail(split);
-        } else {
-          setDebt((prev) => {
-            console.log('prev', prev, 'info', info);
-            prev.push(info);
-            let sorted = prev.sort((a, b) => {
-              return new Date(b.date) - new Date(a.date);
-            });
-            return sorted;
+          //排序
+          let sorted = newArr.sort((a, b) => {
+            return new Date(b.date) - new Date(a.date);
           });
-        }
-        setIsDebtChanged((prev) => {
-          return !prev;
+          return sorted;
         });
-        onHide();
+        setDetail(split);
+      } else {
+        //Add
+        setDebt((prev) => {
+          //加進去之後再排序
+          prev.push(info);
+          let sorted = prev.sort((a, b) => {
+            return new Date(b.date) - new Date(a.date);
+          });
+          return sorted;
+        });
       }
+      setIsDebtChanged((prev) => {
+        return !prev;
+      });
+      onHide();
     } catch (err) {
-      console.log(err);
+      console.log(err.response);
+      return alert(err.response);
     }
   };
-
-  console.log(info);
 
   return (
     <Modal className="window" size="lg" aria-labelledby="contained-modal-title-vcenter" centered {...{ onHide, show }}>
@@ -199,7 +194,7 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
             <Form.Label>
               Paid By:
               <Form.Select aria-label="dropdown paid by" onChange={handleInfoChange('lender')}>
-                <option selected>{groupUserNames[info.lender]}</option>
+                <option>{groupUserNames[info.lender]}</option>
                 {groupUsers.map((userId) => {
                   if (userId !== info.lender) return <option value={userId}>{groupUserNames[userId]}</option>;
                 })}
