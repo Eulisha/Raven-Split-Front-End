@@ -44,12 +44,14 @@ const UserGroups = ({ setCurrGroup, isGroupChanged, setGroupUsers, setGroupUserN
       >
         <a className="logo" href={`${constants.HOST}/dashboard`}>
           <FaCrow size={40} />
-          <span style={{ fontSize: '20px', marginLeft: '30px' }}>Raven Split</span>
+          <div className="logo-title">Raven Split</div>
         </a>
       </CSidebarBrand>
       <CSidebarBrand>
-        <Icons.UserIcon />
-        <span style={{ fontSize: '20px', marginLeft: '30px' }}>{CurrUser.user.name}</span>
+        <div className="logo" href={`${constants.HOST}/dashboard`}>
+          <Icons.UserIcon />
+          <div className="logo-title">{CurrUser.user.name}</div>
+        </div>
       </CSidebarBrand>
       {/* <CSidebarHeader>{CurrUser.users.name}</CSidebarHeader> */}
       <CSidebarNav>

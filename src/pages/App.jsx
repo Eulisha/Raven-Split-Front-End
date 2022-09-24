@@ -33,7 +33,9 @@ const App = () => {
         navigate('/login');
       }
     };
-    fetchUserInfo();
+    if (window.location.href !== `${constants.HOST}/login`) {
+      fetchUserInfo();
+    }
   }, []);
 
   return (

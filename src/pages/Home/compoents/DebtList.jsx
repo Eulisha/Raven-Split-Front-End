@@ -14,7 +14,7 @@ const DebtList = ({ debtInfo }) => {
   return (
     <div className="debt-header">
       <div className="debt-items-left">
-        <div className="date debt-item">{`${date} `}</div>
+        <div className="date debt-item">{`${date.replace('2022-', '').replace('-', '/')} `}</div>
         <div className="description debt-item">{`${title} `}</div>
       </div>
       <div className="debt-items-right">
