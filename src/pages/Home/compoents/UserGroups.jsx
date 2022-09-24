@@ -37,11 +37,7 @@ const UserGroups = ({ setCurrGroup, isGroupChanged, setGroupUsers, setGroupUserN
 
   return (
     <CSidebar id="group_area" position="fixed">
-      <CSidebarBrand
-      // onClick={() => {
-      //   window.location.assign = `${constants.HOST}/dashboard`;
-      // }}
-      >
+      <CSidebarBrand>
         <a className="logo" href={`${constants.HOST}/dashboard`}>
           <FaCrow size={40} />
           <div className="logo-title">Raven Split</div>

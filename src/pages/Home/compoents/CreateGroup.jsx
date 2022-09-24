@@ -5,6 +5,7 @@ import constants from '../../../global/constants';
 import { User } from '../../App';
 import { GroupInfo } from './Home';
 import { MdDelete } from 'react-icons/md';
+import { useEffect } from 'react';
 
 const CreateGroup = ({ location, setEditingShow, editingShow }) => {
   console.log('Editing Group....');
@@ -12,10 +13,11 @@ const CreateGroup = ({ location, setEditingShow, editingShow }) => {
   let CurrUser = useContext(User);
   let CurrGroupInfo = useContext(GroupInfo) || {};
   let { id, name, email } = CurrUser.user;
+  console.log('id, name, email', id, name, email);
 
   let { currGroup, groupUsers, groupUserNames, groupUserEmails, setIsGroupChanged } = CurrGroupInfo;
 
-  // console.log('currUser', CurrUser);
+  console.log('currUser', CurrUser);
   // console.log('groupUsers', groupUsers);
   // console.log('currGroup', currGroup);
   // console.log(location);
@@ -39,12 +41,20 @@ const CreateGroup = ({ location, setEditingShow, editingShow }) => {
   console.log(group_type);
 
   //設定state
-  const [editedGroupUserIds, setEditedGroupUserIds] = useState(location === 'group_users' ? groupUsers : [id]);
-  const [editedGroupUserEmails, setEditedGroupUserEmails] = useState(location === 'group_users' ? groupUserEmails : { [id]: email });
-  const [editedGroupUserNames, setEditedGroupUserNames] = useState(location === 'group_users' ? groupUserNames : { [id]: name });
+  const initialGroupUserId = [id];
+  const initialGroupUserEmail = { id: email };
+  const initialGroupUserName = { id: name };
+  console.log(initialGroupUserId, initialGroupUserEmail, initialGroupUserName);
 
-  // console.log('editedGroupUserIds', editedGroupUserIds);
-  // console.log('editedGroupUserEmails', editedGroupUserEmails);
+  const [editedGroupUserIds, setEditedGroupUserIds] = useState(location === 'group_users' ? groupUsers : initialGroupUserId);
+  const [editedGroupUserEmails, setEditedGroupUserEmails] = useState(location === 'group_users' ? groupUserEmails : initialGroupUserEmail);
+  const [editedGroupUserNames, setEditedGroupUserNames] = useState(location === 'group_users' ? groupUserNames : initialGroupUserName);
+
+  useEffect(() => {
+    //debugonly
+    console.log('editedGroupUserIds', editedGroupUserIds);
+    console.log('editedGroupUserEmails', editedGroupUserEmails);
+  }, [editedGroupUserIds, editedGroupUserEmails]);
 
   //設定ref
   const inputGroupName = useRef();
@@ -52,9 +62,10 @@ const CreateGroup = ({ location, setEditingShow, editingShow }) => {
 
   //EventHandle
   const handleAddUser = () => {
+    console.log(Object.values(editedGroupUserEmails), inputUserEmail.current.value);
     if (Object.values(editedGroupUserEmails).includes(inputUserEmail.current.value)) {
-      alert('Member already in list above .');
       inputUserEmail.current.value = '';
+      return alert('Member already in list above .');
     }
     const token = localStorage.getItem('accessToken');
     const fetchUser = async () => {
@@ -149,9 +160,11 @@ const CreateGroup = ({ location, setEditingShow, editingShow }) => {
       //確認有成功後更新state
       if (result.status === 200) {
         setIsGroupChanged((prev) => !prev);
-        // onHide(() => {
         setEditingShow(false);
-        // });
+
+        setEditedGroupUserIds([id]);
+        setEditedGroupUserEmails({ [id]: email });
+        setEditedGroupUserNames({ [id]: name });
       }
     } catch (err) {
       console.log(err);

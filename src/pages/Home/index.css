@@ -259,7 +259,7 @@
 }
 #debts_column{
 /* flex-grow:2 !important; */
-width: 70%;
+width: 60%;
 margin-right:20px
 }
 .detail-list-buttons{
@@ -271,11 +271,12 @@ margin-right:20px
 .debt-header{
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   height: 3rem;
   width: 100%;
   margin: 0 10px;
+
 }
 .debt-items-left{
   display: flex;
@@ -284,10 +285,10 @@ margin-right:20px
   align-items: center;
   font-size: 18px;
   height: 100%;
-  gap:15px
+  gap:30px
 }
 .date{
-  font-size: 14px;
+  font-size: 16px;
 }
 .debt-items-right{
   display: flex;
@@ -362,14 +363,29 @@ margin-right:20px
   padding: 0 16px ;
   font-size: 16px;
 }
-.group-balance-list-settle-button{
-  margin-right: 20px !important;
+
+.group-balance-detail-item{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0px !important;
+  margin: 0px !important;
+}
+.group-balance-detail-item-wrapper{
+  display:flex;
+  justify-content: space-between;
+}
+.group-balance-list-settle-button-wrapper{
+display: flex !important;
+justify-content: flex-end;
+margin: 5px 0px 5px!important;
 }
 
 .group-balance-detail-item{
   display: flex !important;
   justify-content: space-between;
   font-size: 16px;
+  margin: 10px !important;
 }
 
 /* 套件改色 */

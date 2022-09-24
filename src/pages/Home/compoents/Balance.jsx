@@ -4,7 +4,7 @@ import constants from '../../../global/constants';
 import { ListGroup, Accordion } from 'react-bootstrap';
 import { GroupInfo } from './Home';
 import Icons from '../../../global/Icons';
-// import SettleOne from './SettleOne';
+import SettleOne from './SettleOne';
 
 const Balance = ({ isDebtChanged }) => {
   console.log('@balance');
@@ -72,22 +72,27 @@ const Balance = ({ isDebtChanged }) => {
                           </>
                         )}
                       </div>
-                      {/* <SettleOne.SettleOneButton settleWithId={userBalance.uid} settleWithName={groupUserNames[userBalance.uid]} /> */}
                     </Accordion.Header>
                     <Accordion.Body>
                       <ListGroup variant="flush" className="group-balance-detail-list">
                         {userBalance.detail.map((detail) => {
                           return detail.borrower === userBalance.uid ? (
                             <ListGroup.Item key={detail.id} className="group-balance-detail-item">
-                              <div>owns</div>
-                              <div>{`${CurrGroupInfo.groupUserNames[detail.lender]}`}</div>
-                              <div className="own-font">{`NT$ ${detail.amount}`}</div>
+                              <div className="group-balance-detail-item-wrapper">
+                                <div>owns</div>
+                                <div>{`${CurrGroupInfo.groupUserNames[detail.lender]}`}</div>
+                                <div className="own-font">{`NT$ ${detail.amount}`}</div>
+                              </div>
+                              <SettleOne.SettleOneButton key={detail.id} settleWithId={userBalance.uid} settleWithName={groupUserNames[userBalance.uid]} />
                             </ListGroup.Item>
                           ) : (
                             <ListGroup.Item key={detail.id} className="group-balance-detail-item">
-                              <div>owned by</div>
-                              <div>{`${CurrGroupInfo.groupUserNames[detail.borrower]}`}</div>
-                              <div className="owned-font">{`NT$ ${detail.amount}`}</div>
+                              <div className="group-balance-detail-item-wrapper">
+                                <div>owned by</div>
+                                <div>{`${CurrGroupInfo.groupUserNames[detail.borrower]}`}</div>
+                                <div className="owned-font">{`NT$ ${detail.amount}`}</div>
+                              </div>
+                              <SettleOne.SettleOneButton key={detail.id} settleWithId={userBalance.uid} settleWithName={groupUserNames[userBalance.uid]} />
                             </ListGroup.Item>
                           );
                         })}
