@@ -83,12 +83,30 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
     };
     handleSum('sum');
   }, [split]);
+  useEffect(() => {
+    // TODO:做到一半
+    console.log(info);
+    console.log(split);
+    if (info.split_method === '1') {
+      setSplit({});
+      const evenAmount = Math.ceil(info.total / groupUsers.length);
+      const evenly = {};
+      groupUsers.map((user) => {
+        evenly[user] = evenAmount;
+      });
+      console.log(evenly);
+      setSplit(evenly);
+    }
+    // setSplit();
+  }, [info.split_method, info.total]);
+  useEffect(() => {}, [split]);
 
   //EventHandle
   const handleInfoChange = (prop) => (e) => {
     if (e.target.name === 'total' || e.target.name === 'amount' || e.target.name === 'lender') {
       setInfo({ ...info, [prop]: Number(e.target.value) });
     } else if (e.target.name === 'split_method') {
+      console.log(inputSplitMethod.current.value);
       setInfo({ ...info, [prop]: inputSplitMethod.current.value });
     } else {
       setInfo({ ...info, [prop]: e.target.value });
@@ -204,7 +222,9 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
             <Form.Label>
               Split Method
               <Form.Select aria-label="drop dwon split method" onChange={handleInfoChange('split_method')}>
-                <option value={info.split_method}>{constants.SPLIT_METHOD[info.split_method]}</option>
+                <option value={info.split_method} onChange={handleInfoChange('split_method')}>
+                  {constants.SPLIT_METHOD[info.split_method]}
+                </option>
                 {Object.keys(constants.SPLIT_METHOD).map((method) => {
                   if (method !== info.split_method) return <option value={method}>{constants.SPLIT_METHOD[method]}</option>;
                 })}
@@ -215,17 +235,32 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
         <Form>
           <Form.Label>Split Debt</Form.Label>
           <Form.Group>
-            <ul>
-              {groupUsers.map((uid) => {
-                return (
-                  <InputGroup key={uid} id={uid} className="debt-input">
-                    <InputGroup.Text>{groupUserNames[uid]}</InputGroup.Text>
-                    <InputGroup.Text>$</InputGroup.Text>
-                    <Form.Control id={Number(uid)} aria-label="Amount" defaultValue={split[uid] ? Number(split[uid]) : null} onChange={handleSplitChange(Number(uid))} />
-                  </InputGroup>
-                );
-              })}
-            </ul>
+            {info.split === '1' ? (
+              <ul>
+                {groupUsers.map((uid) => {
+                  return (
+                    <InputGroup key={uid} id={uid} className="debt-input">
+                      <InputGroup.Text>{groupUserNames[uid]}</InputGroup.Text>
+                      <InputGroup.Text>$</InputGroup.Text>
+                      <Form.Control id={Number(uid)} aria-label="Amount" readOnly onChange={handleSplitChange(Number(uid))} />
+                      {/* FIXME:readonly not work */}
+                    </InputGroup>
+                  );
+                })}
+              </ul>
+            ) : (
+              <ul>
+                {groupUsers.map((uid) => {
+                  return (
+                    <InputGroup key={uid} id={uid} className="debt-input">
+                      <InputGroup.Text>{groupUserNames[uid]}</InputGroup.Text>
+                      <InputGroup.Text>$</InputGroup.Text>
+                      <Form.Control id={Number(uid)} aria-label="Amount" defaultValue={split[uid] ? Number(split[uid]) : null} onChange={handleSplitChange(Number(uid))} />
+                    </InputGroup>
+                  );
+                })}
+              </ul>
+            )}
             <Form.Label>Total {currencyFormat(currSum.total)}</Form.Label>
             <br />
             <Form.Label> {currencyFormat(currSum.total - currSum.sum)} Left</Form.Label>
