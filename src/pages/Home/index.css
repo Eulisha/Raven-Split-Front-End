@@ -120,9 +120,11 @@
   display: flex;
   justify-content: flex-start;
 }
+.nav-link{
+  margin-left: 20px !important;
+}
 .sidebar-footer{
-  padding-top: 0px !important;
-  padding-bottom: 0px !important;
+  padding: 0px !important;
   margin-top: auto;
   color:#fff !important;
 }
@@ -139,7 +141,7 @@
 }
 .add-group-btn{
   display: flex;
-  flex:1 1;
+  /* flex:1 1; */
   align-items: center;
   padding:var(--cui-sidebar-nav-link-padding-y) var(--cui-sidebar-nav-link-padding-x);
   padding-left: var(--cui-sidebar-nav-icon-width);
@@ -155,6 +157,7 @@
 }
 .add-group-btn:hover{
   background-color:#394659
+  
 }
 
 

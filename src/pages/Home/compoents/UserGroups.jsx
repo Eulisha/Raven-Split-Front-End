@@ -4,8 +4,7 @@ import constants from '../../../global/constants';
 import CreateGroup from './CreateGroup';
 import { User } from '../../App';
 import { FaCrow } from 'react-icons/fa';
-// CNavTitle, CBadge,  CSidebarToggler
-import { CSidebar, CSidebarBrand, CSidebarNav, CNavGroup, CNavItem, CSidebarFooter } from '@coreui/react';
+import { CSidebar, CSidebarBrand, CSidebarNav, CNavTitle, CNavItem, CSidebarFooter } from '@coreui/react';
 import CIcon from '@coreui/icons-react';
 import { cilAccountLogout, cilPlus } from '@coreui/icons';
 import Icons from '../../../global/Icons';
@@ -58,22 +57,20 @@ const UserGroups = ({ setCurrGroup, isGroupChanged, setGroupUsers, setGroupUserN
         </div>
       </CSidebarBrand>
       <CSidebarNav>
-        <CNavGroup toggler="Groups">
-          {userGroups.map((group) => {
-            if (group.type === '1') {
-              return (
-                <CNavItem href="#" key={group.gid} onClick={() => setCurrGroup({ gid: group.gid, name: group.name, type: group.type })}>
-                  {group.name}
-                </CNavItem>
-              );
-            }
-          })}
-          <button className="add-group-btn" onClick={() => setEditingShow(true)}>
-            <CIcon icon={cilPlus} style={{ marginRight: '10px' }} />
-            新增群組
-          </button>
-        </CNavGroup>
-        <CNavGroup toggler="Pairs">
+        {/* <CNavGroup toggler="Groups"> */}
+        <CNavTitle>Groups</CNavTitle>
+        {userGroups.map((group) => {
+          if (group.type === '1') {
+            return (
+              <CNavItem href="#" key={group.gid} onClick={() => setCurrGroup({ gid: group.gid, name: group.name, type: group.type })}>
+                {group.name}
+              </CNavItem>
+            );
+          }
+        })}
+
+        {/* </CNavGroup> */}
+        {/* <CNavGroup toggler="Pairs">
           {userGroups.map((group) => {
             if (group.type === '2') {
               return (
@@ -102,7 +99,7 @@ const UserGroups = ({ setCurrGroup, isGroupChanged, setGroupUsers, setGroupUserN
             <CIcon icon={cilPlus} style={{ marginRight: '10px' }} />
             新增群組
           </CNavItem>
-        </CNavGroup>
+        </CNavGroup> */}
         {editingShow && (
           <div>
             <CreateGroup
@@ -117,6 +114,10 @@ const UserGroups = ({ setCurrGroup, isGroupChanged, setGroupUsers, setGroupUserN
           </div>
         )}
         <CSidebarFooter>
+          <button className="add-group-btn" onClick={() => setEditingShow(true)}>
+            <CIcon icon={cilPlus} style={{ marginRight: '10px' }} />
+            新增群組
+          </button>
           <CNavItem
             href="/login"
             onClick={() => {

@@ -3,7 +3,14 @@ import { useState, useEffect, useRef, useContext } from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
 import constants from '../../../global/constants';
 import { GroupInfo } from './Home';
+<<<<<<< HEAD
 import Swal from 'sweetalert2';
+=======
+import Icons from '../../../global/Icons';
+import currencyFormat from '../../../global/utils';
+import { GiPayMoney } from 'react-icons/gi';
+import { BsArrowRight } from 'react-icons/bs';
+>>>>>>> layout
 
 const SettleButton = ({ setIsDebtChanged }) => {
   let CurrGroupInfo = useContext(GroupInfo);
@@ -123,11 +130,30 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
           </Form.Group>
           <div>
             <ul>
-              {settle.map((ele, ind) => {
+              {settle.map((ele) => {
                 return (
-                  <li key={ind}>
-                    {groupUserNames[ele.borrower]} 還 {groupUserNames[ele.lender]} ${ele.amount}
-                  </li>
+                  // <>
+                  //   <li key={ind}>
+                  //     {groupUserNames[ele.borrower]} 還 {groupUserNames[ele.lender]} ${ele.amount}
+                  //   </li>
+
+                  <div className="settle-pair-items">
+                    <Icons.UserIcon />
+                    <span>{groupUserNames[ele.borrower]}</span>
+                    <div className="settle-pair-pay-amount-wapper">
+                      <BsArrowRight />
+                      <div style={{ display: 'flex', flexDirection: 'column', justifyItems: 'flex-end', alignItems: 'center', margin: '10px' }}>
+                        <div>
+                          <span className="settle-pair-pay-amount">{currencyFormat(ele.amount)}</span>
+                          <GiPayMoney style={{ width: '30px', height: '30px' }} />
+                        </div>
+                      </div>
+                      <BsArrowRight />
+                    </div>
+                    <span>{groupUserNames[ele.lender]}</span>
+                    <Icons.UserIcon />
+                  </div>
+                  // </>
                 );
               })}
             </ul>
