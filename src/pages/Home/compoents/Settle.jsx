@@ -3,14 +3,11 @@ import { useState, useEffect, useRef, useContext } from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
 import constants from '../../../global/constants';
 import { GroupInfo } from './Home';
-<<<<<<< HEAD
 import Swal from 'sweetalert2';
-=======
 import Icons from '../../../global/Icons';
 import currencyFormat from '../../../global/utils';
 import { GiPayMoney } from 'react-icons/gi';
 import { BsArrowRight } from 'react-icons/bs';
->>>>>>> layout
 
 const SettleButton = ({ setIsDebtChanged }) => {
   let CurrGroupInfo = useContext(GroupInfo);
