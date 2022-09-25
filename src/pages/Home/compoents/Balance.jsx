@@ -29,7 +29,7 @@ const Balance = ({ isDebtChanged }) => {
             authorization: `Bearer ${token}`,
           },
         });
-        console.log('BACKEND for setbalance: ', data);
+        console.log('BACKEND for setbalance: ', data); //{1:{uid:1,total:100,details:[{id:901,borrower:2,lender:1,amount:50}]}}
         setBalance(data.data);
       } catch (err) {
         console.log(err.response.data.err);
@@ -51,6 +51,7 @@ const Balance = ({ isDebtChanged }) => {
       <ListGroup>
         {balances.length === 0 && groupUsers //FIXME:會不會兩個都沒有?!
           ? groupUsers.map((user) => {
+              //新群組尚無借貸關係
               return (
                 <ListGroup.Item key={user} className="item">
                   {groupUserNames[user]}
@@ -58,6 +59,7 @@ const Balance = ({ isDebtChanged }) => {
               );
             })
           : balances.map((userBalance) => {
+              //balance是後端整理過key group-by userID的array object
               return (
                 <Accordion>
                   <Accordion.Item key={userBalance.uid} id={userBalance.uid} className="item" eventKey="1">
@@ -65,7 +67,7 @@ const Balance = ({ isDebtChanged }) => {
                       <div className="group-balance-list">
                         <Icons.UserIcon />
                         <span>{groupUserNames[userBalance.uid]} </span>
-                        {userBalance.balance > 0 ? (
+                        {userBalance.balance >= 0 ? (
                           <>
                             <span>paid </span>
                             <span className="owned-font">{currencyFormat(userBalance.balance)} </span>
@@ -83,16 +85,22 @@ const Balance = ({ isDebtChanged }) => {
                         {userBalance.detail.map((detail) => {
                           return (
                             <ListGroup.Item key={detail.id} className="group-balance-detail-item">
-                              <div className="group-balance-detail-item-wrapper">
-                                <div>{detail.lender === userBalance.uid ? 'paid by' : 'owns'}</div>
-                                <div>
-                                  {detail.lender === userBalance.uid ? `${CurrGroupInfo.groupUserNames[detail.borrower]}` : `${CurrGroupInfo.groupUserNames[detail.lender]}`}
+                              {detail.lender === userBalance.uid ? (
+                                //借款人 : 欠款人
+                                <div className="group-balance-detail-item-wrapper">
+                                  <div>{'owns'}</div>
+                                  <div>{`${CurrGroupInfo.groupUserNames[detail.borrower]}`}</div>
+                                  <div className="own-font">{currencyFormat(detail.amount)}</div>
                                 </div>
-                                <div className="own-font">{currencyFormat(detail.amount)}</div>
-                              </div>
+                              ) : (
+                                <div className="group-balance-detail-item-wrapper">
+                                  <div>{'paid by'}</div>
+                                  <div>{`${CurrGroupInfo.groupUserNames[detail.lender]}`}</div>
+                                  <div className="owned-font">{currencyFormat(detail.amount)}</div>
+                                </div>
+                              )}
                               <SettleOne.SettleOneButton
                                 key={detail.id}
-                                ownStatus={'own'}
                                 settleFromId={detail.lender}
                                 settleFromName={groupUserNames[detail.lender]}
                                 settleToId={detail.borrower}

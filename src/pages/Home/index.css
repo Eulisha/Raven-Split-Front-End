@@ -370,7 +370,7 @@ color:rgb(150 157 165);
   padding: 0px !important;
 }
 
-/* group member區 */
+/* group balance區 */
 #group-users{
   /* flex-grow:1.5 !important; */
   width: 35%;
@@ -389,9 +389,10 @@ color:rgb(150 157 165);
   margin:5px 0;
   color: #ffff;
 }
+/* balance列表 */
 .group-balance-list{
   display: flex !important;
-  justify-content: space-between;
+  justify-content: space-evenly;
   align-items: center;
   width: 100%;
   padding: 0 16px ;
@@ -399,11 +400,12 @@ color:rgb(150 157 165);
 }
 
 .group-balance-detail-item{
-  display: flex;
+  display: flex !important;
+  justify-content: space-between;
   flex-direction: column;
   justify-content: center;
-  padding: 0px !important;
-  margin: 0px !important;
+  padding: 10px !important;
+  font-size: 16px;
 }
 .group-balance-detail-item-wrapper{
   display:flex;
@@ -415,12 +417,7 @@ justify-content: flex-end;
 margin: 5px 0px 5px!important;
 }
 
-.group-balance-detail-item{
-  display: flex !important;
-  justify-content: space-between;
-  font-size: 16px;
-  margin: 10px !important;
-}
+/* settle pair botton */
 .settle-pair-form-body{
   padding: 30px !important;
 }

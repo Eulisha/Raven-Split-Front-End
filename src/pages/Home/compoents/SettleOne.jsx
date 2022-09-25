@@ -19,7 +19,7 @@ const SettleOneButton = ({ ownStatus, settleFromId, settleFromName, settleToId, 
   console.log('settleToId, settleToName, gid: ', settleToId, settleToName, gid);
 
   return (
-    <div>
+    <div className="group-balance-list-settle-button-wrapper">
       <Button size="sm" variant="outline-info" className="group-balance-list-settle-button" onClick={() => setEditingShow(true)}>
         Settle
       </Button>
