@@ -27,7 +27,8 @@ const SignUp = ({ setHasAccount }) => {
       localStorage.setItem('accessToken', data.data.accessToken);
       window.location.assign(`${constants.HOST}/dashboard`);
     } catch (err) {
-      console.log(err);
+      console.log(err.response.data.err);
+      return alert(err.response.data.err);
     }
   };
 
