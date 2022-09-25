@@ -13,7 +13,7 @@ const EditGroup = ({ setEditingShow, editingShow }) => {
   let CurrUser = useContext(User);
   let CurrGroupInfo = useContext(GroupInfo);
   let { id, name, email } = CurrUser.user;
-  let { currGroup, groupUsers, groupUserNames, groupUserEmails, setIsGroupChanged } = CurrGroupInfo;
+  let { currGroup, groupUsers, groupUserNames, groupUserEmails, setCurrGroup, setIsGroupChanged } = CurrGroupInfo;
   let group_type = currGroup.type;
   console.log('id, name, email, currGroup, groupUsers, group_type: ', id, name, email, currGroup, groupUsers, group_type);
 
@@ -106,6 +106,7 @@ const EditGroup = ({ setEditingShow, editingShow }) => {
 
       setIsGroupChanged((prev) => !prev);
       setEditingShow(false);
+      setCurrGroup({ ...currGroup, ['name']: inputGroupName.current.value });
     } catch (err) {
       console.log(err.response.data.err);
       return alert(err.response.data.err);

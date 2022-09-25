@@ -8,7 +8,6 @@ import { useContext } from 'react';
 import { User } from '../../App';
 import Container from 'react-bootstrap/Container';
 import CenterTopBar from './CenterTopBar';
-import { useEffect } from 'react';
 
 export const GroupInfo = React.createContext();
 
@@ -26,9 +25,10 @@ const Home = () => {
   const [debts, setDebt] = useState([]);
   const [isDebtChanged, setIsDebtChanged] = useState(false);
 
-  useEffect(() => {}, [currGroup]);
   return (
-    <GroupInfo.Provider value={{ currGroup, groupUsers, groupUserNames, groupUserEmails, isGroupChanged, setIsGroupChanged, setGroupUsers, setGroupUserNames, setGroupUserEmails }}>
+    <GroupInfo.Provider
+      value={{ currGroup, groupUsers, groupUserNames, groupUserEmails, isGroupChanged, setIsGroupChanged, setCurrGroup, setGroupUsers, setGroupUserNames, setGroupUserEmails }}
+    >
       {CurrUser.user && (
         <>
           <UserGroups setCurrGroup={setCurrGroup} isGroupChanged={isGroupChanged} setIsGroupChanged={setIsGroupChanged} />
