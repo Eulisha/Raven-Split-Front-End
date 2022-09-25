@@ -414,6 +414,35 @@ margin: 5px 0px 5px!important;
   font-size: 16px;
   margin: 10px !important;
 }
+.settle-pair-form-body{
+  padding: 30px !important;
+}
+.settle-pair-items{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin: 40px 0px;
+  gap:10px
+}
+.settle-pair-pay-amount-wapper{
+  display: flex;
+  /* flex-direction: column; */
+  justify-content: center;
+  align-items: center;
+  gap: 5px
+}
+.settle-pair-pay-amount{
+  font-size: 20px;
+}
+.settle-pair-pay-arrow{
+  width: 5rem !important;
+}
+.settle-pair-pay-icon-wapper{
+  display: flex;
+  gap: 10px;
+  margin:5px 30px;
+}
 
 /* 套件改色 */
 .accordion-item:last-of-type .accordion-button.collapsed{

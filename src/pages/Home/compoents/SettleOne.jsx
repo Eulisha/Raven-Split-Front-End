@@ -4,8 +4,11 @@ import { Button, Modal, Form } from 'react-bootstrap';
 import constants from '../../../global/constants';
 import { User } from '../../App';
 import { GroupInfo } from './Home';
+import Icons from '../../../global/Icons';
+import { RiMoneyDollarCircleLine } from 'react-icons/ri';
+import { BsArrowRight } from 'react-icons/bs';
 
-const SettleOneButton = ({ settleWithId, settleWithName, setIsDebtChanged }) => {
+const SettleOneButton = ({ ownStatus, settleWithId, settleWithName, settleAmount, setIsDebtChanged }) => {
   let CurrGroupInfo = useContext(GroupInfo);
   let { currGroup } = CurrGroupInfo;
   let gid = currGroup.gid;
@@ -20,8 +23,10 @@ const SettleOneButton = ({ settleWithId, settleWithName, setIsDebtChanged }) => 
       {editingShow && (
         <SettleOneWindow
           gid={gid}
+          ownStatus={ownStatus}
           settleWithId={settleWithId}
           settleWithName={settleWithName}
+          settleAmount={settleAmount}
           setIsDebtChanged={setIsDebtChanged}
           show={editingShow}
           onHide={() => setEditingShow(false)}
@@ -31,7 +36,7 @@ const SettleOneButton = ({ settleWithId, settleWithName, setIsDebtChanged }) => 
   );
 };
 
-const SettleOneWindow = ({ gid, settleWithId, settleWithName, setIsDebtChanged, onHide, show }) => {
+const SettleOneWindow = ({ gid, ownStatus, settleWithId, settleWithName, settleAmount, setIsDebtChanged, onHide, show }) => {
   console.log('@Settle pair');
 
   //Context
@@ -106,8 +111,8 @@ const SettleOneWindow = ({ gid, settleWithId, settleWithName, setIsDebtChanged, 
         <Modal.Title id="contained-modal-title-vcenter">{`Settle Up With ${settleWithName}`}</Modal.Title>
       </Modal.Header>
       <Form>
-        <Modal.Body>
-          <Form.Group className="mb-3" controlId="formBasicEmail">
+        <Modal.Body className="settle-pair-form-body">
+          <Form.Group>
             <Form.Label>Date</Form.Label>
             <Form.Control
               ref={inputDate}
@@ -120,17 +125,38 @@ const SettleOneWindow = ({ gid, settleWithId, settleWithName, setIsDebtChanged, 
             <Form.Label>Title</Form.Label>
             <Form.Control ref={inputTitle} type="text" name="title" defaultValue={`Settle Balances Between ${name} And ${settleWithName}`}></Form.Control>
           </Form.Group>
-          <div>
-            <ul>
-              {settle.map((ele, ind) => {
-                return (
-                  <li key={ind}>
-                    {groupUserNames[ele.borrower]} 還 {groupUserNames[ele.lender]} ${ele.amount}
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
+
+          {ownStatus === 'own' ? (
+            <div className="settle-pair-items">
+              <Icons.UserIcon />
+              <span>{name}</span>
+              <span>pay</span>
+              <RiMoneyDollarCircleLine />
+              <span>{settleWithName}</span>
+              <Icons.UserIcon />
+              <span>{settleAmount}</span>
+            </div>
+          ) : (
+            <div className="settle-pair-items">
+              <Icons.UserIcon />
+              <span>{settleWithName}</span>
+              <div className="settle-pair-pay-amount-wapper">
+                {/* <div className="settle-pair-pay-icon-wapper"> */}
+                <BsArrowRight />
+                <div style={{ display: 'flex', flexDirection: 'column', justifyItems: 'flex-end', alignItems: 'center' }}>
+                  <div>
+                    <RiMoneyDollarCircleLine style={{ width: '30px', height: '30px' }} />
+                    <span className="settle-pair-pay-amount">{`NT$ ${settleAmount}`}</span>
+                  </div>
+                  {/* <span>pay</span> */}
+                </div>
+                {/* </div> */}
+                <BsArrowRight />
+              </div>
+              <span>{name}</span>
+              <Icons.UserIcon />
+            </div>
+          )}
         </Modal.Body>
         <Modal.Footer>
           <Button variant="primary" type="submit" onClick={handleSubmit}>

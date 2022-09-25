@@ -81,7 +81,13 @@ const Balance = ({ isDebtChanged }) => {
                                 <div>{`${CurrGroupInfo.groupUserNames[detail.lender]}`}</div>
                                 <div className="own-font">{`NT$ ${detail.amount}`}</div>
                               </div>
-                              <SettleOne.SettleOneButton key={detail.id} settleWithId={userBalance.uid} settleWithName={groupUserNames[userBalance.uid]} />
+                              <SettleOne.SettleOneButton
+                                key={detail.id}
+                                ownStatus={'own'}
+                                settleWithId={userBalance.uid}
+                                settleWithName={groupUserNames[userBalance.uid]}
+                                settleAmount={detail.amount}
+                              />
                             </ListGroup.Item>
                           ) : (
                             <ListGroup.Item key={detail.id} className="group-balance-detail-item">
@@ -90,7 +96,13 @@ const Balance = ({ isDebtChanged }) => {
                                 <div>{`${CurrGroupInfo.groupUserNames[detail.borrower]}`}</div>
                                 <div className="owned-font">{`NT$ ${detail.amount}`}</div>
                               </div>
-                              <SettleOne.SettleOneButton key={detail.id} settleWithId={userBalance.uid} settleWithName={groupUserNames[userBalance.uid]} />
+                              <SettleOne.SettleOneButton
+                                key={detail.id}
+                                ownStatus={'owned'}
+                                settleWithId={userBalance.uid}
+                                settleWithName={groupUserNames[userBalance.uid]}
+                                settleAmount={detail.amount}
+                              />
                             </ListGroup.Item>
                           );
                         })}

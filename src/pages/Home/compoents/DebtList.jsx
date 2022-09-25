@@ -3,10 +3,13 @@
 // import Button from 'react-bootstrap/Button';
 import { useContext } from 'react';
 import { GroupInfo } from './Home';
+import { User } from '../../App';
 
 const DebtList = ({ debtInfo }) => {
   console.log('@DebtList');
   let CurrGroupInfo = useContext(GroupInfo);
+  let CurrUser = useContext(User);
+  let currUserId = CurrUser.user.id;
   let { groupUserNames } = CurrGroupInfo;
   const { date, title, total, lender, isOwned, ownAmount } = debtInfo;
 
@@ -18,7 +21,7 @@ const DebtList = ({ debtInfo }) => {
       </div>
       <div className="debt-items-right">
         <div className="cost debt-item-pay-by">
-          <span className="paid-by">{`${groupUserNames[lender]} paid`}</span>
+          <span className="paid-by">{lender === currUserId ? 'You paid' : `${groupUserNames[lender]} paid`}</span>
           <span className="paid-by debt-item-amount">{`NT$ ${total} `}</span>
         </div>
         <div className="cost debt-item-you">
@@ -26,7 +29,7 @@ const DebtList = ({ debtInfo }) => {
             <span className="you debt-item-not-involved">Not Involved</span>
           ) : (
             <>
-              <span className="you">{`${isOwned === true ? 'You Paid' : 'You Own'}`}</span>
+              <span className="you">{`${isOwned === true ? 'You Paid' : 'You Lent'}`}</span>
               {isOwned ? (
                 <span className="you debt-item-amount owned-font">{`NT$ ${ownAmount}`}</span>
               ) : (
