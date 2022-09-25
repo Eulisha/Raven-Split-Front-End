@@ -343,6 +343,11 @@ margin-right:20px
   font-size: 18px;
   margin-top: 8px;
 }
+.debt-item-not-involved{
+color:rgb(150 157 165);
+}
+
+
 /* debt detail */
 .debt-detail-list{
   width: 50%;

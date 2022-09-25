@@ -22,8 +22,18 @@ const DebtList = ({ debtInfo }) => {
           <span className="paid-by debt-item-amount">{`NT$ ${total} `}</span>
         </div>
         <div className="cost debt-item-you">
-          <span className="you">{`${isOwned ? 'You Paid' : 'You Own'}`}</span>
-          {isOwned ? <span className="you debt-item-amount owned-font">{`NT$ ${ownAmount}`}</span> : <span className="you debt-item-amount own-font">{`NT$ ${ownAmount}`}</span>}
+          {isOwned === null ? (
+            <span className="you debt-item-not-involved">Not Involved</span>
+          ) : (
+            <>
+              <span className="you">{`${isOwned === true ? 'You Paid' : 'You Own'}`}</span>
+              {isOwned ? (
+                <span className="you debt-item-amount owned-font">{`NT$ ${ownAmount}`}</span>
+              ) : (
+                <span className="you debt-item-amount own-font">{`NT$ ${ownAmount}`}</span>
+              )}
+            </>
+          )}
         </div>
       </div>
     </div>
