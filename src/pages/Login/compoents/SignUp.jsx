@@ -1,8 +1,9 @@
 import axios from 'axios';
 import { useState } from 'react';
 import constants from '../../../global/constants';
+import { Form, Button, Card } from 'react-bootstrap';
 
-const SignUp = () => {
+const SignUp = ({ setHasAccount }) => {
   console.log('@Signup');
 
   const [inputValues, setinputValues] = useState({
@@ -31,26 +32,33 @@ const SignUp = () => {
   };
 
   return (
-    <form id="sign-up">
-      SignUp
-      <label>
-        Email
-        <input id="email" type="email" name="email" value={inputValues.email} onChange={handleInput('email')} />
-      </label>
-      <label>
-        Password
-        <input id="password" type="password" name="password" value={inputValues.password} onChange={handleInput('password')} />
-      </label>
-      <label>
-        Name
-        <input id="name" type="text" name="name" value={inputValues.name} onChange={handleInput('name')} />
-      </label>
-      <label>
-        CellPhone
-        <input id="cellphone" type="text" name="cellphone" value={inputValues.cellphone} onChange={handleInput('cellphone')} />
-      </label>
-      <button onClick={hanldleSubmit}>Submit</button>
-    </form>
+    <Card className="login-card">
+      <Form className="sign-up">
+        <Form.Group className="mb-3" controlId="formBasicEmail">
+          <Form.Label>Email address</Form.Label>
+          <Form.Control type="email" placeholder="Enter email" value={inputValues.email} onChange={handleInput('email')} />
+        </Form.Group>
+
+        <Form.Group className="mb-3" controlId="formBasicPassword">
+          <Form.Label>Password</Form.Label>
+          <Form.Control type="password" placeholder="Password" value={inputValues.password} onChange={handleInput('password')} />
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="formBasicName">
+          <Form.Label>Name</Form.Label>
+          <Form.Control type="text" placeholder="Name" name="name" value={inputValues.name} onChange={handleInput('name')} />
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="formBasicCellPhone">
+          <Form.Label>CellPhone</Form.Label>
+          <Form.Control type="text" placeholder="CellPhone" value={inputValues.cellphone} onChange={handleInput('cellphone')} />
+        </Form.Group>
+        <Button variant="primary" type="submit" onClick={hanldleSubmit}>
+          Submit
+        </Button>
+        <button className="change-login-method-btn" variant="outline-success" onClick={() => setHasAccount(false)}>
+          I don't have account yet
+        </button>
+      </Form>
+    </Card>
   );
 };
 
