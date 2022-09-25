@@ -1,8 +1,9 @@
 import axios from 'axios';
 import { useState } from 'react';
 import constants from '../../../global/constants';
+import { Form, Button, Card } from 'react-bootstrap';
 
-const SignIn = () => {
+const SignIn = ({ setHasAccount }) => {
   console.log('@Signin');
 
   const [inputValues, setinputValues] = useState({
@@ -28,18 +29,25 @@ const SignIn = () => {
   };
 
   return (
-    <form id="sign-in">
-      SignIn
-      <label>
-        Email
-        <input id="email" type="email" name="email" value={inputValues.email} onChange={handleInput('email')} />
-      </label>
-      <label>
-        Password
-        <input id="password" type="password" name="password" value={inputValues.password} onChange={handleInput('password')} />
-      </label>
-      <button onClick={hanldleSubmit}>Submit</button>
-    </form>
+    <Card className="login-card">
+      <Form className="sign-in">
+        <Form.Group className="mb-3" controlId="formBasicEmail">
+          <Form.Label>Email address</Form.Label>
+          <Form.Control type="email" placeholder="Enter email" value={inputValues.email} onChange={handleInput('email')} />
+        </Form.Group>
+
+        <Form.Group className="mb-3" controlId="formBasicPassword">
+          <Form.Label>Password</Form.Label>
+          <Form.Control type="password" placeholder="Password" value={inputValues.password} onChange={handleInput('password')} />
+        </Form.Group>
+        <Button variant="primary" type="submit" onClick={hanldleSubmit}>
+          Submit
+        </Button>
+        <button className="change-login-method-btn" variant="outline-success" onClick={() => setHasAccount(false)}>
+          I don't have account yet
+        </button>
+      </Form>
+    </Card>
   );
 };
 
