@@ -2,6 +2,7 @@ import { useContext } from 'react';
 import { ListGroup } from 'react-bootstrap';
 import { GroupInfo } from './Home';
 import Icons from '../../../global/Icons';
+import currencyFormat from '../../../global/utils';
 // import { NumericFormat } from 'react-number-format';
 
 const DetailList = ({ details }) => {
@@ -18,7 +19,7 @@ const DetailList = ({ details }) => {
               </div>
               <div>{`${CurrGroupInfo.groupUserNames[borrowerId]}`}</div>
               <div>owns</div>
-              <div>{`NT$ ${details[borrowerId]}`}</div>
+              <div>{currencyFormat(details[borrowerId])}</div>
               {/* <NumericFormat value={details[borrowerId]} thousandSeparator="," disabled style={{ border: 'none', backgroundColor: 'inherit' }} />; */}
             </ListGroup.Item>
           );

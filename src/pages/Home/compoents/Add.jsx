@@ -4,6 +4,7 @@ import { Button, Modal, Form, InputGroup } from 'react-bootstrap';
 import constants from '../../../global/constants';
 import { User } from '../../App';
 import { GroupInfo } from './Home';
+import currencyFormat from '../../../global/utils';
 
 const AddButton = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged }) => {
   const [editingShow, setEditingShow] = useState(false);
@@ -225,9 +226,9 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
                 );
               })}
             </ul>
-            <Form.Label>Total $ {currSum.total}</Form.Label>
+            <Form.Label>Total {currencyFormat(currSum.total)}</Form.Label>
             <br />
-            <Form.Label>$ {currSum.total - currSum.sum} Left</Form.Label>
+            <Form.Label> {currencyFormat(currSum.total - currSum.sum)} Left</Form.Label>
           </Form.Group>
         </Form>
       </Modal.Body>

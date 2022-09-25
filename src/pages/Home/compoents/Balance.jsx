@@ -5,6 +5,7 @@ import { ListGroup, Accordion } from 'react-bootstrap';
 import { GroupInfo } from './Home';
 import Icons from '../../../global/Icons';
 import SettleOne from './SettleOne';
+import currencyFormat from '../../../global/utils';
 
 const Balance = ({ isDebtChanged }) => {
   console.log('@balance');
@@ -61,12 +62,12 @@ const Balance = ({ isDebtChanged }) => {
                         {userBalance.balance > 0 ? (
                           <>
                             <span>paid </span>
-                            <span className="owned-font">{`NT$ ${userBalance.balance}`} </span>
+                            <span className="owned-font">{currencyFormat(userBalance.balance)} </span>
                           </>
                         ) : (
                           <>
                             <span>owns</span>
-                            <span className="own-font">{`NT$ ${-userBalance.balance}`} </span>
+                            <span className="own-font">{currencyFormat(-userBalance.balance)} </span>
                           </>
                         )}
                       </div>
@@ -79,7 +80,7 @@ const Balance = ({ isDebtChanged }) => {
                               <div className="group-balance-detail-item-wrapper">
                                 <div>owns</div>
                                 <div>{`${CurrGroupInfo.groupUserNames[detail.lender]}`}</div>
-                                <div className="own-font">{`NT$ ${detail.amount}`}</div>
+                                <div className="own-font">{currencyFormat(detail.amount)}</div>
                               </div>
                               <SettleOne.SettleOneButton
                                 key={detail.id}
@@ -94,7 +95,7 @@ const Balance = ({ isDebtChanged }) => {
                               <div className="group-balance-detail-item-wrapper">
                                 <div>owned by</div>
                                 <div>{`${CurrGroupInfo.groupUserNames[detail.borrower]}`}</div>
-                                <div className="owned-font">{`NT$ ${detail.amount}`}</div>
+                                <div className="owned-font">{currencyFormat(detail.amount)}</div>
                               </div>
                               <SettleOne.SettleOneButton
                                 key={detail.id}

@@ -5,6 +5,7 @@ import constants from '../../../global/constants';
 import { User } from '../../App';
 import { GroupInfo } from './Home';
 import Icons from '../../../global/Icons';
+import currencyFormat from '../../../global/utils';
 // import { RiMoneyDollarCircleLine } from 'react-icons/ri';
 import { GiPayMoney } from 'react-icons/gi';
 import { BsArrowRight } from 'react-icons/bs';
@@ -117,7 +118,7 @@ const SettleOneWindow = ({ gid, ownStatus, settleWithId, settleWithName, settleA
             <Form.Label>Date</Form.Label>
             <Form.Control
               ref={inputDate}
-              type="text"
+              type="date"
               name="data"
               defaultValue={`${new Date(Date.now()).getFullYear()}-${new Date(Date.now()).getMonth() + 1 < 10 ? 0 : ''}${new Date(Date.now()).getMonth() + 1}-${new Date(
                 Date.now()
@@ -135,7 +136,7 @@ const SettleOneWindow = ({ gid, ownStatus, settleWithId, settleWithName, settleA
                 <BsArrowRight />
                 <div style={{ display: 'flex', flexDirection: 'column', justifyItems: 'flex-end', alignItems: 'center', margin: '10px' }}>
                   <div>
-                    <span className="settle-pair-pay-amount">{`NT$ ${settleAmount}`}</span>
+                    <span className="settle-pair-pay-amount">{currencyFormat(settleAmount)}</span>
                     <GiPayMoney style={{ width: '30px', height: '30px' }} />
                   </div>
                 </div>
@@ -153,7 +154,7 @@ const SettleOneWindow = ({ gid, ownStatus, settleWithId, settleWithName, settleA
                 <div style={{ display: 'flex', flexDirection: 'column', justifyItems: 'flex-end', alignItems: 'center', margin: '10px' }}>
                   <div>
                     <GiPayMoney style={{ width: '30px', height: '30px' }} />
-                    <span className="settle-pair-pay-amount">{`NT$ ${settleAmount}`}</span>
+                    <span className="settle-pair-pay-amount">{currencyFormat(settleAmount)}</span>
                   </div>
                 </div>
                 <BsArrowRight />

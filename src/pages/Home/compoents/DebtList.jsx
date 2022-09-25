@@ -4,6 +4,7 @@
 import { useContext } from 'react';
 import { GroupInfo } from './Home';
 import { User } from '../../App';
+import currencyFormat from '../../../global/utils';
 
 const DebtList = ({ debtInfo }) => {
   console.log('@DebtList');
@@ -22,7 +23,7 @@ const DebtList = ({ debtInfo }) => {
       <div className="debt-items-right">
         <div className="cost debt-item-pay-by">
           <span className="paid-by">{lender === currUserId ? 'You paid' : `${groupUserNames[lender]} paid`}</span>
-          <span className="paid-by debt-item-amount">{`NT$ ${total} `}</span>
+          <span className="paid-by debt-item-amount">{currencyFormat(total)}</span>
         </div>
         <div className="cost debt-item-you">
           {isOwned === null ? (
@@ -31,9 +32,9 @@ const DebtList = ({ debtInfo }) => {
             <>
               <span className="you">{`${isOwned === true ? 'You Paid' : 'You Lent'}`}</span>
               {isOwned ? (
-                <span className="you debt-item-amount owned-font">{`NT$ ${ownAmount}`}</span>
+                <span className="you debt-item-amount owned-font">{currencyFormat(ownAmount)}</span>
               ) : (
-                <span className="you debt-item-amount own-font">{`NT$ ${ownAmount}`}</span>
+                <span className="you debt-item-amount own-font">{currencyFormat(ownAmount)}</span>
               )}
             </>
           )}
