@@ -17,6 +17,7 @@ const DetailList = ({ details }) => {
                 <Icons.UserIcon />
               </div>
               <div>{`${CurrGroupInfo.groupUserNames[borrowerId]}`}</div>
+              <div>owns</div>
               <div>{`NT$ ${details[borrowerId]}`}</div>
               {/* <NumericFormat value={details[borrowerId]} thousandSeparator="," disabled style={{ border: 'none', backgroundColor: 'inherit' }} />; */}
             </ListGroup.Item>
