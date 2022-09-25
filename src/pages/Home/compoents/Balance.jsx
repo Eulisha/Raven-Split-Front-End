@@ -6,6 +6,7 @@ import { GroupInfo } from './Home';
 import Icons from '../../../global/Icons';
 import SettleOne from './SettleOne';
 import currencyFormat from '../../../global/utils';
+import Swal from 'sweetalert2';
 
 const Balance = ({ isDebtChanged }) => {
   console.log('@balance');
@@ -32,7 +33,12 @@ const Balance = ({ isDebtChanged }) => {
         setBalance(data.data);
       } catch (err) {
         console.log(err.response.data.err);
-        return alert(err.response.data.err);
+        return Swal.fire({
+          title: 'Error!',
+          text: err.response.data.err,
+          icon: 'error',
+          confirmButtonText: 'Cool',
+        });
       }
     };
     if (gid) {

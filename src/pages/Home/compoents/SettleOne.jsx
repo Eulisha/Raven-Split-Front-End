@@ -9,6 +9,7 @@ import currencyFormat from '../../../global/utils';
 // import { RiMoneyDollarCircleLine } from 'react-icons/ri';
 import { GiPayMoney } from 'react-icons/gi';
 import { BsArrowRight } from 'react-icons/bs';
+import Swal from 'sweetalert2';
 
 const SettleOneButton = ({ ownStatus, settleFromId, settleFromName, settleToId, settleToName, settleAmount, setIsDebtChanged }) => {
   let CurrGroupInfo = useContext(GroupInfo);
@@ -71,7 +72,12 @@ const SettleOneWindow = ({ gid, settleFromId, settleFromName, settleToId, settle
         setSettle(data.data);
       } catch (err) {
         console.log(err.response.data.err);
-        return alert(err.response.data.err);
+        return Swal.fire({
+          title: 'Error!',
+          text: err.response.data.err,
+          icon: 'error',
+          confirmButtonText: 'Cool',
+        });
       }
     };
     fetchGetSettle();
@@ -105,7 +111,12 @@ const SettleOneWindow = ({ gid, settleFromId, settleFromName, settleToId, settle
       onHide();
     } catch (err) {
       console.log(err.response.data.err);
-      return alert(err.response.data.err);
+      return Swal.fire({
+        title: 'Error!',
+        text: err.response.data.err,
+        icon: 'error',
+        confirmButtonText: 'Cool',
+      });
     }
   };
 

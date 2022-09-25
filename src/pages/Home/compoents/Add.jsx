@@ -189,7 +189,12 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
       onHide();
     } catch (err) {
       console.log(err.response.data.err);
-      return alert(err.response.data.err);
+      return Swal.fire({
+        title: 'Error!',
+        text: err.response.data.err,
+        icon: 'error',
+        confirmButtonText: 'Cool',
+      });
     }
   };
 

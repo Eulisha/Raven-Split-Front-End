@@ -9,6 +9,7 @@ import { CSidebar, CSidebarBrand, CSidebarNav, CNavGroup, CNavItem, CSidebarFoot
 import CIcon from '@coreui/icons-react';
 import { cilAccountLogout, cilPlus } from '@coreui/icons';
 import Icons from '../../../global/Icons';
+import Swal from 'sweetalert2';
 
 const UserGroups = ({ setCurrGroup, isGroupChanged, setGroupUsers, setGroupUserNames, setGroupUserEmails, setIsGroupChanged }) => {
   console.log('@UserGroups');
@@ -31,7 +32,12 @@ const UserGroups = ({ setCurrGroup, isGroupChanged, setGroupUsers, setGroupUserN
         setUserGroups(data.data);
       } catch (err) {
         console.log(err.response.data.err);
-        return alert(err.response.data.err);
+        return Swal.fire({
+          title: 'Error!',
+          text: err.response.data.err,
+          icon: 'error',
+          confirmButtonText: 'Cool',
+        });
       }
     };
     fetchuserGroups();

@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import constants from '../../../global/constants';
 // import { CurrUser } from '../../App';
 import Dashboard_list from './Dashboard_list';
+import Swal from 'sweetalert2';
 
 const Dashboard = (isGroupChanged) => {
   const [selfBalance, setSelfBalance] = useState({});
@@ -21,7 +22,12 @@ const Dashboard = (isGroupChanged) => {
         setSelfBalance(data.data);
       } catch (err) {
         console.log(err.response.data.err);
-        return alert(err.response.data.err);
+        return Swal.fire({
+          title: 'Error!',
+          text: err.response.data.err,
+          icon: 'error',
+          confirmButtonText: 'Cool',
+        });
       }
     };
     fetchSelfBalances();

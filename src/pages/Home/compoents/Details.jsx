@@ -6,6 +6,7 @@ import Button from 'react-bootstrap/Button';
 // import Edit from './Edit';
 import Add from './Add';
 import { GroupInfo } from './Home';
+import Swal from 'sweetalert2';
 
 const Details = ({ debtInfo, setDebt, setIsDebtChanged }) => {
   console.log('@Details');
@@ -41,7 +42,12 @@ const Details = ({ debtInfo, setDebt, setIsDebtChanged }) => {
         setDetail(oriSplit);
       } catch (err) {
         console.log(err.response.data.err);
-        return alert(err.response.data.err);
+        return Swal.fire({
+          title: 'Error!',
+          text: err.response.data.err,
+          icon: 'error',
+          confirmButtonText: 'Cool',
+        });
       }
     };
     let detailsKeys = Object.keys(details);
@@ -55,7 +61,13 @@ const Details = ({ debtInfo, setDebt, setIsDebtChanged }) => {
     // const debtId = Number(e.target.id);
     const confirm = prompt('被刪除的帳將無法復原，若真要刪除，請輸入「刪除」');
     if (confirm !== '刪除') {
-      return alert(' 輸入錯誤，再考慮看看唄 ');
+      s;
+      return Swal.fire({
+        title: 'Error!',
+        text: '輸入錯誤，再考慮看看唄',
+        icon: 'error',
+        confirmButtonText: 'Cool',
+      });
     }
 
     try {
@@ -75,7 +87,12 @@ const Details = ({ debtInfo, setDebt, setIsDebtChanged }) => {
       });
     } catch (err) {
       console.log(err.response.data.err);
-      return alert(err.response.data.err);
+      return Swal.fire({
+        title: 'Error!',
+        text: err.response.data.err,
+        icon: 'error',
+        confirmButtonText: 'Cool',
+      });
     }
   };
 
