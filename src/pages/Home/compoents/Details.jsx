@@ -61,7 +61,6 @@ const Details = ({ debtInfo, setDebt, setIsDebtChanged }) => {
     // const debtId = Number(e.target.id);
     const confirm = prompt('被刪除的帳將無法復原，若真要刪除，請輸入「刪除」');
     if (confirm !== '刪除') {
-      s;
       return Swal.fire({
         title: 'Error!',
         text: '輸入錯誤，再考慮看看唄',
