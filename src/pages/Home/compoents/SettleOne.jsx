@@ -5,7 +5,8 @@ import constants from '../../../global/constants';
 import { User } from '../../App';
 import { GroupInfo } from './Home';
 import Icons from '../../../global/Icons';
-import { RiMoneyDollarCircleLine } from 'react-icons/ri';
+// import { RiMoneyDollarCircleLine } from 'react-icons/ri';
+import { GiPayMoney } from 'react-icons/gi';
 import { BsArrowRight } from 'react-icons/bs';
 
 const SettleOneButton = ({ ownStatus, settleWithId, settleWithName, settleAmount, setIsDebtChanged }) => {
@@ -130,27 +131,31 @@ const SettleOneWindow = ({ gid, ownStatus, settleWithId, settleWithName, settleA
             <div className="settle-pair-items">
               <Icons.UserIcon />
               <span>{name}</span>
-              <span>pay</span>
-              <RiMoneyDollarCircleLine />
+              <div className="settle-pair-pay-amount-wapper">
+                <BsArrowRight />
+                <div style={{ display: 'flex', flexDirection: 'column', justifyItems: 'flex-end', alignItems: 'center', margin: '10px' }}>
+                  <div>
+                    <span className="settle-pair-pay-amount">{`NT$ ${settleAmount}`}</span>
+                    <GiPayMoney style={{ width: '30px', height: '30px' }} />
+                  </div>
+                </div>
+                <BsArrowRight />
+              </div>
               <span>{settleWithName}</span>
               <Icons.UserIcon />
-              <span>{settleAmount}</span>
             </div>
           ) : (
             <div className="settle-pair-items">
               <Icons.UserIcon />
               <span>{settleWithName}</span>
               <div className="settle-pair-pay-amount-wapper">
-                {/* <div className="settle-pair-pay-icon-wapper"> */}
                 <BsArrowRight />
-                <div style={{ display: 'flex', flexDirection: 'column', justifyItems: 'flex-end', alignItems: 'center' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', justifyItems: 'flex-end', alignItems: 'center', margin: '10px' }}>
                   <div>
-                    <RiMoneyDollarCircleLine style={{ width: '30px', height: '30px' }} />
+                    <GiPayMoney style={{ width: '30px', height: '30px' }} />
                     <span className="settle-pair-pay-amount">{`NT$ ${settleAmount}`}</span>
                   </div>
-                  {/* <span>pay</span> */}
                 </div>
-                {/* </div> */}
                 <BsArrowRight />
               </div>
               <span>{name}</span>
@@ -159,7 +164,7 @@ const SettleOneWindow = ({ gid, ownStatus, settleWithId, settleWithName, settleA
           )}
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" type="submit" onClick={handleSubmit}>
+          <Button variant="outline-primary" type="submit" onClick={handleSubmit}>
             Submit
           </Button>
         </Modal.Footer>
