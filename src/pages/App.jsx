@@ -8,6 +8,7 @@ import constants from '../global/constants';
 import axios from 'axios';
 // import './style.scss';
 import '@coreui/coreui/dist/css/coreui.min.css';
+import { Alert } from '@mui/material';
 
 export const User = React.createContext();
 
@@ -15,11 +16,21 @@ const App = () => {
   console.log('@App');
   const navigate = useNavigate();
   const [user, setUser] = useState({});
+  const [showAlert, setShowAlert] = useState(false);
 
   useEffect(() => {
     const fetchUserInfo = async () => {
+      console.log('here');
       try {
         const token = localStorage.getItem('accessToken');
+        if (!token) {
+          console.log('no token');
+          setShowAlert(true);
+          // alert('Please Log In First!');
+          navigate('/login');
+          return;
+        }
+
         const { data } = await axios.get(constants.API_GET_USER_INFO, {
           headers: {
             authorization: `Bearer ${token}`,
@@ -29,11 +40,12 @@ const App = () => {
         setUser(data.data);
       } catch (err) {
         console.log(err.response.data.err);
-        alert(err.response);
+        <Alert severity="error">{err.response}</Alert>;
         navigate('/login');
       }
     };
     if (window.location.href !== `${constants.HOST}/login`) {
+      console.log('in');
       fetchUserInfo();
     }
   }, []);
@@ -42,11 +54,13 @@ const App = () => {
     <User.Provider value={{ user, setUser }}>
       <div className="App">
         <Routes className="App">
-          {/* {user.id && <Route id="home_container" element={<Home user={user} />} path="/dashboard" />} */}
           <Route id="home_container" element={<Home user={user} />} path="/dashboard" />
           <Route element={<Login />} path="/login" />
         </Routes>
       </div>
+      <Alert severity="error" show={showAlert}>
+        Please Log In First!
+      </Alert>
     </User.Provider>
   );
 };
