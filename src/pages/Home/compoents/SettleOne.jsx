@@ -10,12 +10,12 @@ import currencyFormat from '../../../global/utils';
 import { GiPayMoney } from 'react-icons/gi';
 import { BsArrowRight } from 'react-icons/bs';
 
-const SettleOneButton = ({ ownStatus, settleWithId, settleWithName, settleAmount, setIsDebtChanged }) => {
+const SettleOneButton = ({ ownStatus, settleFromId, settleFromName, settleToId, settleToName, settleAmount, setIsDebtChanged }) => {
   let CurrGroupInfo = useContext(GroupInfo);
   let { currGroup } = CurrGroupInfo;
   let gid = currGroup.gid;
   const [editingShow, setEditingShow] = useState(false);
-  console.log('settleWithId, settleWithName, gid: ', settleWithId, settleWithName, gid);
+  console.log('settleToId, settleToName, gid: ', settleToId, settleToName, gid);
 
   return (
     <div>
@@ -26,8 +26,10 @@ const SettleOneButton = ({ ownStatus, settleWithId, settleWithName, settleAmount
         <SettleOneWindow
           gid={gid}
           ownStatus={ownStatus}
-          settleWithId={settleWithId}
-          settleWithName={settleWithName}
+          settleFromId={settleFromId}
+          settleToId={settleToId}
+          settleFromName={settleFromName}
+          settleToName={settleToName}
           settleAmount={settleAmount}
           setIsDebtChanged={setIsDebtChanged}
           show={editingShow}
@@ -38,7 +40,7 @@ const SettleOneButton = ({ ownStatus, settleWithId, settleWithName, settleAmount
   );
 };
 
-const SettleOneWindow = ({ gid, ownStatus, settleWithId, settleWithName, settleAmount, setIsDebtChanged, onHide, show }) => {
+const SettleOneWindow = ({ gid, settleFromId, settleFromName, settleToId, settleToName, settleAmount, setIsDebtChanged, onHide, show }) => {
   console.log('@Settle pair');
 
   //Context
@@ -53,7 +55,7 @@ const SettleOneWindow = ({ gid, ownStatus, settleWithId, settleWithName, settleA
 
   //state
   const [settle, setSettle] = useState([]);
-  console.log('user id, name, email, settleWithId, settleWithName, groupUserNames: ', id, name, email, settleWithId, settleWithName, groupUserNames);
+  console.log('user id, name, email, settleToId, settleToName, groupUserNames: ', id, name, email, settleToId, settleToName, groupUserNames);
 
   //撈settle資料
   useEffect(() => {
@@ -88,7 +90,7 @@ const SettleOneWindow = ({ gid, ownStatus, settleWithId, settleWithName, settleA
         settle_detail: settle,
       };
       console.log('FRONT for settle pair: ', body);
-      const { data } = await axios.post(`${constants.API_POST_SETTLE_PAIR}/${gid}/${id}/${settleWithId}`, body, {
+      const { data } = await axios.post(`${constants.API_POST_SETTLE_PAIR}/${gid}/${settleFromId}/${settleToId}`, body, {
         headers: {
           authorization: `Bearer ${token}`,
         },
@@ -110,7 +112,7 @@ const SettleOneWindow = ({ gid, ownStatus, settleWithId, settleWithName, settleA
   return (
     <Modal size="lg" aria-labelledby="contained-modal-title-vcenter" centered {...{ onHide, show }}>
       <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">{`Settle Up With ${settleWithName}`}</Modal.Title>
+        <Modal.Title id="contained-modal-title-vcenter">{`Settle Up With ${settleToName}`}</Modal.Title>
       </Modal.Header>
       <Form>
         <Modal.Body className="settle-pair-form-body">
@@ -125,44 +127,25 @@ const SettleOneWindow = ({ gid, ownStatus, settleWithId, settleWithName, settleA
               ).getDate()}`}
             />
             <Form.Label>Title</Form.Label>
-            <Form.Control ref={inputTitle} type="text" name="title" defaultValue={`Settle Balances Between ${name} And ${settleWithName}`}></Form.Control>
+            <Form.Control ref={inputTitle} type="text" name="title" defaultValue={`Settle Balances Between ${settleFromName} And ${settleToName}`}></Form.Control>
           </Form.Group>
 
-          {ownStatus === 'own' ? (
-            <div className="settle-pair-items">
-              <Icons.UserIcon />
-              <span>{name}</span>
-              <div className="settle-pair-pay-amount-wapper">
-                <BsArrowRight />
-                <div style={{ display: 'flex', flexDirection: 'column', justifyItems: 'flex-end', alignItems: 'center', margin: '10px' }}>
-                  <div>
-                    <span className="settle-pair-pay-amount">{currencyFormat(settleAmount)}</span>
-                    <GiPayMoney style={{ width: '30px', height: '30px' }} />
-                  </div>
+          <div className="settle-pair-items">
+            <Icons.UserIcon />
+            <span>{settleFromName}</span>
+            <div className="settle-pair-pay-amount-wapper">
+              <BsArrowRight />
+              <div style={{ display: 'flex', flexDirection: 'column', justifyItems: 'flex-end', alignItems: 'center', margin: '10px' }}>
+                <div>
+                  <span className="settle-pair-pay-amount">{currencyFormat(settleAmount)}</span>
+                  <GiPayMoney style={{ width: '30px', height: '30px' }} />
                 </div>
-                <BsArrowRight />
               </div>
-              <span>{settleWithName}</span>
-              <Icons.UserIcon />
+              <BsArrowRight />
             </div>
-          ) : (
-            <div className="settle-pair-items">
-              <Icons.UserIcon />
-              <span>{settleWithName}</span>
-              <div className="settle-pair-pay-amount-wapper">
-                <BsArrowRight />
-                <div style={{ display: 'flex', flexDirection: 'column', justifyItems: 'flex-end', alignItems: 'center', margin: '10px' }}>
-                  <div>
-                    <GiPayMoney style={{ width: '30px', height: '30px' }} />
-                    <span className="settle-pair-pay-amount">{currencyFormat(settleAmount)}</span>
-                  </div>
-                </div>
-                <BsArrowRight />
-              </div>
-              <span>{name}</span>
-              <Icons.UserIcon />
-            </div>
-          )}
+            <span>{settleToName}</span>
+            <Icons.UserIcon />
+          </div>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="outline-primary" type="submit" onClick={handleSubmit}>

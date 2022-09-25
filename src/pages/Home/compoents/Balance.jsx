@@ -75,33 +75,22 @@ const Balance = ({ isDebtChanged }) => {
                     <Accordion.Body>
                       <ListGroup variant="flush" className="group-balance-detail-list">
                         {userBalance.detail.map((detail) => {
-                          return detail.borrower === userBalance.uid ? (
+                          return (
                             <ListGroup.Item key={detail.id} className="group-balance-detail-item">
                               <div className="group-balance-detail-item-wrapper">
-                                <div>owns</div>
-                                <div>{`${CurrGroupInfo.groupUserNames[detail.lender]}`}</div>
+                                <div>{detail.lender === userBalance.uid ? 'paid by' : 'owns'}</div>
+                                <div>
+                                  {detail.lender === userBalance.uid ? `${CurrGroupInfo.groupUserNames[detail.borrower]}` : `${CurrGroupInfo.groupUserNames[detail.lender]}`}
+                                </div>
                                 <div className="own-font">{currencyFormat(detail.amount)}</div>
                               </div>
                               <SettleOne.SettleOneButton
                                 key={detail.id}
                                 ownStatus={'own'}
-                                settleWithId={userBalance.uid}
-                                settleWithName={groupUserNames[userBalance.uid]}
-                                settleAmount={detail.amount}
-                              />
-                            </ListGroup.Item>
-                          ) : (
-                            <ListGroup.Item key={detail.id} className="group-balance-detail-item">
-                              <div className="group-balance-detail-item-wrapper">
-                                <div>owned by</div>
-                                <div>{`${CurrGroupInfo.groupUserNames[detail.borrower]}`}</div>
-                                <div className="owned-font">{currencyFormat(detail.amount)}</div>
-                              </div>
-                              <SettleOne.SettleOneButton
-                                key={detail.id}
-                                ownStatus={'owned'}
-                                settleWithId={userBalance.uid}
-                                settleWithName={groupUserNames[userBalance.uid]}
+                                settleFromId={detail.lender}
+                                settleFromName={groupUserNames[detail.lender]}
+                                settleToId={detail.borrower}
+                                settleToName={groupUserNames[detail.borrower]}
                                 settleAmount={detail.amount}
                               />
                             </ListGroup.Item>
