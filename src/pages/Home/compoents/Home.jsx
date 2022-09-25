@@ -28,7 +28,7 @@ const Home = () => {
 
   useEffect(() => {}, [currGroup]);
   return (
-    <GroupInfo.Provider value={{ currGroup, groupUsers, groupUserNames, groupUserEmails, setIsGroupChanged, setGroupUsers, setGroupUserNames, setGroupUserEmails }}>
+    <GroupInfo.Provider value={{ currGroup, groupUsers, groupUserNames, groupUserEmails, isGroupChanged, setIsGroupChanged, setGroupUsers, setGroupUserNames, setGroupUserEmails }}>
       {CurrUser.user && (
         <>
           <UserGroups setCurrGroup={setCurrGroup} isGroupChanged={isGroupChanged} setIsGroupChanged={setIsGroupChanged} />

@@ -28,7 +28,7 @@ const API_GET_USER_GROUPS = `${API_HOST}/user/groups`;
 const API_GET_User_EXIST = `${API_HOST}/user/user-exist`;
 
 //Mapping
-const SPLIT_METHOD = { 1: 'even', 2: 'customize', 3: 'by share', 4: 'by percentage' };
+const SPLIT_METHOD = { 1: 'even', 2: 'customize', 3: 'by share', 4: 'by percentage', 5: 'full_amount' };
 const USER_ROLE = { 4: 'owner', 3: 'administer', 2: 'editor', 1: 'viewer' };
 const GROUP_TYPE = { 1: 'group', 2: 'pair', 3: 'group_buying' };
 

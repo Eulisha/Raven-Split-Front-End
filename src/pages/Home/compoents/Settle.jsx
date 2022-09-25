@@ -50,7 +50,7 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
       } catch (err) {
         console.log(err);
         console.log(err.response.data.err);
-        return alert(err.response);
+        return alert(err.response.data.err);
       }
     };
     fetchGetSettle();
@@ -84,8 +84,8 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
 
       onHide();
     } catch (err) {
-      console.log(err.response);
-      return alert(err.response);
+      console.log(err.response.data.err);
+      return alert(err.response.data.err);
     }
   };
 

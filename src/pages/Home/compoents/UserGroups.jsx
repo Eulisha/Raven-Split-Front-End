@@ -30,8 +30,8 @@ const UserGroups = ({ setCurrGroup, isGroupChanged, setGroupUsers, setGroupUserN
         console.log('BACKEND for setUserGroups: ', data.data);
         setUserGroups(data.data);
       } catch (err) {
-        console.log(err.response);
-        return alert(err.response);
+        console.log(err.response.data.err);
+        return alert(err.response.data.err);
       }
     };
     fetchuserGroups();
@@ -62,10 +62,10 @@ const UserGroups = ({ setCurrGroup, isGroupChanged, setGroupUsers, setGroupUserN
               );
             }
           })}
-          <CNavItem href="#" onClick={() => setEditingShow(true)}>
+          <button className="add-group-btn" onClick={() => setEditingShow(true)}>
             <CIcon icon={cilPlus} style={{ marginRight: '10px' }} />
             新增群組
-          </CNavItem>
+          </button>
         </CNavGroup>
         <CNavGroup toggler="Pairs">
           {userGroups.map((group) => {

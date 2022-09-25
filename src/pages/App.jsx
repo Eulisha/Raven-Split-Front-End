@@ -28,7 +28,7 @@ const App = () => {
         console.log('BACKEND for setUser: ', data.data);
         setUser(data.data);
       } catch (err) {
-        console.log(err.response);
+        console.log(err.response.data.err);
         alert(err.response);
         navigate('/login');
       }

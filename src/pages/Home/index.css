@@ -71,11 +71,14 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    cursor: pointer;
     text-decoration: none;
     color: inherit;
     outline:0;
     gap: 15px;
+  }
+  
+  a.logo{
+    cursor: pointer;
   }
 
 
@@ -133,6 +136,25 @@
 }
 .nav-icon{
   color:#fff !important;
+}
+.add-group-btn{
+  display: flex;
+  flex:1 1;
+  align-items: center;
+  padding:var(--cui-sidebar-nav-link-padding-y) var(--cui-sidebar-nav-link-padding-x);
+  padding-left: var(--cui-sidebar-nav-icon-width);
+  width: 100%;
+  color: #fff;
+  text-decoration: none;
+  white-space: nowrap;
+  background-color: #2f3c50;
+  border-bottom-color: rgba(0,0,0,0);
+  border-left-color:  rgba(0,0,0,0);
+  border-right-color:  rgba(0,0,0,0);
+  border-top-color:  rgba(0,0,0,0);
+}
+.add-group-btn:hover{
+  background-color:#394659
 }
 
 

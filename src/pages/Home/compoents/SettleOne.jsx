@@ -61,8 +61,8 @@ const SettleOneWindow = ({ gid, settleWithId, settleWithName, setIsDebtChanged, 
         console.log('BACKEND for setSettle:  ', data.data);
         setSettle(data.data);
       } catch (err) {
-        console.log(err.response);
-        return alert(err.response);
+        console.log(err.response.data.err);
+        return alert(err.response.data.err);
       }
     };
     fetchGetSettle();
@@ -95,8 +95,8 @@ const SettleOneWindow = ({ gid, settleWithId, settleWithName, setIsDebtChanged, 
 
       onHide();
     } catch (err) {
-      console.log(err.response);
-      return alert(err.response);
+      console.log(err.response.data.err);
+      return alert(err.response.data.err);
     }
   };
 

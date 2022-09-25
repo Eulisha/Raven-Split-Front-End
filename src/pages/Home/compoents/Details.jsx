@@ -40,8 +40,8 @@ const Details = ({ debtInfo, setDebt, setIsDebtChanged }) => {
         console.log('整理好最後用來setDetails: ', oriSplit);
         setDetail(oriSplit);
       } catch (err) {
-        console.log(err.response);
-        return alert(err.response);
+        console.log(err.response.data.err);
+        return alert(err.response.data.err);
       }
     };
     let detailsKeys = Object.keys(details);
@@ -74,8 +74,8 @@ const Details = ({ debtInfo, setDebt, setIsDebtChanged }) => {
         return !prev;
       });
     } catch (err) {
-      console.log(err.response);
-      return alert(err.response);
+      console.log(err.response.data.err);
+      return alert(err.response.data.err);
     }
   };
 

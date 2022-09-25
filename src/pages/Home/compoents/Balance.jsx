@@ -13,6 +13,7 @@ const Balance = ({ isDebtChanged }) => {
   let CurrGroupInfo = useContext(GroupInfo);
   let { currGroup, groupUsers, groupUserNames, isGroupChanged } = CurrGroupInfo;
   let { gid } = currGroup;
+  console.log('currGroup, groupUsers, groupUserNames, isGroupChanged, gid: ', currGroup, groupUsers, groupUserNames, isGroupChanged, gid);
 
   //useState
   const [balances, setBalance] = useState([]);
@@ -29,8 +30,8 @@ const Balance = ({ isDebtChanged }) => {
         console.log('BACKEND for setbalance: ', data);
         setBalance(data.data);
       } catch (err) {
-        console.log(err.response);
-        return alert(err.response);
+        console.log(err.response.data.err);
+        return alert(err.response.data.err);
       }
     };
     if (gid) {

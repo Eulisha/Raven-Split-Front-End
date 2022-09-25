@@ -40,15 +40,15 @@ const GroupUsers = ({ setGroupUsers, setGroupUserNames, setGroupUserEmails, isDe
         setGroupUserNames(userNames);
         setGroupUserEmails(userEmails);
       } catch (err) {
-        console.log(err.response);
-        return alert(err.response);
+        console.log(err.response.data.err);
+        return alert(err.response.data.err);
       }
     };
     if (gid) {
       fetchUsers(gid);
     }
-  }, [isGroupChanged]);
-  // currGroup,
+  }, [currGroup, isGroupChanged]);
+
   return (
     <div id="group-users">
       <div className="group-users-top-bar">

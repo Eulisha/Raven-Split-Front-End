@@ -169,8 +169,8 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
       });
       onHide();
     } catch (err) {
-      console.log(err.response);
-      return alert(err.response);
+      console.log(err.response.data.err);
+      return alert(err.response.data.err);
     }
   };
 

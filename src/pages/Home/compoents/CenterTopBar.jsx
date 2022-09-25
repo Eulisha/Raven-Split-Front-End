@@ -7,7 +7,7 @@ import { GroupInfo } from './Home';
 
 const CenterTopBar = ({ setDebt, setIsDebtChanged }) => {
   let CurrGroupInfo = useContext(GroupInfo);
-  let { currGroup, groupUsers, setGroupUsers, setGroupUserNames, setGroupUserEmails, setIsGroupChanged } = CurrGroupInfo;
+  let { currGroup, groupUsers } = CurrGroupInfo;
   const [editShow, setEditShow] = useState(false);
 
   return (
@@ -25,15 +25,7 @@ const CenterTopBar = ({ setDebt, setIsDebtChanged }) => {
             </div>
             {groupUsers && editShow && (
               <div>
-                <EditGroup
-                  location="group_users"
-                  editingShow={editShow}
-                  setEditingShow={setEditShow}
-                  setGroupUsers={setGroupUsers}
-                  setGroupUserNames={setGroupUserNames}
-                  setGroupUserEmails={setGroupUserEmails}
-                  setIsGroupChanged={setIsGroupChanged}
-                />
+                <EditGroup editingShow={editShow} setEditingShow={setEditShow} />
               </div>
             )}
           </Navbar.Collapse>

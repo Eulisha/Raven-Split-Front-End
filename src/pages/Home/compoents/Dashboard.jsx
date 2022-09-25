@@ -20,14 +20,14 @@ const Dashboard = (isGroupChanged) => {
         console.log('BACKEND for setSelfBalance: ', data.data);
         setSelfBalance(data.data);
       } catch (err) {
-        console.log(err.response);
-        return alert(err.response);
+        console.log(err.response.data.err);
+        return alert(err.response.data.err);
       }
     };
     fetchSelfBalances();
   }, [isGroupChanged]);
 
-  return <div className="self-balance-area">{selfBalance && <Dashboard_list selfBalance={selfBalance} />}</div>;
+  return <div className="self-balance-area">{selfBalance.summary && <Dashboard_list selfBalance={selfBalance} />}</div>;
 };
 
 export default Dashboard;

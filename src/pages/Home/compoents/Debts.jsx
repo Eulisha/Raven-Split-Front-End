@@ -27,8 +27,8 @@ const Debts = ({ debts, isDebtChanged, setDebt, setIsDebtChanged }) => {
         console.log('BACKEND for setDebts: ', data.data);
         setDebt(data.data);
       } catch (err) {
-        console.log(err.response);
-        return alert(err.response);
+        console.log(err.response.data.err);
+        return alert(err.response.data.err);
       }
     };
     if (currGroup.gid) {

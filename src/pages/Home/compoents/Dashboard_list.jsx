@@ -9,15 +9,15 @@ const Dashboard_list = ({ selfBalance }) => {
           <Card className="dashboard-self-summary-card own-bg">
             <Card.Body className="dashboard-self-summary-card-body">
               <Card.Title className="dashboard-self-summary-card-title">Own</Card.Title>
-              <Card.Text className="dashboard-self-summary-card-amount-own">NT 3000</Card.Text>
+              <Card.Text className="dashboard-self-summary-card-amount-own">{`NT$ ${selfBalance.summary.borrow}`}</Card.Text>
             </Card.Body>
           </Card>
         </Col>
         <Col className="dashboard-self-summary-col">
           <Card className="dashboard-self-summary-card total-bg">
             <Card.Body className="dashboard-self-summary-card-body">
-              <Card.Title className="dashboard-self-summary-card-title">Total</Card.Title>
-              <Card.Text className="dashboard-self-summary-card-amount-total">NT 10000</Card.Text>
+              <Card.Title className="dashboard-self-summary-card-title">Net</Card.Title>
+              <Card.Text className="dashboard-self-summary-card-amount-total">{`NT$ ${selfBalance.summary.net}`}</Card.Text>
             </Card.Body>
           </Card>
         </Col>
@@ -25,7 +25,7 @@ const Dashboard_list = ({ selfBalance }) => {
           <Card className="dashboard-self-summary-card owned-bg">
             <Card.Body className="dashboard-self-summary-card-body">
               <Card.Title className="dashboard-self-summary-card-title">Owned</Card.Title>
-              <Card.Text className="dashboard-self-summary-card-amount-owned">NT 13000</Card.Text>
+              <Card.Text className="dashboard-self-summary-card-amount-owned">{`NT$ ${selfBalance.summary.lend}`}</Card.Text>
             </Card.Body>
           </Card>
         </Col>
