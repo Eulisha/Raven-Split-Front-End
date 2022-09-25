@@ -1,11 +1,11 @@
-import { useEffect, useContext } from 'react';
+import { useEffect, useContext, useState } from 'react';
 import axios from 'axios';
 import constants from '../../../global/constants';
 import Details from './Details';
 import DebtList from './DebtList';
 import { Accordion } from 'react-bootstrap';
-// import Button from 'react-bootstrap/Button';
 import { GroupInfo } from './Home';
+import { Pagination } from '@mui/material';
 
 const Debts = ({ debts, isDebtChanged, setDebt, setIsDebtChanged }) => {
   console.log('@Debts');
@@ -13,12 +13,15 @@ const Debts = ({ debts, isDebtChanged, setDebt, setIsDebtChanged }) => {
   let CurrGroupInfo = useContext(GroupInfo);
   let { currGroup, groupUsers } = CurrGroupInfo;
 
+  const [paging, setPaging] = useState(1);
+  const [pageCount, setPageCount] = useState(1);
+
   //撈debts
   useEffect(() => {
     const fetchDebts = async (gid) => {
       try {
         const token = localStorage.getItem('accessToken');
-        const { data } = await axios.get(`${constants.API_GET_DEBTS}/${gid}`, {
+        const { data } = await axios.get(`${constants.API_GET_DEBTS}/${gid}?paging=${paging}`, {
           headers: {
             authorization: `Bearer ${token}`,
           },
@@ -34,7 +37,29 @@ const Debts = ({ debts, isDebtChanged, setDebt, setIsDebtChanged }) => {
     if (currGroup.gid) {
       fetchDebts(currGroup.gid);
     }
-  }, [currGroup, isDebtChanged]);
+  }, [currGroup, isDebtChanged, paging]);
+
+  //撈pages
+  useEffect(() => {
+    const fetchDebtPages = async (gid) => {
+      try {
+        const token = localStorage.getItem('accessToken');
+        const { data } = await axios.get(`${constants.API_GET_DEBT_PAGES}/${gid}`, {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        });
+        console.log('BACKEND for setPaging: ', data.data);
+        setPageCount(data.data.pageCount);
+      } catch (err) {
+        console.log(err.response.data.err);
+        return alert(err.response.data.err);
+      }
+    };
+    if (currGroup.gid) {
+      fetchDebtPages(currGroup.gid);
+    }
+  }, [currGroup, isDebtChanged, paging]);
 
   return (
     <div id="debts_column">
@@ -60,6 +85,13 @@ const Debts = ({ debts, isDebtChanged, setDebt, setIsDebtChanged }) => {
             </>
           );
         })}
+      <Pagination
+        count={pageCount}
+        page={paging}
+        onChange={(e, page) => {
+          setPaging(page);
+        }}
+      />
     </div>
   );
 };

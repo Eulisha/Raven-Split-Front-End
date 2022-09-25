@@ -346,6 +346,10 @@ margin-right:20px
 .debt-item-not-involved{
 color:rgb(150 157 165);
 }
+.MuiPagination-ul{
+  justify-content: center !important;
+  margin-top: 10px !important;
+}
 
 
 /* debt detail */

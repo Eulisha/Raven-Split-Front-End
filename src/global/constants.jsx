@@ -9,6 +9,7 @@ const API_HOST = 'http://localhost:3000/api';
 const API_GET_DEBTS = `${API_HOST}/debt/debts`;
 const API_GET_DEBT_DETAILS = `${API_HOST}/debt/detail`;
 const API_GET_BALANCES = `${API_HOST}/debt/balances`;
+const API_GET_DEBT_PAGES = `${API_HOST}/debt/pages`;
 const API_GET_SETTLE = `${API_HOST}/debt/settle`;
 const API_GET_SELF_BALANCES = `${API_HOST}/debt/user-balances`;
 const API_POST_DEBT = `${API_HOST}/debt/debt`;
@@ -41,6 +42,7 @@ export default {
   API_GET_DEBTS,
   API_GET_DEBT_DETAILS,
   API_GET_BALANCES,
+  API_GET_DEBT_PAGES,
   API_GET_SETTLE,
   API_GET_SELF_BALANCES,
   API_POST_DEBT,
