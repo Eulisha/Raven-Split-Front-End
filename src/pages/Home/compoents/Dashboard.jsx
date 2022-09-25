@@ -27,7 +27,12 @@ const Dashboard = (isGroupChanged) => {
     fetchSelfBalances();
   }, [isGroupChanged]);
 
-  return <div className="self-balance-area">{selfBalance.summary && <Dashboard_list selfBalance={selfBalance} />}</div>;
+  // return <div className="self-balance-area">{selfBalance.summary && <Dashboard_list selfBalance={selfBalance} />}</div>;
+  return (
+    <div className="self-balance-area">
+      <Dashboard_list selfBalance={selfBalance} />
+    </div>
+  );
 };
 
 export default Dashboard;

@@ -4,32 +4,34 @@ import Icons from '../../../global/Icons';
 const Dashboard_list = ({ selfBalance }) => {
   return (
     <>
-      <Row className="dashboard-self-summary-row">
-        <Col className="dashboard-self-summary-col">
-          <Card className="dashboard-self-summary-card own-bg">
-            <Card.Body className="dashboard-self-summary-card-body">
-              <Card.Title className="dashboard-self-summary-card-title">Own</Card.Title>
-              <Card.Text className="dashboard-self-summary-card-amount-own">{`NT$ ${selfBalance.summary.borrow}`}</Card.Text>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col className="dashboard-self-summary-col">
-          <Card className="dashboard-self-summary-card total-bg">
-            <Card.Body className="dashboard-self-summary-card-body">
-              <Card.Title className="dashboard-self-summary-card-title">Net</Card.Title>
-              <Card.Text className="dashboard-self-summary-card-amount-total">{`NT$ ${selfBalance.summary.net}`}</Card.Text>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col className="dashboard-self-summary-col">
-          <Card className="dashboard-self-summary-card owned-bg">
-            <Card.Body className="dashboard-self-summary-card-body">
-              <Card.Title className="dashboard-self-summary-card-title">Owned</Card.Title>
-              <Card.Text className="dashboard-self-summary-card-amount-owned">{`NT$ ${selfBalance.summary.lend}`}</Card.Text>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
+      {selfBalance.summary && (
+        <Row className="dashboard-self-summary-row">
+          <Col className="dashboard-self-summary-col">
+            <Card className="dashboard-self-summary-card own-bg">
+              <Card.Body className="dashboard-self-summary-card-body">
+                <Card.Title className="dashboard-self-summary-card-title">Own</Card.Title>
+                <Card.Text className="dashboard-self-summary-card-amount-own">{`NT$ ${selfBalance.summary.borrow}`}</Card.Text>
+              </Card.Body>
+            </Card>
+          </Col>
+          <Col className="dashboard-self-summary-col">
+            <Card className="dashboard-self-summary-card total-bg">
+              <Card.Body className="dashboard-self-summary-card-body">
+                <Card.Title className="dashboard-self-summary-card-title">Net</Card.Title>
+                <Card.Text className="dashboard-self-summary-card-amount-total">{`NT$ ${selfBalance.summary.net}`}</Card.Text>
+              </Card.Body>
+            </Card>
+          </Col>
+          <Col className="dashboard-self-summary-col">
+            <Card className="dashboard-self-summary-card owned-bg">
+              <Card.Body className="dashboard-self-summary-card-body">
+                <Card.Title className="dashboard-self-summary-card-title">Owned</Card.Title>
+                <Card.Text className="dashboard-self-summary-card-amount-owned">{`NT$ ${selfBalance.summary.lend}`}</Card.Text>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      )}
       <div className="self-balance-list">
         <div key="self-balance-list-own" className="self-balance-list-own">
           <div className="self-balance-list-title">YOU OWE</div>

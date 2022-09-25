@@ -81,8 +81,9 @@ const EditGroup = ({ setEditingShow, editingShow }) => {
       const newGroupUsers = { group_name: inputGroupName.current.value, group_type, groupUsers: [] };
       //[{uid:1,email:a@a.com,role:2}]
 
+      console.log(editedGroupUserIds);
       editedGroupUserIds.map((userId) => {
-        // console.log('editedGroupUserId map');
+        console.log('editedGroupUserId', userId, groupUsers);
         if (!groupUsers.includes(userId)) {
           //將新增的加入arr
           const newGroupUser = { uid: userId, email: editedGroupUserEmails[userId], role: group_type === '1' ? 2 : group_type === '2' ? 4 : 1 };

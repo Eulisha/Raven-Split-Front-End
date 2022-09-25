@@ -42,7 +42,8 @@ const App = () => {
     <User.Provider value={{ user, setUser }}>
       <div className="App">
         <Routes className="App">
-          {user.id && <Route id="home_container" element={<Home user={user} />} path="/dashboard" />}
+          {/* {user.id && <Route id="home_container" element={<Home user={user} />} path="/dashboard" />} */}
+          <Route id="home_container" element={<Home user={user} />} path="/dashboard" />
           <Route element={<Login />} path="/login" />
         </Routes>
       </div>
