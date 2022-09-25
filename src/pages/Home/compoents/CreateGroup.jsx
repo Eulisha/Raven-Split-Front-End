@@ -5,6 +5,7 @@ import constants from '../../../global/constants';
 import { User } from '../../App';
 import { GroupInfo } from './Home';
 import { MdDelete } from 'react-icons/md';
+import Swal from 'sweetalert2';
 
 const CreateGroup = ({ location, setEditingShow, editingShow }) => {
   console.log('@Creat Group');
@@ -47,7 +48,12 @@ const CreateGroup = ({ location, setEditingShow, editingShow }) => {
     console.log(Object.values(editedGroupUserEmails), inputUserEmail.current.value);
     if (Object.values(editedGroupUserEmails).includes(inputUserEmail.current.value)) {
       inputUserEmail.current.value = '';
-      return alert('Member already in list above.');
+      return Swal.fire({
+        title: 'Error!',
+        text: 'Member already in list above.',
+        icon: 'error',
+        confirmButtonText: 'Cool',
+      });
     }
     const token = localStorage.getItem('accessToken');
     const fetchUser = async () => {
@@ -68,7 +74,12 @@ const CreateGroup = ({ location, setEditingShow, editingShow }) => {
         inputUserEmail.current.value = '';
       } catch (err) {
         console.log(err.response.data.err);
-        return alert(err.response.data.err);
+        return Swal.fire({
+          title: 'Error!',
+          text: err.response.data.err,
+          icon: 'error',
+          confirmButtonText: 'Cool',
+        });
       }
     };
     fetchUser();
@@ -123,7 +134,12 @@ const CreateGroup = ({ location, setEditingShow, editingShow }) => {
       setEditingShow(false);
     } catch (err) {
       console.log(err.response.data.err);
-      return alert(err.response.data.err);
+      return Swal.fire({
+        title: 'Error!',
+        text: err.response.data.err,
+        icon: 'error',
+        confirmButtonText: 'Cool',
+      });
     }
   };
 

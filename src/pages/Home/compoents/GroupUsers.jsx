@@ -4,6 +4,7 @@ import constants from '../../../global/constants';
 import Balance from './Balance';
 // import { User } from '../../App';
 import { GroupInfo } from './Home';
+import Swal from 'sweetalert2';
 // import { RiUserSettingsLine } from 'react-icons/ri';
 {
   /* <RiUserSettingsLine style={{ marginLeft: '10px' }} /> */
@@ -41,7 +42,12 @@ const GroupUsers = ({ setGroupUsers, setGroupUserNames, setGroupUserEmails, isDe
         setGroupUserEmails(userEmails);
       } catch (err) {
         console.log(err.response.data.err);
-        return alert(err.response.data.err);
+        return Swal.fire({
+          title: 'Error!',
+          text: err.response.data.err,
+          icon: 'error',
+          confirmButtonText: 'Cool',
+        });
       }
     };
     if (gid) {

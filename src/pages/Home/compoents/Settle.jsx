@@ -3,6 +3,7 @@ import { useState, useEffect, useRef, useContext } from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
 import constants from '../../../global/constants';
 import { GroupInfo } from './Home';
+import Swal from 'sweetalert2';
 
 const SettleButton = ({ setIsDebtChanged }) => {
   let CurrGroupInfo = useContext(GroupInfo);
@@ -50,7 +51,12 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
       } catch (err) {
         console.log(err);
         console.log(err.response.data.err);
-        return alert(err.response.data.err);
+        return Swal.fire({
+          title: 'Error!',
+          text: err.response.data.err,
+          icon: 'error',
+          confirmButtonText: 'Cool',
+        });
       }
     };
     fetchGetSettle();
@@ -85,7 +91,12 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
       onHide();
     } catch (err) {
       console.log(err.response.data.err);
-      return alert(err.response.data.err);
+      return Swal.fire({
+        title: 'Error!',
+        text: err.response.data.err,
+        icon: 'error',
+        confirmButtonText: 'Cool',
+      });
     }
   };
 

@@ -8,7 +8,7 @@ import constants from '../global/constants';
 import axios from 'axios';
 // import './style.scss';
 import '@coreui/coreui/dist/css/coreui.min.css';
-import { Alert } from '@mui/material';
+import Swal from 'sweetalert2';
 
 export const User = React.createContext();
 
@@ -16,7 +16,6 @@ const App = () => {
   console.log('@App');
   const navigate = useNavigate();
   const [user, setUser] = useState({});
-  const [showAlert, setShowAlert] = useState(false);
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -25,8 +24,12 @@ const App = () => {
         const token = localStorage.getItem('accessToken');
         if (!token) {
           console.log('no token');
-          setShowAlert(true);
-          // alert('Please Log In First!');
+          Swal.fire({
+            title: 'Error!',
+            text: 'Please login first',
+            icon: 'error',
+            confirmButtonText: 'Cool',
+          });
           navigate('/login');
           return;
         }
@@ -40,8 +43,13 @@ const App = () => {
         setUser(data.data);
       } catch (err) {
         console.log(err.response.data.err);
-        <Alert severity="error">{err.response}</Alert>;
-        navigate('/login');
+        Swal.fire({
+          title: 'Error!',
+          text: err.response.data.err,
+          icon: 'error',
+          confirmButtonText: 'Cool',
+        });
+        return navigate('/login');
       }
     };
     if (window.location.href !== `${constants.HOST}/login`) {
@@ -58,9 +66,6 @@ const App = () => {
           <Route element={<Login />} path="/login" />
         </Routes>
       </div>
-      <Alert severity="error" show={showAlert}>
-        Please Log In First!
-      </Alert>
     </User.Provider>
   );
 };

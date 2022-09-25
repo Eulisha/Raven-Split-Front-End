@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useState } from 'react';
 import constants from '../../../global/constants';
 import { Form, Button, Card } from 'react-bootstrap';
+import Swal from 'sweetalert2';
 
 const SignUp = ({ setHasAccount }) => {
   console.log('@Signup');
@@ -28,7 +29,12 @@ const SignUp = ({ setHasAccount }) => {
       window.location.assign(`${constants.HOST}/dashboard`);
     } catch (err) {
       console.log(err.response.data.err);
-      return alert(err.response.data.err);
+      return Swal.fire({
+        title: 'Error!',
+        text: err.response.data.err,
+        icon: 'error',
+        confirmButtonText: 'Cool',
+      });
     }
   };
 

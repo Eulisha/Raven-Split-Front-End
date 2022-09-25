@@ -6,6 +6,7 @@ import { User } from '../../App';
 import { GroupInfo } from './Home';
 import { MdDelete } from 'react-icons/md';
 import { useEffect } from 'react';
+import Swal from 'sweetalert2';
 
 const EditGroup = ({ setEditingShow, editingShow }) => {
   console.log('@Edit Group');
@@ -30,7 +31,12 @@ const EditGroup = ({ setEditingShow, editingShow }) => {
   const handleAddUser = () => {
     if (Object.values(editedGroupUserEmails).includes(inputUserEmail.current.value)) {
       inputUserEmail.current.value = '';
-      return alert('Member already in list above .');
+      return Swal.fire({
+        title: 'Error!',
+        text: 'Member already in list above .',
+        icon: 'error',
+        confirmButtonText: 'Cool',
+      });
     }
     const token = localStorage.getItem('accessToken');
     const fetchUser = async () => {
@@ -53,7 +59,12 @@ const EditGroup = ({ setEditingShow, editingShow }) => {
         inputUserEmail.current.value = '';
       } catch (err) {
         console.log(err.response.data.err);
-        return alert(err.response.data.err);
+        return Swal.fire({
+          title: 'Error!',
+          text: err.response.data.err,
+          icon: 'error',
+          confirmButtonText: 'Cool',
+        });
       }
     };
     fetchUser();
@@ -109,7 +120,12 @@ const EditGroup = ({ setEditingShow, editingShow }) => {
       setCurrGroup({ ...currGroup, ['name']: inputGroupName.current.value });
     } catch (err) {
       console.log(err.response.data.err);
-      return alert(err.response.data.err);
+      return Swal.fire({
+        title: 'Error!',
+        text: err.response.data.err,
+        icon: 'error',
+        confirmButtonText: 'Cool',
+      });
     }
   };
 

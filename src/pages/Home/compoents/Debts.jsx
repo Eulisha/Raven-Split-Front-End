@@ -6,6 +6,7 @@ import DebtList from './DebtList';
 import { Accordion } from 'react-bootstrap';
 import { GroupInfo } from './Home';
 import { Pagination } from '@mui/material';
+import Swal from 'sweetalert2';
 
 const Debts = ({ debts, isDebtChanged, setDebt, setIsDebtChanged }) => {
   console.log('@Debts');
@@ -31,7 +32,12 @@ const Debts = ({ debts, isDebtChanged, setDebt, setIsDebtChanged }) => {
         setDebt(data.data);
       } catch (err) {
         console.log(err.response.data.err);
-        return alert(err.response.data.err);
+        return Swal.fire({
+          title: 'Error!',
+          text: err.response.data.err,
+          icon: 'error',
+          confirmButtonText: 'Cool',
+        });
       }
     };
     if (currGroup.gid) {
@@ -53,7 +59,12 @@ const Debts = ({ debts, isDebtChanged, setDebt, setIsDebtChanged }) => {
         setPageCount(data.data.pageCount);
       } catch (err) {
         console.log(err.response.data.err);
-        return alert(err.response.data.err);
+        return Swal.fire({
+          title: 'Error!',
+          text: err.response.data.err,
+          icon: 'error',
+          confirmButtonText: 'Cool',
+        });
       }
     };
     if (currGroup.gid) {
