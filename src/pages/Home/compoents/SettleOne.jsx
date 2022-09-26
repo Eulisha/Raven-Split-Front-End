@@ -126,14 +126,13 @@ const SettleOneWindow = ({ gid, settleFromId, settleFromName, settleToId, settle
         settle_detail: settle,
       };
       console.log('FRONT for settle pair: ', body);
-      // const { data } = await axios.post(`${constants.API_POST_SETTLE_PAIR}/${gid}/${settleFromId}/${settleToId}`, body, {
-      const result = await axios.post(`${constants.API_POST_SETTLE_PAIR}/${gid}/${settleFromId}/${settleToId}`, body, {
+      const { data } = await axios.post(`${constants.API_POST_SETTLE_PAIR}/${gid}/${settleFromId}/${settleToId}`, body, {
         headers: {
           authorization: `Bearer ${token}`,
         },
       });
 
-      console.log('BACKEND settle pair result: ', result);
+      console.log('BACKEND settle pair result: ', data);
       console.log(setIsDebtChanged);
       setSettle([]);
       setIsDebtChanged((prev) => {
