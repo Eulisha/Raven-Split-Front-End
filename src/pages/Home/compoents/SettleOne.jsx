@@ -135,12 +135,12 @@ const SettleOneWindow = ({ gid, settleFromId, settleFromName, settleToId, settle
 
       console.log('BACKEND settle pair result: ', result);
       console.log(setIsDebtChanged);
-      // setSettle([]);
-      // setIsDebtChanged((prev) => {
-      //   return !prev;
-      // });
+      setSettle([]);
+      setIsDebtChanged((prev) => {
+        return !prev;
+      });
 
-      // onHide();
+      onHide();
     } catch (err) {
       console.log(err.response.data.err);
       return Swal.fire({
