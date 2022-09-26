@@ -115,7 +115,8 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
   };
 
   //儲存DB
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
       //整理送後端格式
       const newDetails = [];

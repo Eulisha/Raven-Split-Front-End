@@ -97,7 +97,8 @@ const CreateGroup = ({ location, setEditingShow, editingShow }) => {
   };
 
   //儲存DB
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
       //整理送後端格式
       const newGroupUsers = { group_name: inputGroupName.current.value, group_type, groupUsers: [] };

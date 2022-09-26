@@ -112,7 +112,8 @@ const SettleOneWindow = ({ gid, settleFromId, settleFromName, settleToId, settle
     };
   }, []);
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     console.log('@handle submit settle pair');
     try {
       const token = localStorage.getItem('accessToken');
@@ -125,19 +126,21 @@ const SettleOneWindow = ({ gid, settleFromId, settleFromName, settleToId, settle
         settle_detail: settle,
       };
       console.log('FRONT for settle pair: ', body);
-      const { data } = await axios.post(`${constants.API_POST_SETTLE_PAIR}/${gid}/${settleFromId}/${settleToId}`, body, {
+      // const { data } = await axios.post(`${constants.API_POST_SETTLE_PAIR}/${gid}/${settleFromId}/${settleToId}`, body, {
+      const result = await axios.post(`${constants.API_POST_SETTLE_PAIR}/${gid}/${settleFromId}/${settleToId}`, body, {
         headers: {
           authorization: `Bearer ${token}`,
         },
       });
-      console.log('BACKEND settle pair result: ', data);
 
-      setSettle([]);
-      setIsDebtChanged((prev) => {
-        return !prev;
-      });
+      console.log('BACKEND settle pair result: ', result);
+      console.log(setIsDebtChanged);
+      // setSettle([]);
+      // setIsDebtChanged((prev) => {
+      //   return !prev;
+      // });
 
-      onHide();
+      // onHide();
     } catch (err) {
       console.log(err.response.data.err);
       return Swal.fire({
