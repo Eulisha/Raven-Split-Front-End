@@ -448,6 +448,21 @@ margin: 5px 0px 5px!important;
   margin:5px 30px;
 }
 
+/* btn區 */
+/* add-debt */
+.form-label{
+  margin: 5px !important;
+}
+.split-debt-input-wrapper{
+  display: flex;
+  flex-direction: column;
+  gap: 10px !important;
+  width: 50%;
+}
+.add-debt-total{
+  font-size: 20px !important;
+}
+
 /* 套件改色 */
 .accordion-item:last-of-type .accordion-button.collapsed{
 background-color: #fff !important;
