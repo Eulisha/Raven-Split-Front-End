@@ -153,16 +153,16 @@ const CreateGroup = ({ location, setEditingShow, editingShow }) => {
       aria-labelledby="contained-modal-title-vcenter"
     >
       <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">{`你正在新增${location}`}</Modal.Title>
+        <Modal.Title id="contained-modal-title-vcenter">Create Group</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>
           <Form.Group id="group_name">
-            <Form.Label>群組名稱</Form.Label>
-            <Form.Control ref={inputGroupName} type="text" />
+            <Form.Label>Group Name</Form.Label>
+            <Form.Control ref={inputGroupName} type="text" placeholder="give me a name" />
           </Form.Group>
           <Form.Group id="group_members">
-            <Form.Label>成員們</Form.Label>
+            <Form.Label>Members</Form.Label>
             {editedGroupUserIds.length > 1 ? (
               editedGroupUserIds.map((uid) => {
                 return (
@@ -192,10 +192,10 @@ const CreateGroup = ({ location, setEditingShow, editingShow }) => {
             )}
           </Form.Group>
           <Form.Group>
-            <div id="add_user">
-              <Form.Label>受邀人的信箱</Form.Label>
+            <div class="add-group-invite-friend">
+              <Form.Label>Invite Friend To Join</Form.Label>
               <InputGroup>
-                <Form.Control ref={inputUserEmail} id="add_user_email" type="email"></Form.Control>
+                <Form.Control ref={inputUserEmail} id="add_user_email" type="email" placeholder="enter email"></Form.Control>
                 <Button variant="outline-secondary" id="button-add" onClick={handleAddUser}>
                   Add
                 </Button>
