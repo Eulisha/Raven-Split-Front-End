@@ -16,7 +16,7 @@ const API_POST_DEBT = `${API_HOST}/debt/debt`;
 const API_PUT_DEBT = `${API_HOST}/debt/debt`;
 const API_DELETE_DEBT = `${API_HOST}/debt/debt`;
 const API_POST_SETTLE = `${API_HOST}/debt/settle`;
-const API_POST_SETTLE_PAIR = `${API_HOST}/debt/settle`;
+const API_POST_SETTLE_PAIR = `${API_HOST}/debt/settle-pair`;
 const API_POST_SETTLE_DONE = `${API_HOST}/debt/settle-done`;
 
 //Group
