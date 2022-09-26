@@ -108,6 +108,10 @@ const SettleOneWindow = ({ gid, settleFromId, settleFromName, settleToId, settle
       }
     };
     fetchGetSettle();
+
+    return () => {
+      console.log('test');
+    };
   }, []);
 
   const handleSubmit = async () => {
