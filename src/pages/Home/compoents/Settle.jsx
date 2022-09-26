@@ -64,6 +64,35 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
       }
     };
     fetchGetSettle();
+
+    return () => {
+      console.log('關掉彈窗了!!');
+
+      const fetchOnHide = async () => {
+        try {
+          const token = localStorage.getItem('accessToken');
+          const { data } = await axios.post(
+            `${constants.API_POST_SETTLE_DONE}/${gid}`,
+            {},
+            {
+              headers: {
+                authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          console.log('BACKEND settleDone result:  ', data.data);
+        } catch (err) {
+          console.log(err.response.data.err);
+          return Swal.fire({
+            title: 'Error!',
+            text: err.response.data.err,
+            icon: 'error',
+            confirmButtonText: 'Cool',
+          });
+        }
+      };
+      fetchOnHide();
+    };
   }, []);
 
   const handleSubmit = async () => {

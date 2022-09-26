@@ -84,7 +84,7 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
     };
     handleSum('sum');
   }, [split]);
-
+  //動態設定平分帳
   useEffect(() => {
     console.log(info, split);
     if (info.split_method === '1') {
