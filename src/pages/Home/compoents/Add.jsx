@@ -84,12 +84,13 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
     };
     handleSum('sum');
   }, [split]);
+
   useEffect(() => {
     // TODO:做到一半
     console.log(info);
-    console.log(split);
+    console.log('$$$$$$$', split);
     if (info.split_method === '1') {
-      setSplit({});
+      // setSplit({});
       const evenAmount = Math.ceil(info.total / groupUsers.length);
       const evenly = {};
       groupUsers.map((user) => {
@@ -100,7 +101,10 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
     }
     // setSplit();
   }, [info.split_method, info.total]);
-  useEffect(() => {}, [split]);
+
+  useEffect(() => {
+    console.log('%%%%%%%%%%%%%%%%', split);
+  }, [split]);
 
   //EventHandle
   const handleInfoChange = (prop) => (e) => {
@@ -241,32 +245,17 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
         <Form>
           <Form.Label>Split Debt</Form.Label>
           <Form.Group>
-            {info.split === '1' ? (
-              <ul>
-                {groupUsers.map((uid) => {
-                  return (
-                    <InputGroup key={uid} id={uid} className="debt-input">
-                      <InputGroup.Text>{groupUserNames[uid]}</InputGroup.Text>
-                      <InputGroup.Text>$</InputGroup.Text>
-                      <Form.Control id={Number(uid)} aria-label="Amount" readOnly onChange={handleSplitChange(Number(uid))} />
-                      {/* FIXME:readonly not work */}
-                    </InputGroup>
-                  );
-                })}
-              </ul>
-            ) : (
-              <ul>
-                {groupUsers.map((uid) => {
-                  return (
-                    <InputGroup key={uid} id={uid} className="debt-input">
-                      <InputGroup.Text>{groupUserNames[uid]}</InputGroup.Text>
-                      <InputGroup.Text>$</InputGroup.Text>
-                      <Form.Control id={Number(uid)} aria-label="Amount" defaultValue={split[uid] ? Number(split[uid]) : null} onChange={handleSplitChange(Number(uid))} />
-                    </InputGroup>
-                  );
-                })}
-              </ul>
-            )}
+            <ul>
+              {groupUsers.map((uid) => {
+                return (
+                  <InputGroup key={uid} id={uid} className="debt-input">
+                    <InputGroup.Text>{groupUserNames[uid]}</InputGroup.Text>
+                    <InputGroup.Text>$</InputGroup.Text>
+                    <Form.Control id={Number(uid)} aria-label="Amount" value={split[uid] ? Number(split[uid]) : null} onChange={handleSplitChange(Number(uid))} />
+                  </InputGroup>
+                );
+              })}
+            </ul>
             <Form.Label>Total {currencyFormat(currSum.total)}</Form.Label>
             <br />
             <Form.Label> {currencyFormat(currSum.total - currSum.sum)} Left</Form.Label>
