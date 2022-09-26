@@ -97,7 +97,6 @@ const Debts = ({ debts, isDebtChanged, setDebt, setIsDebtChanged }) => {
           );
         })}
       <Pagination
-        className="pagination"
         count={pageCount}
         page={paging}
         onChange={(e, page) => {
