@@ -116,7 +116,7 @@ const UserGroups = ({ setCurrGroup, isGroupChanged, setGroupUsers, setGroupUserN
         <CSidebarFooter>
           <button className="add-group-btn" onClick={() => setEditingShow(true)}>
             <CIcon icon={cilPlus} style={{ marginRight: '10px' }} />
-            新增群組
+            Create Group
           </button>
           <CNavItem
             href="/login"

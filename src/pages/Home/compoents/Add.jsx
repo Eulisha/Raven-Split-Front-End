@@ -6,6 +6,7 @@ import { User } from '../../App';
 import { GroupInfo } from './Home';
 import currencyFormat from '../../../global/utils';
 import Swal from 'sweetalert2';
+import { GiReceiveMoney } from 'react-icons/gi';
 
 const AddButton = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged }) => {
   const [editingShow, setEditingShow] = useState(false);
@@ -198,46 +199,48 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
   return (
     <Modal className="window" size="lg" aria-labelledby="contained-modal-title-vcenter" centered {...{ onHide, show }}>
       <Modal.Header closeButton>
-        <Modal.Title>帳怎麼分呢？</Modal.Title>
+        <Modal.Title>How to share expense?</Modal.Title>
       </Modal.Header>
-      <Modal.Body>
-        <Form>
+      <Modal.Body className="add-debt-modal-body">
+        <Form className="add-debt-form">
           <Form.Group aria-label="add-debt-form-group">
-            <Form.Label className="add-debt-form-label-top">
-              Date: <Form.Control type="date" defaultValue={debtInfo ? debtInfo.date : info.date} onChange={handleInfoChange('date')} />
-            </Form.Label>
-            <Form.Label className="add-debt-form-label-top">
-              Title: <Form.Control type="text" name="title" defaultValue={debtInfo ? debtInfo.title : ''} onChange={handleInfoChange('title')} />
-            </Form.Label>
-            <Form.Label className="add-debt-form-label-top">
-              Total: <Form.Control type="number" name="total" defaultValue={debtInfo ? debtInfo.total : 0} onChange={handleInfoChange('total')} />
-            </Form.Label>
-            <Form.Label className="add-debt-form-label-top">
-              Paid By:
-              <Form.Select aria-label="dropdown paid by" className="add-debt-form-label-top" onChange={handleInfoChange('lender')}>
-                <option>{groupUserNames[info.lender]}</option>
-                {groupUsers.map((userId) => {
-                  if (userId !== info.lender) return <option value={userId}>{groupUserNames[userId]}</option>;
-                })}
-              </Form.Select>
-            </Form.Label>
-            <Form.Label>
-              Split Method
-              <Form.Select aria-label="drop dwon split method" onChange={handleInfoChange('split_method')}>
-                <option value={info.split_method} onChange={handleInfoChange('split_method')}>
-                  {constants.SPLIT_METHOD[info.split_method]}
-                </option>
-                {Object.keys(constants.SPLIT_METHOD).map((method) => {
-                  if (method !== info.split_method) return <option value={method}>{constants.SPLIT_METHOD[method]}</option>;
-                })}
-              </Form.Select>
-            </Form.Label>
+            <div className="add-debt-form-wrapper">
+              <Form.Label className="add-debt-form-label-top">
+                Date: <Form.Control type="date" defaultValue={debtInfo ? debtInfo.date : info.date} onChange={handleInfoChange('date')} />
+              </Form.Label>
+              <Form.Label className="add-debt-form-label-top">
+                Title: <Form.Control type="text" name="title" defaultValue={debtInfo ? debtInfo.title : ''} onChange={handleInfoChange('title')} />
+              </Form.Label>
+              <Form.Label className="add-debt-form-label-top">
+                Total: <Form.Control type="number" name="total" defaultValue={debtInfo ? debtInfo.total : 0} onChange={handleInfoChange('total')} />
+              </Form.Label>
+              <Form.Label className="add-debt-form-label-top">
+                Paid By:
+                <Form.Select aria-label="dropdown paid by" className="add-debt-form-label-top" onChange={handleInfoChange('lender')}>
+                  <option>{groupUserNames[info.lender]}</option>
+                  {groupUsers.map((userId) => {
+                    if (userId !== info.lender) return <option value={userId}>{groupUserNames[userId]}</option>;
+                  })}
+                </Form.Select>
+              </Form.Label>
+              <Form.Label>
+                Split Method
+                <Form.Select aria-label="drop dwon split method" onChange={handleInfoChange('split_method')}>
+                  <option value={info.split_method} onChange={handleInfoChange('split_method')}>
+                    {constants.SPLIT_METHOD[info.split_method]}
+                  </option>
+                  {Object.keys(constants.SPLIT_METHOD).map((method) => {
+                    if (method !== info.split_method) return <option value={method}>{constants.SPLIT_METHOD[method]}</option>;
+                  })}
+                </Form.Select>
+              </Form.Label>
+            </div>
           </Form.Group>
         </Form>
-        <Form>
+        <Form className="add-debt-split-detail-form">
           <Form.Label>Split Debt</Form.Label>
           <Form.Group>
-            <ul>
+            <ul className="add-debt-split-detail-list">
               {groupUsers.map((uid) => {
                 return (
                   <InputGroup key={uid} id={uid} className="debt-input">
@@ -248,9 +251,11 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
                 );
               })}
             </ul>
-            <Form.Label>Total {currencyFormat(currSum.total)}</Form.Label>
-            <br />
-            <Form.Label className="add-debt-total">Left {currencyFormat(currSum.total - currSum.sum)}</Form.Label>
+            <div className="add-debt-total-div">
+              <Form.Label className="add-debt-total">Total {currencyFormat(currSum.total)}</Form.Label>
+              <GiReceiveMoney style={{ width: '30px', height: '30px' }} />
+              <Form.Label className="add-debt-total">{currencyFormat(currSum.total - currSum.sum)} Left </Form.Label>
+            </div>
           </Form.Group>
         </Form>
       </Modal.Body>
