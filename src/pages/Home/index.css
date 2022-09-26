@@ -451,6 +451,8 @@ margin: 5px 0px 5px!important;
 /* 套件改色 */
 .accordion-item:last-of-type .accordion-button.collapsed{
 background-color: #fff !important;
+
+
 }
 
 

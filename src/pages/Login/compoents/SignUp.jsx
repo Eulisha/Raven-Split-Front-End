@@ -39,33 +39,36 @@ const SignUp = ({ setHasAccount }) => {
   };
 
   return (
-    <Card className="login-card">
-      <Form className="sign-up">
-        <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Label>Email address</Form.Label>
-          <Form.Control type="email" placeholder="Enter email" value={inputValues.email} onChange={handleInput('email')} />
-        </Form.Group>
-
-        <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Label>Password</Form.Label>
-          <Form.Control type="password" placeholder="Password" value={inputValues.password} onChange={handleInput('password')} />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="formBasicName">
-          <Form.Label>Name</Form.Label>
-          <Form.Control type="text" placeholder="Name" name="name" value={inputValues.name} onChange={handleInput('name')} />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="formBasicCellPhone">
-          <Form.Label>CellPhone</Form.Label>
-          <Form.Control type="text" placeholder="CellPhone" value={inputValues.cellphone} onChange={handleInput('cellphone')} />
-        </Form.Group>
-        <Button variant="primary" type="submit" onClick={hanldleSubmit}>
-          Submit
-        </Button>
-        <button className="change-login-method-btn" variant="outline-success" onClick={() => setHasAccount(false)}>
-          I don't have account yet
-        </button>
-      </Form>
-    </Card>
+    <div className="login-wrapper">
+      <img className="login-image" src="https://i.pinimg.com/originals/e4/c0/f9/e4c0f92fa80da7648307aae4a3896a11.gif" />
+      <Card className="login-card">
+        <Form className="sign-up">
+          <Form.Label className="login-title">Sign Up</Form.Label>
+          <Form.Group className="mb-3" controlId="formBasicEmail">
+            <Form.Label>Email address</Form.Label>
+            <Form.Control type="email" placeholder="Enter email" value={inputValues.email} onChange={handleInput('email')} />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="formBasicPassword">
+            <Form.Label>Password</Form.Label>
+            <Form.Control type="password" placeholder="Password" value={inputValues.password} onChange={handleInput('password')} />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="formBasicName">
+            <Form.Label>Name</Form.Label>
+            <Form.Control type="text" placeholder="Name" name="name" value={inputValues.name} onChange={handleInput('name')} />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="formBasicCellPhone">
+            <Form.Label>CellPhone</Form.Label>
+            <Form.Control type="text" placeholder="CellPhone" value={inputValues.cellphone} onChange={handleInput('cellphone')} />
+          </Form.Group>
+          <Button variant="info" type="submit" onClick={hanldleSubmit}>
+            Submit
+          </Button>
+          <button className="change-login-method-btn" variant="outline-success" onClick={() => setHasAccount(false)}>
+            I already have account
+          </button>
+        </Form>
+      </Card>
+    </div>
   );
 };
 

@@ -36,25 +36,28 @@ const SignIn = ({ setHasAccount }) => {
   };
 
   return (
-    <Card className="login-card">
-      <Form className="sign-in">
-        <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Label>Email address</Form.Label>
-          <Form.Control type="email" placeholder="Enter email" value={inputValues.email} onChange={handleInput('email')} />
-        </Form.Group>
-
-        <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Label>Password</Form.Label>
-          <Form.Control type="password" placeholder="Password" value={inputValues.password} onChange={handleInput('password')} />
-        </Form.Group>
-        <Button variant="primary" type="submit" onClick={hanldleSubmit}>
-          Submit
-        </Button>
-        <button className="change-login-method-btn" variant="outline-success" onClick={() => setHasAccount(false)}>
-          I don't have account yet
-        </button>
-      </Form>
-    </Card>
+    <div className="login-wrapper">
+      <img className="login-image" src="https://i.pinimg.com/originals/e4/c0/f9/e4c0f92fa80da7648307aae4a3896a11.gif" />
+      <Card className="login-card">
+        <Form className="sign-in">
+          <Form.Label className="login-title">Sign In</Form.Label>
+          <Form.Group className="mb-3" controlId="formBasicEmail">
+            <Form.Label>Email address</Form.Label>
+            <Form.Control type="email" placeholder="Enter email" value={inputValues.email} onChange={handleInput('email')} />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="formBasicPassword">
+            <Form.Label>Password</Form.Label>
+            <Form.Control type="password" placeholder="Password" value={inputValues.password} onChange={handleInput('password')} />
+          </Form.Group>
+          <Button className="sumbit-btn" variant="primary" type="submit" onClick={hanldleSubmit}>
+            Submit
+          </Button>
+          <button className="change-login-method-btn" variant="outline-success" onClick={() => setHasAccount(false)}>
+            I don't have account yet
+          </button>
+        </Form>
+      </Card>
+    </div>
   );
 };
 
