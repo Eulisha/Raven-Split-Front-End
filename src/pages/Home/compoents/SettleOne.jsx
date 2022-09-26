@@ -138,16 +138,18 @@ const SettleOneWindow = ({ gid, settleFromId, settleFromName, settleToId, settle
       setIsDebtChanged((prev) => {
         return !prev;
       });
-
+      console.log('finished');
       onHide();
     } catch (err) {
-      console.log(err.response.data.err);
-      return Swal.fire({
+      console.log(err.response);
+      onHide();
+      Swal.fire({
         title: 'Error!',
-        text: err.response.data.err,
+        text: err.response,
         icon: 'error',
         confirmButtonText: 'Cool',
       });
+      return;
     }
   };
 

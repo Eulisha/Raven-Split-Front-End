@@ -8,7 +8,7 @@ import SettleOne from './SettleOne';
 import currencyFormat from '../../../global/utils';
 import Swal from 'sweetalert2';
 
-const Balance = ({ isDebtChanged }) => {
+const Balance = ({ isDebtChanged, setIsDebtChanged }) => {
   console.log('@balance');
 
   //useContext
@@ -106,6 +106,7 @@ const Balance = ({ isDebtChanged }) => {
                                 settleToId={detail.borrower}
                                 settleToName={groupUserNames[detail.borrower]}
                                 settleAmount={detail.amount}
+                                setIsDebtChanged={setIsDebtChanged}
                               />
                             </ListGroup.Item>
                           );

@@ -51,6 +51,7 @@ const Home = () => {
                       setGroupUserEmails={setGroupUserEmails}
                       isDebtChanged={isDebtChanged}
                       isGroupChanged={isGroupChanged}
+                      setIsDebtChanged={setIsDebtChanged}
                     />
                   </div>
                 </>

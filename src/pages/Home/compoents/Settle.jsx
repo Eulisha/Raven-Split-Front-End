@@ -95,7 +95,8 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
     };
   }, []);
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     console.log('@handle settle submit group');
 
     try {
@@ -124,12 +125,14 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
       onHide();
     } catch (err) {
       console.log(err.response.data.err);
-      return Swal.fire({
+      Swal.fire({
         title: 'Error!',
         text: err.response.data.err,
         icon: 'error',
         confirmButtonText: 'Cool',
       });
+      onHide();
+      return;
     }
   };
 

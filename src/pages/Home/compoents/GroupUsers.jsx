@@ -10,7 +10,7 @@ import Swal from 'sweetalert2';
   /* <RiUserSettingsLine style={{ marginLeft: '10px' }} /> */
 }
 
-const GroupUsers = ({ setGroupUsers, setGroupUserNames, setGroupUserEmails, isDebtChanged, isGroupChanged }) => {
+const GroupUsers = ({ setGroupUsers, setGroupUserNames, setGroupUserEmails, isDebtChanged, isGroupChanged, setIsDebtChanged }) => {
   console.log('@GroupUsers');
   // let CurrUser = useContext(User);
   let CurrGroupInfo = useContext(GroupInfo);
@@ -60,7 +60,7 @@ const GroupUsers = ({ setGroupUsers, setGroupUserNames, setGroupUserEmails, isDe
       <div className="group-users-top-bar">
         <div> Group Balance</div>
       </div>
-      <Balance id="balance" isDebtChanged={isDebtChanged} />
+      <Balance id="balance" isDebtChanged={isDebtChanged} setIsDebtChanged={setIsDebtChanged} />
     </div>
   );
 };
