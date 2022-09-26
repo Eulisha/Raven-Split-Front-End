@@ -101,10 +101,10 @@ const Balance = ({ isDebtChanged, setIsDebtChanged }) => {
                               )}
                               <SettleOne.SettleOneButton
                                 key={detail.id}
-                                settleFromId={detail.lender}
-                                settleFromName={groupUserNames[detail.lender]}
-                                settleToId={detail.borrower}
-                                settleToName={groupUserNames[detail.borrower]}
+                                settleFromId={detail.borrower}
+                                settleFromName={groupUserNames[detail.borrower]}
+                                settleToId={detail.lender}
+                                settleToName={groupUserNames[detail.lender]}
                                 settleAmount={detail.amount}
                                 setIsDebtChanged={setIsDebtChanged}
                               />
