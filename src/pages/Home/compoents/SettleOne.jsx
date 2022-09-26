@@ -18,6 +18,33 @@ const SettleOneButton = ({ ownStatus, settleFromId, settleFromName, settleToId, 
   const [editingShow, setEditingShow] = useState(false);
   console.log('settleToId, settleToName, gid: ', settleToId, settleToName, gid);
 
+  //FIXME: 放在這裡不行，要再想一下
+  useEffect(() => {
+    const fetchOnHide = async () => {
+      try {
+        const token = localStorage.getItem('accessToken');
+        const { data } = await axios.post(`${constants.API_POST_SETTLE_DONE}/${gid}`, {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        });
+        console.log('BACKEND settleDone result:  ', data.data);
+      } catch (err) {
+        console.log(err.response.data.err);
+        return Swal.fire({
+          title: 'Error!',
+          text: err.response.data.err,
+          icon: 'error',
+          confirmButtonText: 'Cool',
+        });
+      }
+    };
+    console.log('確認跳出去是否有正確設定editingShow:', editingShow);
+    if (!editingShow) {
+      fetchOnHide();
+    }
+  }, [editingShow]);
+
   return (
     <div className="group-balance-list-settle-button-wrapper">
       <Button size="sm" variant="outline-info" className="group-balance-list-settle-button" onClick={() => setEditingShow(true)}>
@@ -81,6 +108,10 @@ const SettleOneWindow = ({ gid, settleFromId, settleFromName, settleToId, settle
       }
     };
     fetchGetSettle();
+
+    return () => {
+      console.log('test');
+    };
   }, []);
 
   const handleSubmit = async () => {
