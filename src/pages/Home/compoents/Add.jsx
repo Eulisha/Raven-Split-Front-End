@@ -206,19 +206,19 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
       </Modal.Header>
       <Modal.Body>
         <Form>
-          <Form.Group>
-            <Form.Label>
+          <Form.Group aria-label="add-debt-form-group">
+            <Form.Label className="add-debt-form-label-top">
               Date: <Form.Control type="date" defaultValue={debtInfo ? debtInfo.date : info.date} onChange={handleInfoChange('date')} />
             </Form.Label>
-            <Form.Label>
+            <Form.Label className="add-debt-form-label-top">
               Title: <Form.Control type="text" name="title" defaultValue={debtInfo ? debtInfo.title : ''} onChange={handleInfoChange('title')} />
             </Form.Label>
-            <Form.Label>
+            <Form.Label className="add-debt-form-label-top">
               Total: <Form.Control type="number" name="total" defaultValue={debtInfo ? debtInfo.total : 0} onChange={handleInfoChange('total')} />
             </Form.Label>
-            <Form.Label>
+            <Form.Label className="add-debt-form-label-top">
               Paid By:
-              <Form.Select aria-label="dropdown paid by" onChange={handleInfoChange('lender')}>
+              <Form.Select aria-label="dropdown paid by" className="add-debt-form-label-top" onChange={handleInfoChange('lender')}>
                 <option>{groupUserNames[info.lender]}</option>
                 {groupUsers.map((userId) => {
                   if (userId !== info.lender) return <option value={userId}>{groupUserNames[userId]}</option>;
@@ -242,7 +242,7 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
           <Form.Label>Split Debt</Form.Label>
           <Form.Group>
             {info.split === '1' ? (
-              <ul>
+              <ul className="split-debt-input-wrapper">
                 {groupUsers.map((uid) => {
                   return (
                     <InputGroup key={uid} id={uid} className="debt-input">
@@ -255,7 +255,7 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
                 })}
               </ul>
             ) : (
-              <ul>
+              <ul className="split-debt-input-wrapper">
                 {groupUsers.map((uid) => {
                   return (
                     <InputGroup key={uid} id={uid} className="debt-input">
@@ -267,9 +267,9 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
                 })}
               </ul>
             )}
-            <Form.Label>Total {currencyFormat(currSum.total)}</Form.Label>
+            <Form.Label className="add-debt-total">Total {currencyFormat(currSum.total)}</Form.Label>
             <br />
-            <Form.Label> {currencyFormat(currSum.total - currSum.sum)} Left</Form.Label>
+            <Form.Label className="add-debt-total">Left {currencyFormat(currSum.total - currSum.sum)}</Form.Label>
           </Form.Group>
         </Form>
       </Modal.Body>
