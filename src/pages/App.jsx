@@ -18,22 +18,15 @@ const App = () => {
   const [user, setUser] = useState({});
 
   useEffect(() => {
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+
     const fetchUserInfo = async () => {
       console.log('here');
       try {
-        const token = localStorage.getItem('accessToken');
-        if (!token) {
-          console.log('no token');
-          Swal.fire({
-            title: 'Error!',
-            text: 'Please login first',
-            icon: 'error',
-            confirmButtonText: 'Cool',
-          });
-          navigate('/login');
-          return;
-        }
-
         const { data } = await axios.get(constants.API_GET_USER_INFO, {
           headers: {
             authorization: `Bearer ${token}`,
@@ -53,7 +46,6 @@ const App = () => {
       }
     };
     if (window.location.href !== `${constants.HOST}/login`) {
-      console.log('in');
       fetchUserInfo();
     }
   }, []);
@@ -62,7 +54,7 @@ const App = () => {
     <User.Provider value={{ user, setUser }}>
       <div className="App">
         <Routes className="App">
-          <Route id="home_container" element={<Home user={user} />} path="/dashboard" />
+          {user.id && <Route id="home_container" element={<Home user={user} />} path="/dashboard" />}
           <Route element={<Login />} path="/login" />
         </Routes>
       </div>
