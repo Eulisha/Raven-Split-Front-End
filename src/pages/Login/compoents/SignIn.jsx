@@ -25,13 +25,23 @@ const SignIn = ({ setHasAccount }) => {
       localStorage.setItem('accessToken', data.data.accessToken);
       window.location.assign(`${constants.HOST}/dashboard`);
     } catch (err) {
-      console.log(err.response.data.err);
-      return Swal.fire({
-        title: 'Error!',
-        text: err.response.data.err,
-        icon: 'error',
-        confirmButtonText: 'Cool',
-      });
+      console.log(err.response);
+      if (err.response.data.provider) {
+        //從validator來的error是array形式
+        return Swal.fire({
+          title: 'Error!',
+          text: err.response.data.err[0].msg,
+          icon: 'error',
+          confirmButtonText: 'Cool',
+        });
+      } else {
+        return Swal.fire({
+          title: 'Error!',
+          text: err.response.data.err,
+          icon: 'error',
+          confirmButtonText: 'Cool',
+        });
+      }
     }
   };
 

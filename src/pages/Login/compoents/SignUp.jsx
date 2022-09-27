@@ -3,6 +3,7 @@ import { useState } from 'react';
 import constants from '../../../global/constants';
 import { Form, Button, Card } from 'react-bootstrap';
 import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
 
 const SignUp = ({ setHasAccount }) => {
   console.log('@Signup');
@@ -15,6 +16,7 @@ const SignUp = ({ setHasAccount }) => {
     provider: 'native',
   });
   // const [submitted, setSubmitted] = useState(false);
+  const navigate = useNavigate();
 
   //event handler
   const handleInput = (prop) => (e) => {
@@ -26,15 +28,26 @@ const SignUp = ({ setHasAccount }) => {
     try {
       const { data } = await axios.post(`${constants.API_POST_SIGNUP}`, inputValues);
       localStorage.setItem('accessToken', data.data.accessToken);
-      window.location.assign(`${constants.HOST}/dashboard`);
+      // window.location.assign(`${constants.HOST}/dashboard`);
+      navigate('/dashboard');
     } catch (err) {
       console.log(err.response.data.err);
-      return Swal.fire({
-        title: 'Error!',
-        text: err.response.data.err,
-        icon: 'error',
-        confirmButtonText: 'Cool',
-      });
+      if (err.response.data.provider) {
+        //從validator來的error是array形式
+        return Swal.fire({
+          title: 'Error!',
+          text: err.response.data.err[0].msg,
+          icon: 'error',
+          confirmButtonText: 'Cool',
+        });
+      } else {
+        return Swal.fire({
+          title: 'Error!',
+          text: err.response.data.err,
+          icon: 'error',
+          confirmButtonText: 'Cool',
+        });
+      }
     }
   };
 
