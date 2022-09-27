@@ -32,9 +32,9 @@ const DebtList = ({ debtInfo }) => {
             <>
               <span className="you">{`${isOwned === true ? 'You Lent' : `${groupUserNames[lender]} Lent You`}`}</span>
               {isOwned ? (
-                <span className="you debt-item-amount owned-font">{currencyFormat(ownAmount)}</span>
+                <span className="you debt-item-amount owed-font">{currencyFormat(ownAmount)}</span>
               ) : (
-                <span className="you debt-item-amount own-font">{currencyFormat(ownAmount)}</span>
+                <span className="you debt-item-amount owe-font">{currencyFormat(ownAmount)}</span>
               )}
             </>
           )}

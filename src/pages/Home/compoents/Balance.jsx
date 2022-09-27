@@ -74,12 +74,12 @@ const Balance = ({ isDebtChanged, setIsDebtChanged }) => {
                         {userBalance.balance >= 0 ? (
                           <>
                             <span>paid </span>
-                            <span className="owned-font">{currencyFormat(userBalance.balance)} </span>
+                            <span className="owed-font">{currencyFormat(userBalance.balance)} </span>
                           </>
                         ) : (
                           <>
                             <span>owes</span>
-                            <span className="own-font">{currencyFormat(-userBalance.balance)} </span>
+                            <span className="owe-font">{currencyFormat(-userBalance.balance)} </span>
                           </>
                         )}
                       </div>
@@ -94,14 +94,14 @@ const Balance = ({ isDebtChanged, setIsDebtChanged }) => {
                                 <div className="group-balance-detail-item-wrapper">
                                   <div>owed by</div>
                                   <div>{`${CurrGroupInfo.groupUserNames[detail.borrower]}`}</div>
-                                  <div className="own-font">{currencyFormat(detail.amount)}</div>
+                                  <div className="owe-font">{currencyFormat(detail.amount)}</div>
                                 </div>
                               ) : (
                                 //header是borrower所以裡面是lender
                                 <div className="group-balance-detail-item-wrapper">
                                   <div>paid by</div>
                                   <div>{`${CurrGroupInfo.groupUserNames[detail.lender]}`}</div>
-                                  <div className="owned-font">{currencyFormat(detail.amount)}</div>
+                                  <div className="owed-font">{currencyFormat(detail.amount)}</div>
                                 </div>
                               )}
                               <SettleOne.SettleOneButton

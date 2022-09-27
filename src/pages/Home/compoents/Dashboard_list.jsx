@@ -8,10 +8,10 @@ const Dashboard_list = ({ selfBalance }) => {
       {selfBalance.summary && (
         <Row className="dashboard-self-summary-row">
           <Col className="dashboard-self-summary-col">
-            <Card className="dashboard-self-summary-card own-bg">
+            <Card className="dashboard-self-summary-card owe-bg">
               <Card.Body className="dashboard-self-summary-card-body">
                 <Card.Title className="dashboard-self-summary-card-title">Owe</Card.Title>
-                <Card.Text className="dashboard-self-summary-card-amount-own">{currencyFormat(selfBalance.summary.borrow)}</Card.Text>
+                <Card.Text className="dashboard-self-summary-card-amount-owe">{currencyFormat(selfBalance.summary.borrow)}</Card.Text>
               </Card.Body>
             </Card>
           </Col>
@@ -24,28 +24,28 @@ const Dashboard_list = ({ selfBalance }) => {
             </Card>
           </Col>
           <Col className="dashboard-self-summary-col">
-            <Card className="dashboard-self-summary-card owned-bg">
+            <Card className="dashboard-self-summary-card owed-bg">
               <Card.Body className="dashboard-self-summary-card-body">
                 <Card.Title className="dashboard-self-summary-card-title">Owed</Card.Title>
-                <Card.Text className="dashboard-self-summary-card-amount-owned">{currencyFormat(selfBalance.summary.lend)}</Card.Text>
+                <Card.Text className="dashboard-self-summary-card-amount-owed">{currencyFormat(selfBalance.summary.lend)}</Card.Text>
               </Card.Body>
             </Card>
           </Col>
         </Row>
       )}
       <div className="self-balance-list">
-        <div key="self-balance-list-own" className="self-balance-list-own">
+        <div key="self-balance-list-owe" className="self-balance-list-owe">
           <div className="self-balance-list-title">YOU OWE</div>
           {Object.keys(selfBalance).length > 0 &&
             selfBalance.borrow.map((user) => {
               return (
-                <div key={user.uid} className="self-balance-own-person-card">
-                  <div key={`self-balance-own-person-title-${user.uid}`} className="balance_total self-balance-own-person-title">
+                <div key={user.uid} className="self-balance-owe-person-card">
+                  <div key={`self-balance-owe-person-title-${user.uid}`} className="balance_total self-balance-owe-person-title">
                     <div>{user.user_name} </div>
                     <div>paid</div>
-                    <div className="own-font">{currencyFormat(user.total)}</div>
+                    <div className="owe-font">{currencyFormat(user.total)}</div>
                   </div>
-                  <ListGroup key={`self-balance-own-${user.uid}`}>
+                  <ListGroup key={`self-balance-owe-${user.uid}`}>
                     {user.pair ? <ListGroup.Item className="balance_pair self-balance-detail-item">Non-Group {currencyFormat(user.pair)}</ListGroup.Item> : ''}
                     {user.group_normal.map((group) => {
                       return (
@@ -78,18 +78,18 @@ const Dashboard_list = ({ selfBalance }) => {
               );
             })}
         </div>
-        <div key="self-balance-list-owned" className="self-balance-list-owned">
+        <div key="self-balance-list-owed" className="self-balance-list-owed">
           <div className="self-balance-list-title">YOU ARE OWED</div>
           {Object.keys(selfBalance).length > 0 &&
             selfBalance.lend.map((user) => {
               return (
-                <div key={user.uid} className="self-balance-owned-person-card">
-                  <div key={`self-balance-owned-person-title-${user.uid}`} className="balance_total self-balance-owned-person-title">
+                <div key={user.uid} className="self-balance-owed-person-card">
+                  <div key={`self-balance-owed-person-title-${user.uid}`} className="balance_total self-balance-owed-person-title">
                     <div>{user.user_name} </div>
                     <div>owes you</div>
-                    <div className="owned-font">{currencyFormat(user.total)}</div>
+                    <div className="owed-font">{currencyFormat(user.total)}</div>
                   </div>
-                  <ListGroup key={`self-balance-owned-${user.uid}`}>
+                  <ListGroup key={`self-balance-owed-${user.uid}`}>
                     {user.pair ? <ListGroup.Item className="balance_pair self-balance-detail-item">Non-Group {currencyFormat(user.pair)}</ListGroup.Item> : ''}
                     {user.group_normal.map((group) => {
                       return (
