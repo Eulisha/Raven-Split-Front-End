@@ -12,7 +12,7 @@ const DetailList = ({ details }) => {
   return (
     <>
       <ListGroup variant="flush" className="debt-detail-list">
-        <ListGroup.Item>Expense Details</ListGroup.Item>
+        <ListGroup.Item className="debt-detail-list-title">Expense Details</ListGroup.Item>
         {Object.keys(details).map((borrowerId) => {
           return (
             <ListGroup.Item key={borrowerId} className="debt-detail-item">
