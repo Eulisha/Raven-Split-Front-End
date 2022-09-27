@@ -78,7 +78,7 @@ const Balance = ({ isDebtChanged, setIsDebtChanged }) => {
                           </>
                         ) : (
                           <>
-                            <span>owns</span>
+                            <span>owes</span>
                             <span className="own-font">{currencyFormat(-userBalance.balance)} </span>
                           </>
                         )}
@@ -89,33 +89,30 @@ const Balance = ({ isDebtChanged, setIsDebtChanged }) => {
                         {userBalance.detail.map((detail) => {
                           return (
                             <ListGroup.Item key={detail.id} className="group-balance-detail-item">
-                              <p>123</p>
-                              {
-                                /* {detail.lender === userBalance.uid ? (
-                                //借款人 : 欠款人
+                              {detail.lender === userBalance.uid ? (
+                                //header是lender所以裡面是borrower
                                 <div className="group-balance-detail-item-wrapper">
-                                  <div>{'owned by'}</div>
+                                  <div>owed by</div>
                                   <div>{`${CurrGroupInfo.groupUserNames[detail.borrower]}`}</div>
                                   <div className="own-font">{currencyFormat(detail.amount)}</div>
                                 </div>
                               ) : (
+                                //header是borrower所以裡面是lender
                                 <div className="group-balance-detail-item-wrapper">
-                                  <div>{'paid by'}</div>
+                                  <div>paid by</div>
                                   <div>{`${CurrGroupInfo.groupUserNames[detail.lender]}`}</div>
                                   <div className="owned-font">{currencyFormat(detail.amount)}</div>
                                 </div>
                               )}
-                              */
-                                <SettleOne.SettleOneButton
-                                  key={detail.id}
-                                  settleFromId={detail.borrower}
-                                  settleFromName={groupUserNames[detail.borrower]}
-                                  settleToId={detail.lender}
-                                  settleToName={groupUserNames[detail.lender]}
-                                  settleAmount={detail.amount}
-                                  setIsDebtChanged={setIsDebtChanged}
-                                />
-                              }
+                              <SettleOne.SettleOneButton
+                                key={detail.id}
+                                settleFromId={detail.borrower}
+                                settleFromName={groupUserNames[detail.borrower]}
+                                settleToId={detail.lender}
+                                settleToName={groupUserNames[detail.lender]}
+                                settleAmount={detail.amount}
+                                setIsDebtChanged={setIsDebtChanged}
+                              />
                             </ListGroup.Item>
                           );
                         })}

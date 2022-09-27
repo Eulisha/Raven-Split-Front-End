@@ -14,21 +14,21 @@
 
   /* 色系 */
   /* 字 */
-  .owned-font{
+  .owed-font{
     color: rgb(66 170 182) !important;
   }
-  .own-font{
+  .owe-font{
     color: rgb(209 140 125) !important;
   }
   .total-font{
     color: #e1ce95 !important;
   }
   /* 背景 */
-  .owned-bg{
+  .owed-bg{
     /* background-color: rgb(66 170 182) !important; */
     background-color: #a9d6d6 !important;
   }
-  .own-bg{
+  .owe-bg{
     /* background-color: rgb(209 140 125) !important; */
     background-color: #eabcb2 !important;
   }
@@ -194,7 +194,7 @@
   font-size: 16px !important;
   color:rgba(86, 91, 98, 0.95) !important;
 }
-.dashboard-self-summary-card-amount-own, .dashboard-self-summary-card-amount-owned, .dashboard-self-summary-card-amount-total{
+.dashboard-self-summary-card-amount-owe, .dashboard-self-summary-card-amount-owed, .dashboard-self-summary-card-amount-total{
   font-size: 22px;
 }
 
@@ -204,7 +204,7 @@
   justify-content: space-between;
   border-radius: 5px;
 }
-.self-balance-list-own, .self-balance-list-owned{
+.self-balance-list-owe, .self-balance-list-owed{
   display: flex;
   flex-direction: column;
   width: 50%;
@@ -215,7 +215,7 @@
   border-radius: 5px;
   color:rgba(139, 144, 150, 0.95);
 }
-.self-balance-own-person-card, .self-balance-owned-person-card{
+.self-balance-owe-person-card, .self-balance-owed-person-card{
   border:solid #ffff 5px;
   border-radius: 5px; 
 }
@@ -226,7 +226,7 @@
   font-weight: 800;
 
 }
-.self-balance-own-person-title, .self-balance-owned-person-title{
+.self-balance-owe-person-title, .self-balance-owed-person-title{
   display: flex;
   justify-content: flex-start;
   font-size: 18px;
@@ -360,8 +360,13 @@ color:rgb(150 157 165);
 
 /* debt detail */
 .debt-detail-list{
-  width: 50%;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch;
+  gap: 10px;
+  width: 60%;
   font-size: 16px;
+  margin-left: 30px
 ;
 }
 
@@ -369,7 +374,7 @@ color:rgb(150 157 165);
   display: flex !important;
   justify-content: space-between;
   align-items: center;
-  margin-left: 20px;
+  /* margin-left: 20px; */
   padding: 0px !important;
 }
 

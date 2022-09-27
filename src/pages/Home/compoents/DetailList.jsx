@@ -3,6 +3,7 @@ import { ListGroup } from 'react-bootstrap';
 import { GroupInfo } from './Home';
 import Icons from '../../../global/Icons';
 import currencyFormat from '../../../global/utils';
+
 // import { NumericFormat } from 'react-number-format';
 
 const DetailList = ({ details }) => {
@@ -11,6 +12,7 @@ const DetailList = ({ details }) => {
   return (
     <>
       <ListGroup variant="flush" className="debt-detail-list">
+        <ListGroup.Item>Expense Details</ListGroup.Item>
         {Object.keys(details).map((borrowerId) => {
           return (
             <ListGroup.Item key={borrowerId} className="debt-detail-item">
@@ -18,7 +20,7 @@ const DetailList = ({ details }) => {
                 <Icons.UserIcon />
               </div>
               <div>{`${CurrGroupInfo.groupUserNames[borrowerId]}`}</div>
-              <div>owns</div>
+              {/* <div>owns</div> */}
               <div>{currencyFormat(details[borrowerId])}</div>
               {/* <NumericFormat value={details[borrowerId]} thousandSeparator="," disabled style={{ border: 'none', backgroundColor: 'inherit' }} />; */}
             </ListGroup.Item>

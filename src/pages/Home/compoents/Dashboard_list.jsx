@@ -10,7 +10,7 @@ const Dashboard_list = ({ selfBalance }) => {
           <Col className="dashboard-self-summary-col">
             <Card className="dashboard-self-summary-card own-bg">
               <Card.Body className="dashboard-self-summary-card-body">
-                <Card.Title className="dashboard-self-summary-card-title">Own</Card.Title>
+                <Card.Title className="dashboard-self-summary-card-title">Owe</Card.Title>
                 <Card.Text className="dashboard-self-summary-card-amount-own">{currencyFormat(selfBalance.summary.borrow)}</Card.Text>
               </Card.Body>
             </Card>
@@ -26,7 +26,7 @@ const Dashboard_list = ({ selfBalance }) => {
           <Col className="dashboard-self-summary-col">
             <Card className="dashboard-self-summary-card owned-bg">
               <Card.Body className="dashboard-self-summary-card-body">
-                <Card.Title className="dashboard-self-summary-card-title">Owned</Card.Title>
+                <Card.Title className="dashboard-self-summary-card-title">Owed</Card.Title>
                 <Card.Text className="dashboard-self-summary-card-amount-owned">{currencyFormat(selfBalance.summary.lend)}</Card.Text>
               </Card.Body>
             </Card>
@@ -86,7 +86,7 @@ const Dashboard_list = ({ selfBalance }) => {
                 <div key={user.uid} className="self-balance-owned-person-card">
                   <div key={`self-balance-owned-person-title-${user.uid}`} className="balance_total self-balance-owned-person-title">
                     <div>{user.user_name} </div>
-                    <div>owns you</div>
+                    <div>owes you</div>
                     <div className="owned-font">{currencyFormat(user.total)}</div>
                   </div>
                   <ListGroup key={`self-balance-owned-${user.uid}`}>

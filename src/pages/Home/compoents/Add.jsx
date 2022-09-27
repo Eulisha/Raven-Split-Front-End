@@ -66,6 +66,7 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
   const [info, setInfo] = useState(initialInfo);
   const [split, setSplit] = useState(oriSplit); //{uid:amount}
   const [currSum, setSum] = useState(oriSum);
+  // const [validated, setValidated] = useState(false);
 
   //Re-Render currSum
   //total
@@ -117,6 +118,7 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
   //儲存DB
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
       //整理送後端格式
       const newDetails = [];
@@ -207,17 +209,18 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
           <Form.Group aria-label="add-debt-form-group">
             <div className="add-debt-form-wrapper">
               <Form.Label className="add-debt-form-label-top">
-                Date: <Form.Control type="date" defaultValue={debtInfo ? debtInfo.date : info.date} onChange={handleInfoChange('date')} />
+                Date: <Form.Control required type="date" max="2023/09/27" defaultValue={debtInfo ? debtInfo.date : info.date} onChange={handleInfoChange('date')} />
               </Form.Label>
               <Form.Label className="add-debt-form-label-top">
-                Title: <Form.Control type="text" name="title" defaultValue={debtInfo ? debtInfo.title : ''} onChange={handleInfoChange('title')} />
+                Title: <Form.Control required type="text" name="title" defaultValue={debtInfo ? debtInfo.title : ''} onChange={handleInfoChange('title')} />
               </Form.Label>
               <Form.Label className="add-debt-form-label-top">
-                Total: <Form.Control type="number" name="total" defaultValue={debtInfo ? debtInfo.total : 0} onChange={handleInfoChange('total')} />
+                Total:{' '}
+                <Form.Control required type="number" min="0" max="100000000" name="total" defaultValue={debtInfo ? debtInfo.total : 0} onChange={handleInfoChange('total')} />
               </Form.Label>
-              <Form.Label className="add-debt-form-label-top">
+              <Form.Label required className="add-debt-form-label-top">
                 Paid By:
-                <Form.Select aria-label="dropdown paid by" className="add-debt-form-label-top" onChange={handleInfoChange('lender')}>
+                <Form.Select required aria-label="dropdown paid by" className="add-debt-form-label-top" onChange={handleInfoChange('lender')}>
                   <option>{groupUserNames[info.lender]}</option>
                   {groupUsers.map((userId) => {
                     if (userId !== info.lender) return <option value={userId}>{groupUserNames[userId]}</option>;
@@ -226,7 +229,7 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
               </Form.Label>
               <Form.Label>
                 Split Method
-                <Form.Select aria-label="drop dwon split method" onChange={handleInfoChange('split_method')}>
+                <Form.Select required aria-label="drop dwon split method" onChange={handleInfoChange('split_method')}>
                   <option value={info.split_method} onChange={handleInfoChange('split_method')}>
                     {constants.SPLIT_METHOD[info.split_method]}
                   </option>
@@ -247,7 +250,15 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
                   <InputGroup key={uid} id={uid} className="debt-input">
                     <InputGroup.Text>{groupUserNames[uid]}</InputGroup.Text>
                     <InputGroup.Text>$</InputGroup.Text>
-                    <Form.Control id={Number(uid)} aria-label="Amount" value={split[uid] ? Number(split[uid]) : null} onChange={handleSplitChange(Number(uid))} />
+                    <Form.Control
+                      id={Number(uid)}
+                      type="number"
+                      min="0"
+                      max="100000000"
+                      aria-label="Amount"
+                      value={split[uid] ? Number(split[uid]) : null}
+                      onChange={handleSplitChange(Number(uid))}
+                    />
                   </InputGroup>
                 );
               })}

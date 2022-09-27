@@ -30,7 +30,7 @@ const DebtList = ({ debtInfo }) => {
             <span className="you debt-item-not-involved">Not Involved</span>
           ) : (
             <>
-              <span className="you">{`${isOwned === true ? 'You Paid' : 'You Lent'}`}</span>
+              <span className="you">{`${isOwned === true ? 'You Lent' : `${groupUserNames[lender]} Lent You`}`}</span>
               {isOwned ? (
                 <span className="you debt-item-amount owned-font">{currencyFormat(ownAmount)}</span>
               ) : (
