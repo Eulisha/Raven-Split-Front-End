@@ -193,7 +193,7 @@ const CreateGroup = ({ location, setEditingShow, editingShow }) => {
             )}
           </Form.Group>
           <Form.Group>
-            <div class="add-group-invite-friend">
+            <div className="add-group-invite-friend">
               <Form.Label>Invite Friend To Join</Form.Label>
               <InputGroup>
                 <Form.Control ref={inputUserEmail} id="add_user_email" type="email" placeholder="enter email"></Form.Control>
