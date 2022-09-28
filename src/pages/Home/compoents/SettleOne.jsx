@@ -60,27 +60,27 @@ const SettleOneWindow = ({ gid, settleFromId, settleFromName, settleToId, settle
 
   //撈settle資料
   useEffect(() => {
-    const fetchGetSettle = async () => {
-      try {
-        const token = localStorage.getItem('accessToken');
-        const { data } = await axios.get(`${constants.API_GET_SETTLE}/${gid}`, {
-          headers: {
-            authorization: `Bearer ${token}`,
-          },
-        });
-        console.log('BACKEND for setSettle:  ', data.data);
-        setSettle(data.data);
-      } catch (err) {
-        console.log(err.response.data.err);
-        return Swal.fire({
-          title: 'Error!',
-          text: err.response.data.err,
-          icon: 'error',
-          confirmButtonText: 'Cool',
-        });
-      }
-    };
-    fetchGetSettle();
+    // const fetchGetSettle = async () => {
+    //   try {
+    //     const token = localStorage.getItem('accessToken');
+    //     const { data } = await axios.get(`${constants.API_GET_SETTLE}/${gid}`, {
+    //       headers: {
+    //         authorization: `Bearer ${token}`,
+    //       },
+    //     });
+    //     console.log('BACKEND for setSettle:  ', data.data);
+    //     setSettle(data.data);
+    //   } catch (err) {
+    //     console.log(err.response.data.err);
+    //     return Swal.fire({
+    //       title: 'Error!',
+    //       text: err.response.data.err,
+    //       icon: 'error',
+    //       confirmButtonText: 'Cool',
+    //     });
+    //   }
+    // };
+    // fetchGetSettle();
 
     return () => {
       console.log('關掉彈窗了!!');
