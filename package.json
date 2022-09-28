@@ -34,6 +34,7 @@
     "react-scripts": "5.0.1",
     "save": "^2.5.0",
     "simplebar-react": "^2.4.1",
+    "sweetalert2": "^11.4.35",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

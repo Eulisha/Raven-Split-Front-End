@@ -66,7 +66,6 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
   const [info, setInfo] = useState(initialInfo);
   const [split, setSplit] = useState(oriSplit); //{uid:amount}
   const [currSum, setSum] = useState(oriSum);
-  // const [validated, setValidated] = useState(false);
 
   //Re-Render currSum
   //total
@@ -118,85 +117,100 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
   //儲存DB
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (validate()) {
+      try {
+        //整理送後端格式
+        const newDetails = [];
+        groupUsers.map((uid) => {
+          if (split[uid]) {
+            newDetails.push({ borrower: Number(uid), amount: Number(split[uid]) });
+          }
+        });
+        const data = { debt_main: info, debt_detail: newDetails };
+        console.log('FRONTEND for post debt :', data);
 
-    try {
-      //整理送後端格式
-      const newDetails = [];
-      groupUsers.map((uid) => {
-        if (split[uid]) {
-          newDetails.push({ borrower: Number(uid), amount: Number(split[uid]) });
+        //傳給後端
+        const token = localStorage.getItem('accessToken');
+        let result;
+        if (!details) {
+          //Add debt
+          result = await axios.post(`${constants.API_POST_DEBT}/${gid}`, data, {
+            headers: {
+              authorization: `Bearer ${token}`,
+            },
+          });
+        } else {
+          //Edit debt
+          result = await axios.put(`${constants.API_PUT_DEBT}/${gid}/${info.id}`, data, {
+            headers: {
+              authorization: `Bearer ${token}`,
+            },
+          });
         }
-      });
-      const data = { debt_main: info, debt_detail: newDetails };
-      console.log('FRONTEND for post debt :', data);
+        console.log('BACKEND for new info debtId: ', result.data);
 
-      //傳給後端
-      const token = localStorage.getItem('accessToken');
-      let result;
-      if (!details) {
-        //Add debt
-        result = await axios.post(`${constants.API_POST_DEBT}/${gid}`, data, {
-          headers: {
-            authorization: `Bearer ${token}`,
-          },
+        //要把debtId改成新的
+        info.id = result.data.data.debtId;
+        //整理state data的格式
+        info.isOwned = Number(info.lender) === currUserId ? true : false;
+        info.ownAmount = Number(info.lender) === currUserId ? info.total - (split[currUserId] ? split[currUserId] : 0) : split[currUserId] ? split[currUserId] : 0;
+        if (details) {
+          //Edit
+          setDebt((prev) => {
+            //找到本來的那筆更新
+            let newArr = prev.map((item) => {
+              if (item.id === debtInfo.id) {
+                return info;
+              } else {
+                return item;
+              }
+            });
+            //排序
+            let sorted = newArr.sort((a, b) => {
+              return new Date(b.date) - new Date(a.date);
+            });
+            return sorted;
+          });
+          setDetail(split);
+        } else {
+          //Add
+          setDebt((prev) => {
+            //加進去之後再排序
+            prev.push(info);
+            let sorted = prev.sort((a, b) => {
+              return new Date(b.date) - new Date(a.date);
+            });
+            return sorted;
+          });
+        }
+        setIsDebtChanged((prev) => {
+          return !prev;
         });
-      } else {
-        //Edit debt
-        result = await axios.put(`${constants.API_PUT_DEBT}/${gid}/${info.id}`, data, {
-          headers: {
-            authorization: `Bearer ${token}`,
-          },
+        onHide();
+      } catch (err) {
+        console.log(err.response.data.err);
+        return Swal.fire({
+          title: 'Error!',
+          text: err.response.data.err,
+          icon: 'error',
+          confirmButtonText: 'Cool',
         });
       }
-      console.log('BACKEND for new info debtId: ', result.data);
-
-      //要把debtId改成新的
-      info.id = result.data.data.debtId;
-      //整理state data的格式
-      info.isOwned = Number(info.lender) === currUserId ? true : false;
-      info.ownAmount = Number(info.lender) === currUserId ? info.total - (split[currUserId] ? split[currUserId] : 0) : split[currUserId] ? split[currUserId] : 0;
-      if (details) {
-        //Edit
-        setDebt((prev) => {
-          //找到本來的那筆更新
-          let newArr = prev.map((item) => {
-            if (item.id === debtInfo.id) {
-              return info;
-            } else {
-              return item;
-            }
-          });
-          //排序
-          let sorted = newArr.sort((a, b) => {
-            return new Date(b.date) - new Date(a.date);
-          });
-          return sorted;
-        });
-        setDetail(split);
-      } else {
-        //Add
-        setDebt((prev) => {
-          //加進去之後再排序
-          prev.push(info);
-          let sorted = prev.sort((a, b) => {
-            return new Date(b.date) - new Date(a.date);
-          });
-          return sorted;
-        });
-      }
-      setIsDebtChanged((prev) => {
-        return !prev;
-      });
-      onHide();
-    } catch (err) {
-      console.log(err.response.data.err);
-      return Swal.fire({
-        title: 'Error!',
-        text: err.response.data.err,
-        icon: 'error',
-        confirmButtonText: 'Cool',
-      });
     }
+  };
+
+  const validate = () => {
+    if (info.date)
+      if (!info.title || info.total || !info.lender || info.split_method) {
+        return;
+      }
+    // return form.reportValidity();
+    // gid,
+    // date: `${new Date(Date.now()).getFullYear()}-${new Date(Date.now()).getMonth() + 1 < 10 ? 0 : ''}${new Date(Date.now()).getMonth() + 1}-${new Date(Date.now()).getDate()}`,
+    // title: '',
+    // total: 0,
+    // lender: currUserId,
+    // split_method: '1',
   };
 
   return (
@@ -205,7 +219,7 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
         <Modal.Title>How to share expense?</Modal.Title>
       </Modal.Header>
       <Modal.Body className="add-debt-modal-body">
-        <Form className="add-debt-form">
+        <Form noValidate className="add-debt-form">
           <Form.Group aria-label="add-debt-form-group">
             <div className="add-debt-form-wrapper">
               <Form.Label className="add-debt-form-label-top">
