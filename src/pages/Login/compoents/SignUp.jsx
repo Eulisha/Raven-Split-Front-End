@@ -29,7 +29,6 @@ const SignUp = ({ setHasAccount }) => {
     e.preventDefault();
     const form = formRef.current;
     if (form.reportValidity()) {
-      console.log('aa');
       try {
         const { data } = await axios.post(`${constants.API_POST_SIGNUP}`, inputValues);
         localStorage.setItem('accessToken', data.data.accessToken);
@@ -55,7 +54,6 @@ const SignUp = ({ setHasAccount }) => {
         }
       }
     } else {
-      console.log('bb');
       validator(formRef);
     }
   };

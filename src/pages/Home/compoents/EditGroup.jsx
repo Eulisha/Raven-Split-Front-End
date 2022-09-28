@@ -7,6 +7,7 @@ import { GroupInfo } from './Home';
 import { MdDelete } from 'react-icons/md';
 import { useEffect } from 'react';
 import Swal from 'sweetalert2';
+import validator from '../../../global/validator';
 
 const EditGroup = ({ setEditingShow, editingShow }) => {
   console.log('@Edit Group');
@@ -26,9 +27,18 @@ const EditGroup = ({ setEditingShow, editingShow }) => {
   //設定ref
   const inputGroupName = useRef();
   const inputUserEmail = useRef();
+  const formRef = useRef();
 
   //EventHandle
-  const handleAddUser = () => {
+  const handleAddUser = (e) => {
+    if (e.target.value === '') {
+      return Swal.fire({
+        title: 'Error!',
+        text: 'Please entry email.',
+        icon: 'error',
+        confirmButtonText: 'Cool',
+      });
+    }
     if (Object.values(editedGroupUserEmails).includes(inputUserEmail.current.value)) {
       inputUserEmail.current.value = '';
       return Swal.fire({
@@ -88,45 +98,50 @@ const EditGroup = ({ setEditingShow, editingShow }) => {
   //儲存DB
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      //整理送後端格式
-      const newGroupUsers = { group_name: inputGroupName.current.value, group_type, groupUsers: [] };
-      //[{uid:1,email:a@a.com,role:2}]
+    const form = formRef.current;
+    if (form.reportValidity()) {
+      try {
+        //整理送後端格式
+        const newGroupUsers = { group_name: inputGroupName.current.value, group_type, groupUsers: [] };
+        //[{uid:1,email:a@a.com,role:2}]
 
-      console.log(editedGroupUserIds);
-      editedGroupUserIds.map((userId) => {
-        console.log('editedGroupUserId', userId, groupUsers);
-        if (!groupUsers.includes(userId)) {
-          //將新增的加入arr
-          const newGroupUser = { uid: userId, email: editedGroupUserEmails[userId], role: group_type === '1' ? 2 : group_type === '2' ? 4 : 1 };
-          // console.log(newGroupUser);
-          newGroupUsers.groupUsers.push(newGroupUser);
-          // console.log(newGroupUsers);
-        }
-      });
+        console.log(editedGroupUserIds);
+        editedGroupUserIds.map((userId) => {
+          console.log('editedGroupUserId', userId, groupUsers);
+          if (!groupUsers.includes(userId)) {
+            //將新增的加入arr
+            const newGroupUser = { uid: userId, email: editedGroupUserEmails[userId], role: group_type === '1' ? 2 : group_type === '2' ? 4 : 1 };
+            // console.log(newGroupUser);
+            newGroupUsers.groupUsers.push(newGroupUser);
+            // console.log(newGroupUsers);
+          }
+        });
 
-      //傳給後端
-      const token = localStorage.getItem('accessToken');
-      console.log('FRONT for put group:', newGroupUsers);
+        //傳給後端
+        const token = localStorage.getItem('accessToken');
+        console.log('FRONT for put group:', newGroupUsers);
 
-      const { data } = await axios.put(`${constants.API_PUT_GROUP}/${currGroup.gid}`, newGroupUsers, {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-      });
-      console.log('BACKEND for set group..: ', data.data);
+        const { data } = await axios.put(`${constants.API_PUT_GROUP}/${currGroup.gid}`, newGroupUsers, {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        });
+        console.log('BACKEND for set group..: ', data.data);
 
-      setIsGroupChanged((prev) => !prev);
-      setEditingShow(false);
-      setCurrGroup({ ...currGroup, ['name']: inputGroupName.current.value });
-    } catch (err) {
-      console.log(err.response.data.err);
-      return Swal.fire({
-        title: 'Error!',
-        text: err.response.data.err,
-        icon: 'error',
-        confirmButtonText: 'Cool',
-      });
+        setIsGroupChanged((prev) => !prev);
+        setEditingShow(false);
+        setCurrGroup({ ...currGroup, ['name']: inputGroupName.current.value });
+      } catch (err) {
+        console.log(err.response.data.err);
+        return Swal.fire({
+          title: 'Error!',
+          text: err.response.data.err,
+          icon: 'error',
+          confirmButtonText: 'Cool',
+        });
+      }
+    } else {
+      validator(formRef);
     }
   };
 
@@ -143,10 +158,10 @@ const EditGroup = ({ setEditingShow, editingShow }) => {
         <Modal.Title id="contained-modal-title-vcenter">Edit Group</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form>
+        <Form noValidate ref={formRef}>
           <Form.Group id="group_name">
             <Form.Label>Group Name</Form.Label>
-            <Form.Control ref={inputGroupName} type="text" defaultValue={currGroup.name} />
+            <Form.Control required ref={inputGroupName} title="Group Name" type="text" defaultValue={currGroup.name} />
           </Form.Group>
           <Form.Group className="add-group-members">
             <Form.Label>Members</Form.Label>

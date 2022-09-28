@@ -7,6 +7,7 @@ import { GroupInfo } from './Home';
 import currencyFormat from '../../../global/utils';
 import Swal from 'sweetalert2';
 import { GiReceiveMoney } from 'react-icons/gi';
+import validator from '../../../global/validator';
 
 const AddButton = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged }) => {
   const [editingShow, setEditingShow] = useState(false);
@@ -46,6 +47,8 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
   console.log('groupUsers, groupUserNames, currUserId, currUserName, gid: ', groupUsers, groupUserNames, currUserId, currUserName, gid);
 
   //Ref
+  const formRef = useRef();
+  const formSplitRef = useRef();
   const inputSplitMethod = useRef();
 
   //設定state for 編輯時暫存的值
@@ -94,7 +97,6 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
       groupUsers.map((user) => {
         evenly[user] = evenAmount;
       });
-      console.log(evenly);
       setSplit(evenly);
     }
   }, [info.split_method, info.total]);
@@ -102,7 +104,7 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
   //EventHandle
   const handleInfoChange = (prop) => (e) => {
     if (e.target.name === 'total' || e.target.name === 'amount' || e.target.name === 'lender') {
-      setInfo({ ...info, [prop]: Number(e.target.value) });
+      setInfo({ ...info, [prop]: currencyFormat(Number(e.target.value)) });
     } else if (e.target.name === 'split_method') {
       console.log(inputSplitMethod.current.value);
       setInfo({ ...info, [prop]: inputSplitMethod.current.value });
@@ -117,7 +119,12 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
   //儲存DB
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validate()) {
+    const form = formRef.current;
+    const formSplit = formSplitRef.current;
+    console.log(form, formSplit);
+    console.log(form.reportValidity(), formSplit.reportValidity());
+    if (form.reportValidity() && formSplit.reportValidity()) {
+      console.log(form.reportValidity());
       try {
         //整理送後端格式
         const newDetails = [];
@@ -196,21 +203,10 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
           confirmButtonText: 'Cool',
         });
       }
+    } else {
+      console.log('else');
+      validator(formRef);
     }
-  };
-
-  const validate = () => {
-    if (info.date)
-      if (!info.title || info.total || !info.lender || info.split_method) {
-        return;
-      }
-    // return form.reportValidity();
-    // gid,
-    // date: `${new Date(Date.now()).getFullYear()}-${new Date(Date.now()).getMonth() + 1 < 10 ? 0 : ''}${new Date(Date.now()).getMonth() + 1}-${new Date(Date.now()).getDate()}`,
-    // title: '',
-    // total: 0,
-    // lender: currUserId,
-    // split_method: '1',
   };
 
   return (
@@ -219,22 +215,31 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
         <Modal.Title>How to share expense?</Modal.Title>
       </Modal.Header>
       <Modal.Body className="add-debt-modal-body">
-        <Form noValidate className="add-debt-form">
+        <Form noValidate className="add-debt-form" ref={formRef}>
           <Form.Group aria-label="add-debt-form-group">
             <div className="add-debt-form-wrapper">
               <Form.Label className="add-debt-form-label-top">
-                Date: <Form.Control required type="date" max="2023/09/27" defaultValue={debtInfo ? debtInfo.date : info.date} onChange={handleInfoChange('date')} />
+                Date:
+                <Form.Control
+                  required
+                  type="date"
+                  min="2000-01-01"
+                  max="2050-12-31"
+                  title="date"
+                  defaultValue={debtInfo ? debtInfo.date : info.date}
+                  onChange={handleInfoChange('date')}
+                />
               </Form.Label>
               <Form.Label className="add-debt-form-label-top">
-                Title: <Form.Control required type="text" name="title" defaultValue={debtInfo ? debtInfo.title : ''} onChange={handleInfoChange('title')} />
+                Title: <Form.Control required type="text" title="title" defaultValue={debtInfo ? debtInfo.title : ''} onChange={handleInfoChange('title')} />
               </Form.Label>
               <Form.Label className="add-debt-form-label-top">
-                Total:{' '}
-                <Form.Control required type="number" min="0" max="100000000" name="total" defaultValue={debtInfo ? debtInfo.total : 0} onChange={handleInfoChange('total')} />
+                Total:
+                <Form.Control required type="number" min="1" max="100000000" title="total" defaultValue={debtInfo ? debtInfo.total : 0} onChange={handleInfoChange('total')} />
               </Form.Label>
               <Form.Label required className="add-debt-form-label-top">
                 Paid By:
-                <Form.Select required aria-label="dropdown paid by" className="add-debt-form-label-top" onChange={handleInfoChange('lender')}>
+                <Form.Select required aria-label="dropdown paid by" title="paid by" className="add-debt-form-label-top" onChange={handleInfoChange('lender')}>
                   <option>{groupUserNames[info.lender]}</option>
                   {groupUsers.map((userId) => {
                     if (userId !== info.lender) return <option value={userId}>{groupUserNames[userId]}</option>;
@@ -243,7 +248,7 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
               </Form.Label>
               <Form.Label>
                 Split Method
-                <Form.Select required aria-label="drop dwon split method" onChange={handleInfoChange('split_method')}>
+                <Form.Select required aria-label="drop dwon split method" title="split method" onChange={handleInfoChange('split_method')}>
                   <option value={info.split_method} onChange={handleInfoChange('split_method')}>
                     {constants.SPLIT_METHOD[info.split_method]}
                   </option>
@@ -255,7 +260,7 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
             </div>
           </Form.Group>
         </Form>
-        <Form className="add-debt-split-detail-form">
+        <Form className="add-debt-split-detail-form" noValidate ref={formSplitRef}>
           <Form.Label>Split Debt</Form.Label>
           <Form.Group>
             <ul className="add-debt-split-detail-list">
@@ -264,21 +269,36 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
                   <InputGroup key={uid} id={uid} className="debt-input">
                     <InputGroup.Text>{groupUserNames[uid]}</InputGroup.Text>
                     <InputGroup.Text>$</InputGroup.Text>
-                    <Form.Control
-                      id={Number(uid)}
-                      type="number"
-                      min="0"
-                      max="100000000"
-                      aria-label="Amount"
-                      value={split[uid] ? Number(split[uid]) : null}
-                      onChange={handleSplitChange(Number(uid))}
-                    />
+                    {info.split_method == '1' ? (
+                      <Form.Control
+                        required
+                        id={Number(uid)}
+                        disabled
+                        type="number"
+                        min="0"
+                        max="100000000"
+                        aria-label="Amount"
+                        value={split[uid] ? Number(split[uid]) : 0}
+                        onChange={handleSplitChange(Number(uid))}
+                      />
+                    ) : (
+                      <Form.Control
+                        required
+                        id={Number(uid)}
+                        type="number"
+                        min="0"
+                        max="100000000"
+                        aria-label="Amount"
+                        value={split[uid] ? Number(split[uid]) : 0}
+                        onChange={handleSplitChange(Number(uid))}
+                      />
+                    )}
                   </InputGroup>
                 );
               })}
             </ul>
             <div className="add-debt-total-div">
-              <Form.Label className="add-debt-total">Total {currencyFormat(currSum.total)}</Form.Label>
+              <Form.Label className="add-debt-total">Total {currSum.total ? currencyFormat(currSum.total) : ''}</Form.Label>
               <GiReceiveMoney style={{ width: '30px', height: '30px' }} />
               <Form.Label className="add-debt-total">{currencyFormat(currSum.total - currSum.sum)} Left </Form.Label>
             </div>

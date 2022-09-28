@@ -8,6 +8,7 @@ import Icons from '../../../global/Icons';
 import currencyFormat from '../../../global/utils';
 import { GiPayMoney } from 'react-icons/gi';
 import { BsArrowRight } from 'react-icons/bs';
+import validator from '../../../global/validator';
 
 const SettleButton = ({ setIsDebtChanged }) => {
   let CurrGroupInfo = useContext(GroupInfo);
@@ -35,6 +36,7 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
   //Ref
   const inputDate = useRef();
   const inputTitle = useRef();
+  const formRef = useRef();
 
   //state
   const [settle, setSettle] = useState([]);
@@ -98,41 +100,45 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log('@handle settle submit group');
+    const form = formRef.current;
+    if (form.reportValidity()) {
+      try {
+        const token = localStorage.getItem('accessToken');
+        const body = {
+          settle_main: {
+            gid,
+            date: inputDate.current.value,
+            title: inputTitle.current.value,
+          },
+          settle_detail: settle,
+        };
+        console.log('FRONT for settle group: ', body);
+        const { data } = await axios.post(`${constants.API_POST_SETTLE}/${gid}`, body, {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        });
+        console.log('BACKEND settle result: ', data);
 
-    try {
-      const token = localStorage.getItem('accessToken');
-      const body = {
-        settle_main: {
-          gid,
-          date: inputDate.current.value,
-          title: inputTitle.current.value,
-        },
-        settle_detail: settle,
-      };
-      console.log('FRONT for settle group: ', body);
-      const { data } = await axios.post(`${constants.API_POST_SETTLE}/${gid}`, body, {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-      });
-      console.log('BACKEND settle result: ', data);
+        setSettle([]);
+        setIsDebtChanged((prev) => {
+          return !prev;
+        });
 
-      setSettle([]);
-      setIsDebtChanged((prev) => {
-        return !prev;
-      });
-
-      onHide();
-    } catch (err) {
-      console.log(err.response.data.err);
-      Swal.fire({
-        title: 'Error!',
-        text: err.response.data.err,
-        icon: 'error',
-        confirmButtonText: 'Cool',
-      });
-      onHide();
-      return;
+        onHide();
+      } catch (err) {
+        console.log(err.response.data.err);
+        Swal.fire({
+          title: 'Error!',
+          text: err.response.data.err,
+          icon: 'error',
+          confirmButtonText: 'Cool',
+        });
+        onHide();
+        return;
+      }
+    } else {
+      validator(formRef);
     }
   };
 
@@ -141,21 +147,23 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">還錢囉！</Modal.Title>
       </Modal.Header>
-      <Form>
+      <Form noValidate ref={formRef}>
         <Modal.Body>
           最佳結帳方式：
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label>Date</Form.Label>
             <Form.Control
-              ref={inputDate}
-              type="text"
-              name="data"
+              required
+              type="date"
+              min="2000-01-01"
+              max="2050-12-31"
+              title="date"
               defaultValue={`${new Date(Date.now()).getFullYear()}-${new Date(Date.now()).getMonth() + 1 < 10 ? 0 : ''}${new Date(Date.now()).getMonth() + 1}-${new Date(
                 Date.now()
               ).getDate()}`}
             />
             <Form.Label>Title</Form.Label>
-            <Form.Control ref={inputTitle} type="text" name="title" defaultValue="Settle Group All Balances"></Form.Control>
+            <Form.Control ref={inputTitle} type="text" name="title" defaultValue="Settle Group All Balances" disabled></Form.Control>
           </Form.Group>
           <div>
             <ul>
