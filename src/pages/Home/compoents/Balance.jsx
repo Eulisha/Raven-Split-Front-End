@@ -73,7 +73,7 @@ const Balance = ({ isDebtChanged, setIsDebtChanged }) => {
                         <span>{groupUserNames[userBalance.uid]} </span>
                         {userBalance.balance >= 0 ? (
                           <>
-                            <span>paid </span>
+                            <span>get back </span>
                             <span className="owed-font">{currencyFormat(userBalance.balance)} </span>
                           </>
                         ) : (
