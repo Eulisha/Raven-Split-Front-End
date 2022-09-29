@@ -122,12 +122,9 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
     e.preventDefault();
     const form = formRef.current;
     const formSplit = formSplitRef.current;
-    console.log(form, formSplit);
-    console.log(form.reportValidity(), formSplit.reportValidity());
-    if (form.reportValidity() && formSplit.reportValidity()) {
-      console.log(form.reportValidity());
-      let splitTotal = 0;
 
+    if (form.reportValidity() && formSplit.reportValidity()) {
+      let splitTotal = 0;
       Object.values(split).map((amount) => {
         splitTotal += Number(amount);
       });
@@ -219,7 +216,6 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
         });
       }
     } else {
-      console.log('else');
       validator(formRef);
     }
   };
