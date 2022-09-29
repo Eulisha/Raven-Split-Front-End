@@ -256,7 +256,7 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
                 <Form.Select required aria-label="dropdown paid by" title="paid by" className="add-debt-form-label-top" onChange={handleInfoChange('lender')}>
                   <option>{groupUserNames[info.lender]}</option>
                   {groupUsers.map((userId) => {
-                    if (userId !== info.lender) return <option value={userId}>{groupUserNames[userId]}</option>;
+                    if (userId != info.lender) return <option value={userId}>{groupUserNames[userId]}</option>;
                   })}
                 </Form.Select>
               </Form.Label>
@@ -267,12 +267,14 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
                     {constants.SPLIT_METHOD[info.split_method]}
                   </option>
                   {Object.keys(constants.SPLIT_METHOD).map((method) => {
-                    if (method !== info.split_method) return <option value={method}>{constants.SPLIT_METHOD[method]}</option>;
+                    if (method != info.split_method) return <option value={method}>{constants.SPLIT_METHOD[method]}</option>;
                   })}
                 </Form.Select>
-                <span className="warning wording" style={{ fontSize: '12px', color: 'rgb(142 149 161)' }}>
-                  ** Automatically round-up to integer if indivisible
-                </span>
+                {info.split_method == '1' && (
+                  <span className="warning wording" style={{ fontSize: '12px', color: 'rgb(142 149 161)' }}>
+                    ** Round-up to integer if indivisible
+                  </span>
+                )}
               </Form.Label>
             </div>
           </Form.Group>
