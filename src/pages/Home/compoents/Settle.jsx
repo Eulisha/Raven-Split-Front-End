@@ -35,7 +35,7 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
 
   //Ref
   const inputDate = useRef();
-  const inputTitle = useRef();
+  // const inputTitle = useRef();
   const formRef = useRef();
 
   //state
@@ -111,7 +111,7 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
           settle_main: {
             gid,
             date: inputDate.current.value,
-            title: inputTitle.current.value,
+            // title: inputTitle.current.value,
           },
           settle_detail: settle,
         };
@@ -158,7 +158,7 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
   return (
     <Modal size="lg" aria-labelledby="contained-modal-title-vcenter" centered {...{ onHide, show }}>
       <Modal.Header className="settle-header" closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">Settle Up Debts !</Modal.Title>
+        <Modal.Title id="contained-modal-title-vcenter">Settle Up All Balances In Group !</Modal.Title>
       </Modal.Header>
       <Form noValidate ref={formRef}>
         <Modal.Body className="settle-body">

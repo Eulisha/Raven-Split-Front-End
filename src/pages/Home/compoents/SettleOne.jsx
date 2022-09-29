@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useState, useEffect, useRef, useContext } from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
 import constants from '../../../global/constants';
-import { User } from '../../App';
+// import { User } from '../../App';
 import { GroupInfo } from './Home';
 import Icons from '../../../global/Icons';
 import currencyFormat from '../../../global/utils';
@@ -17,7 +17,7 @@ const SettleOneButton = ({ ownStatus, settleFromId, settleFromName, settleToId, 
   let { currGroup } = CurrGroupInfo;
   let gid = currGroup.gid;
   const [editingShow, setEditingShow] = useState(false);
-  console.log('settleToId, settleToName, gid: ', settleToId, settleToName, gid);
+  // console.log('settleToId, settleToName, gid: ', settleToId, settleToName, gid);
 
   return (
     <div className="group-balance-list-settle-button-wrapper">
@@ -46,19 +46,19 @@ const SettleOneWindow = ({ gid, settleFromId, settleFromName, settleToId, settle
   console.log('@Settle pair');
 
   //Context
-  let CurrUser = useContext(User);
-  let CurrGroupInfo = useContext(GroupInfo);
-  let { id, name, email } = CurrUser.user;
-  let { groupUserNames } = CurrGroupInfo;
+  // let CurrUser = useContext(User);
+  // let CurrGroupInfo = useContext(GroupInfo);
+  // let { id, name, email } = CurrUser.user;
+  // let { groupUserNames } = CurrGroupInfo;
 
   //Ref
   const inputDate = useRef();
-  const inputTitle = useRef();
+  // const inputTitle = useRef();
   const formRef = useRef();
 
   //state
-  const [settle, setSettle] = useState([]);
-  console.log('user id, name, email, settleToId, settleToName, groupUserNames: ', id, name, email, settleToId, settleToName, groupUserNames);
+  // const [settle, setSettle] = useState([]);
+  // console.log('user id, name, email, settleToId, settleToName, groupUserNames: ', id, name, email, settleToId, settleToName, groupUserNames);
 
   //跳出時送後端解鎖
   useEffect(() => {
@@ -104,9 +104,9 @@ const SettleOneWindow = ({ gid, settleFromId, settleFromName, settleToId, settle
           settle_main: {
             gid,
             date: inputDate.current.value,
-            title: inputTitle.current.value,
+            // title: `Settle Balances Between ${settleFromName} And ${settleToName}`,
           },
-          settle_detail: settle,
+          // settle_detail: settle,
         };
         console.log('FRONT for settle pair: ', body);
         const { data } = await axios.post(`${constants.API_POST_SETTLE_PAIR}/${gid}/${settleFromId}/${settleToId}`, body, {
@@ -117,14 +117,14 @@ const SettleOneWindow = ({ gid, settleFromId, settleFromName, settleToId, settle
 
         console.log('BACKEND settle pair result: ', data);
         console.log(setIsDebtChanged);
-        setSettle([]);
+        // setSettle([]);
         setIsDebtChanged((prev) => {
           return !prev;
         });
         console.log('finished');
         onHide();
       } catch (err) {
-        console.log(err.response);
+        console.log(err);
         if (err.response.data.provider) {
           //從validator來的error是array形式
           Swal.fire({
