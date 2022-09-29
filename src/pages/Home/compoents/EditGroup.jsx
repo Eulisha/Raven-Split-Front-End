@@ -30,8 +30,8 @@ const EditGroup = ({ setEditingShow, editingShow }) => {
   const formRef = useRef();
 
   //EventHandle
-  const handleAddUser = (e) => {
-    if (e.target.value === '') {
+  const handleAddUser = () => {
+    if (inputUserEmail.current.value === '') {
       return Swal.fire({
         title: 'Error!',
         text: 'Please entry email.',
