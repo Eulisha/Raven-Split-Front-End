@@ -92,12 +92,13 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
   useEffect(() => {
     console.log(info, split);
     if (info.split_method === '1') {
-      const evenAmount = Math.ceil(info.total / groupUsers.length);
+      const evenAmount = Math.floor(info.total / groupUsers.length);
       const evenly = {};
       groupUsers.map((user) => {
         evenly[user] = evenAmount;
       });
       setSplit(evenly);
+      return;
     }
   }, [info.split_method, info.total]);
 
@@ -121,20 +122,17 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
     e.preventDefault();
     const form = formRef.current;
     const formSplit = formSplitRef.current;
-    console.log(form, formSplit);
-    console.log(form.reportValidity(), formSplit.reportValidity());
-    if (form.reportValidity() && formSplit.reportValidity()) {
-      console.log(form.reportValidity());
-      let splitTotal = 0;
 
-      Object.values(split).map((ele) => {
-        splitTotal += Number(ele.amount);
+    if (form.reportValidity() && formSplit.reportValidity()) {
+      let splitTotal = 0;
+      Object.values(split).map((amount) => {
+        splitTotal += Number(amount);
       });
       if (info.total != splitTotal) {
         return Swal.fire({
-          title: 'Error!',
-          text: 'Toal not match with the sum of split expenses, please check.',
-          icon: 'error',
+          title: 'Expense is indivisible ',
+          text: `Still NT$${currSum.total - currSum.sum} left. Please check before save.`,
+          icon: 'warning',
           confirmButtonText: 'Cool',
         });
       }
@@ -218,7 +216,6 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
         });
       }
     } else {
-      console.log('else');
       validator(formRef);
     }
   };
@@ -270,11 +267,17 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
                     if (method != info.split_method) return <option value={method}>{constants.SPLIT_METHOD[method]}</option>;
                   })}
                 </Form.Select>
+<<<<<<< HEAD
                 {info.split_method == '1' && (
                   <span className="warning wording" style={{ fontSize: '12px', color: 'rgb(142 149 161)' }}>
                     ** Round-up to integer if indivisible
                   </span>
                 )}
+=======
+                {/* <span className="warning wording" style={{ fontSize: '12px', color: 'rgb(142 149 161)' }}>
+                  ** Automatically round-up to integer if indivisible
+                </span> */}
+>>>>>>> develop
               </Form.Label>
             </div>
           </Form.Group>
