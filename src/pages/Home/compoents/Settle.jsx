@@ -52,8 +52,10 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
           },
         });
         console.log('BACKEND for setSettle: ', data.data);
-
-        setSettle(data.data);
+        let sorted = data.data.sort((a, b) => {
+          return new Date(b.amount) - new Date(a.amount);
+        });
+        setSettle(sorted);
       } catch (err) {
         console.log(err);
         console.log(err.response.data.err);
@@ -155,12 +157,12 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
 
   return (
     <Modal size="lg" aria-labelledby="contained-modal-title-vcenter" centered {...{ onHide, show }}>
-      <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">還錢囉！</Modal.Title>
+      <Modal.Header className="settle-header" closeButton>
+        <Modal.Title id="contained-modal-title-vcenter">Settle Up Debts !</Modal.Title>
       </Modal.Header>
       <Form noValidate ref={formRef}>
-        <Modal.Body>
-          最佳結帳方式：
+        <Modal.Body className="settle-body">
+          <Modal.Title className="settle-description"> Below is the simple way to let every members get thiers repayments</Modal.Title>
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label>Date</Form.Label>
             <Form.Control
@@ -174,38 +176,54 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
                 Date.now()
               ).getDate()}`}
             />
-            <Form.Label>Title</Form.Label>
-            <Form.Control ref={inputTitle} type="text" name="title" defaultValue="Settle Group All Balances" disabled></Form.Control>
+            {/* <Form.Label>Title</Form.Label> */}
+            {/* <Form.Control ref={inputTitle} type="text" name="title" defaultValue="Settle Group All Balances" disabled></Form.Control> */}
           </Form.Group>
           <div>
-            <ul>
-              {settle.map((ele) => {
-                return (
-                  // <>
-                  //   <li key={ind}>
-                  //     {groupUserNames[ele.borrower]} 還 {groupUserNames[ele.lender]} ${ele.amount}
-                  //   </li>
-
-                  <div className="settle-pair-items">
-                    <Icons.UserIcon />
-                    <span>{groupUserNames[ele.borrower]}</span>
-                    <div className="settle-pair-pay-amount-wapper">
-                      <BsArrowRight />
-                      <div style={{ display: 'flex', flexDirection: 'column', justifyItems: 'flex-end', alignItems: 'center', margin: '10px' }}>
-                        <div>
-                          <span className="settle-pair-pay-amount">{currencyFormat(ele.amount)}</span>
-                          <GiPayMoney style={{ width: '30px', height: '30px' }} />
+            {settle.map((ele) => {
+              return (
+                <div className="settle-pair-items">
+                  {ele.amount == 0 ? (
+                    <>
+                      <Icons.UserIcon />
+                      <span>{groupUserNames[ele.borrower]}</span>
+                      <div className="settle-pair-pay-amount-wapper">
+                        <BsArrowRight />
+                        <div style={{ display: 'flex', flexDirection: 'column', justifyItems: 'flex-end', alignItems: 'center', margin: '10px' }}>
+                          <div>
+                            <span className="settle-pair-pay-amount" style={{ color: '#dddcdc' }}>
+                              {currencyFormat(ele.amount)}
+                            </span>
+                            <GiPayMoney style={{ width: '30px', height: '30px', color: '#dddcdc' }} />
+                          </div>
                         </div>
+                        <BsArrowRight />
                       </div>
-                      <BsArrowRight />
-                    </div>
-                    <span>{groupUserNames[ele.lender]}</span>
-                    <Icons.UserIcon />
-                  </div>
-                  // </>
-                );
-              })}
-            </ul>
+                      <span>{groupUserNames[ele.lender]}</span>
+                      <Icons.UserIcon />
+                    </>
+                  ) : (
+                    <>
+                      <Icons.UserIcon />
+                      <span>{groupUserNames[ele.borrower]}</span>
+                      <div className="settle-pair-pay-amount-wapper">
+                        <BsArrowRight />
+                        <div style={{ display: 'flex', flexDirection: 'column', justifyItems: 'flex-end', alignItems: 'center', margin: '10px' }}>
+                          <div>
+                            <span className="settle-pair-pay-amount">{currencyFormat(ele.amount)}</span>
+
+                            <GiPayMoney style={{ width: '30px', height: '30px' }} />
+                          </div>
+                        </div>
+                        <BsArrowRight />
+                      </div>
+                      <span>{groupUserNames[ele.lender]}</span>
+                      <Icons.UserIcon />
+                    </>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </Modal.Body>
         <Modal.Footer>

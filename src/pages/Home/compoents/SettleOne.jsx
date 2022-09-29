@@ -151,11 +151,11 @@ const SettleOneWindow = ({ gid, settleFromId, settleFromName, settleToId, settle
 
   return (
     <Modal size="lg" aria-labelledby="contained-modal-title-vcenter" centered {...{ onHide, show }}>
-      <Modal.Header closeButton>
+      <Modal.Header className="settle-header" closeButton>
         <Modal.Title id="contained-modal-title-vcenter">{`Settle Up With ${settleToName}`}</Modal.Title>
       </Modal.Header>
       <Form noValidate ref={formRef}>
-        <Modal.Body className="settle-pair-form-body">
+        <Modal.Body className="settle-body">
           <Form.Group>
             <Form.Label>Date</Form.Label>
             <Form.Control
@@ -169,8 +169,8 @@ const SettleOneWindow = ({ gid, settleFromId, settleFromName, settleToId, settle
                 Date.now()
               ).getDate()}`}
             />
-            <Form.Label>Title</Form.Label>
-            <Form.Control ref={inputTitle} type="text" name="title" defaultValue={`Settle Balances Between ${settleFromName} And ${settleToName}`} disabled></Form.Control>
+            {/* <Form.Label>Title</Form.Label> */}
+            {/* <Form.Control ref={inputTitle} type="text" name="title" defaultValue={`Settle Balances Between ${settleFromName} And ${settleToName}`} disabled></Form.Control> */}
           </Form.Group>
 
           <div className="settle-pair-items">
