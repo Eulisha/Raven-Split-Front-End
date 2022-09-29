@@ -102,6 +102,7 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
     console.log('@handle settle submit group');
     const form = formRef.current;
     if (form.reportValidity()) {
+      console.log(form, validator);
       try {
         const token = localStorage.getItem('accessToken');
         const body = {
@@ -127,13 +128,23 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
 
         onHide();
       } catch (err) {
-        console.log(err.response.data.err);
-        Swal.fire({
-          title: 'Error!',
-          text: err.response.data.err,
-          icon: 'error',
-          confirmButtonText: 'Cool',
-        });
+        console.log(err.response);
+        if (err.response.data.provider) {
+          //從validator來的error是array形式
+          Swal.fire({
+            title: 'Error!',
+            text: err.response.data.err[0].msg,
+            icon: 'error',
+            confirmButtonText: 'Cool',
+          });
+        } else {
+          Swal.fire({
+            title: 'Error!',
+            text: err.response.data.err,
+            icon: 'error',
+            confirmButtonText: 'Cool',
+          });
+        }
         onHide();
         return;
       }
@@ -154,6 +165,7 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
             <Form.Label>Date</Form.Label>
             <Form.Control
               required
+              ref={inputDate}
               type="date"
               min="2000-01-01"
               max="2050-12-31"

@@ -267,17 +267,9 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
                     if (method != info.split_method) return <option value={method}>{constants.SPLIT_METHOD[method]}</option>;
                   })}
                 </Form.Select>
-<<<<<<< HEAD
-                {info.split_method == '1' && (
-                  <span className="warning wording" style={{ fontSize: '12px', color: 'rgb(142 149 161)' }}>
-                    ** Round-up to integer if indivisible
-                  </span>
-                )}
-=======
                 {/* <span className="warning wording" style={{ fontSize: '12px', color: 'rgb(142 149 161)' }}>
                   ** Automatically round-up to integer if indivisible
                 </span> */}
->>>>>>> develop
               </Form.Label>
             </div>
           </Form.Group>

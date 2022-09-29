@@ -60,30 +60,8 @@ const SettleOneWindow = ({ gid, settleFromId, settleFromName, settleToId, settle
   const [settle, setSettle] = useState([]);
   console.log('user id, name, email, settleToId, settleToName, groupUserNames: ', id, name, email, settleToId, settleToName, groupUserNames);
 
-  //撈settle資料
+  //跳出時送後端解鎖
   useEffect(() => {
-    // const fetchGetSettle = async () => {
-    //   try {
-    //     const token = localStorage.getItem('accessToken');
-    //     const { data } = await axios.get(`${constants.API_GET_SETTLE}/${gid}`, {
-    //       headers: {
-    //         authorization: `Bearer ${token}`,
-    //       },
-    //     });
-    //     console.log('BACKEND for setSettle:  ', data.data);
-    //     setSettle(data.data);
-    //   } catch (err) {
-    //     console.log(err.response.data.err);
-    //     return Swal.fire({
-    //       title: 'Error!',
-    //       text: err.response.data.err,
-    //       icon: 'error',
-    //       confirmButtonText: 'Cool',
-    //     });
-    //   }
-    // };
-    // fetchGetSettle();
-
     return () => {
       console.log('關掉彈窗了!!');
 
@@ -118,6 +96,7 @@ const SettleOneWindow = ({ gid, settleFromId, settleFromName, settleToId, settle
     e.preventDefault();
     console.log('@handle submit settle pair');
     const form = formRef.current;
+    console.log(validator, form);
     if (form.reportValidity()) {
       try {
         const token = localStorage.getItem('accessToken');
@@ -146,13 +125,23 @@ const SettleOneWindow = ({ gid, settleFromId, settleFromName, settleToId, settle
         onHide();
       } catch (err) {
         console.log(err.response);
+        if (err.response.data.provider) {
+          //從validator來的error是array形式
+          Swal.fire({
+            title: 'Error!',
+            text: err.response.data.err[0].msg,
+            icon: 'error',
+            confirmButtonText: 'Cool',
+          });
+        } else {
+          Swal.fire({
+            title: 'Error!',
+            text: err.response.data.err,
+            icon: 'error',
+            confirmButtonText: 'Cool',
+          });
+        }
         onHide();
-        Swal.fire({
-          title: 'Error!',
-          text: err.response,
-          icon: 'error',
-          confirmButtonText: 'Cool',
-        });
         return;
       }
     } else {
@@ -170,6 +159,7 @@ const SettleOneWindow = ({ gid, settleFromId, settleFromName, settleToId, settle
           <Form.Group>
             <Form.Label>Date</Form.Label>
             <Form.Control
+              ref={inputDate}
               required
               type="date"
               min="2000-01-01"
