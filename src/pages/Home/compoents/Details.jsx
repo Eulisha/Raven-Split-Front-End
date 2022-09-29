@@ -3,7 +3,6 @@ import { useState, useEffect, useContext } from 'react';
 import constants from '../../../global/constants';
 import DetailList from './DetailList';
 import Button from 'react-bootstrap/Button';
-// import Edit from './Edit';
 import Add from './Add';
 import { GroupInfo } from './Home';
 import Swal from 'sweetalert2';
@@ -58,7 +57,6 @@ const Details = ({ debtInfo, setDebt, setIsDebtChanged }) => {
 
   //刪除debt列
   const handleDeleteDebt = async () => {
-    // const debtId = Number(e.target.id);
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
@@ -102,7 +100,11 @@ const Details = ({ debtInfo, setDebt, setIsDebtChanged }) => {
     <div>
       <DetailList key="detail-list" details={details} />
       <div className="detail-list-buttons">
-        <Add.AddButton key="update" className="edit" debtInfo={debtInfo} details={details} setDebt={setDebt} setDetail={setDetail} setIsDebtChanged={setIsDebtChanged} />
+        {debtInfo.title.includes('Settle Balances Between') ? (
+          ''
+        ) : (
+          <Add.AddButton key="update" className="edit" debtInfo={debtInfo} details={details} setDebt={setDebt} setDetail={setDetail} setIsDebtChanged={setIsDebtChanged} />
+        )}
         <Button size="sm" variant="outline-danger" id={debtId} onClick={handleDeleteDebt}>
           Delete
         </Button>
