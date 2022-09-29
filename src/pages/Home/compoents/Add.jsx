@@ -292,7 +292,7 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
                         min="0"
                         max="100000000"
                         aria-label="Amount"
-                        value={split[uid] ? Number(split[uid]) : 0}
+                        value={split[uid] ? split[uid] : 0}
                         onChange={handleSplitChange(Number(uid))}
                       />
                     ) : (
@@ -303,7 +303,7 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
                         min="0"
                         max="100000000"
                         aria-label="Amount"
-                        value={split[uid] ? Number(split[uid]) : 0}
+                        defaultValue={split[uid] ? split[uid] : 0}
                         onChange={handleSplitChange(Number(uid))}
                       />
                     )}
