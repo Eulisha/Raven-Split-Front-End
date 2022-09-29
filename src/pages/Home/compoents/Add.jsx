@@ -115,7 +115,7 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
   const handleSplitChange = (prop) => (e) => {
     setSplit({ ...split, [prop]: Number(e.target.value) });
   };
-
+  console.log(split);
   //儲存DB
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -125,6 +125,20 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
     console.log(form.reportValidity(), formSplit.reportValidity());
     if (form.reportValidity() && formSplit.reportValidity()) {
       console.log(form.reportValidity());
+      let splitTotal = 0;
+
+      Object.values(split).map((ele) => {
+        splitTotal += Number(ele.amount);
+      });
+      if (info.total != splitTotal) {
+        return Swal.fire({
+          title: 'Error!',
+          text: 'Toal not match with the sum of split expenses, please check.',
+          icon: 'error',
+          confirmButtonText: 'Cool',
+        });
+      }
+
       try {
         //整理送後端格式
         const newDetails = [];
