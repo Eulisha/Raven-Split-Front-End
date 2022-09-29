@@ -110,6 +110,7 @@ const CreateGroup = ({ location, setEditingShow, editingShow }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const form = formRef.current;
+    console.log(form, validator);
     if (form.reportValidity()) {
       try {
         //整理送後端格式
@@ -146,13 +147,24 @@ const CreateGroup = ({ location, setEditingShow, editingShow }) => {
         // setEditedGroupUserNames({ [id]: name });
         setEditingShow(false);
       } catch (err) {
-        console.log(err.response.data.err);
-        return Swal.fire({
-          title: 'Error!',
-          text: err.response.data.err,
-          icon: 'error',
-          confirmButtonText: 'Cool',
-        });
+        console.log(err.response);
+        if (err.response.data.provider) {
+          //從validator來的error是array形式
+          Swal.fire({
+            title: 'Error!',
+            text: err.response.data.err[0].msg,
+            icon: 'error',
+            confirmButtonText: 'Cool',
+          });
+        } else {
+          Swal.fire({
+            title: 'Error!',
+            text: err.response.data.err,
+            icon: 'error',
+            confirmButtonText: 'Cool',
+          });
+        }
+        return;
       }
     } else {
       validator(formRef);
