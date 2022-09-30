@@ -343,7 +343,6 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
                       />
                     ) : (
                       <Form.Control
-                        required
                         id={Number(uid)}
                         type="number"
                         min="0"
