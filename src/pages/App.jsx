@@ -24,8 +24,9 @@ const App = () => {
       return;
     }
 
+    //TODO: forbidden是從userinfo來的不是這裡
+
     const fetchUserInfo = async () => {
-      console.log('here');
       try {
         const { data } = await axios.get(constants.API_GET_USER_INFO, {
           headers: {
@@ -36,13 +37,14 @@ const App = () => {
         setUser(data.data);
       } catch (err) {
         console.log(err.response.data.err);
+        navigate('/login');
         Swal.fire({
           title: 'Error!',
           text: err.response.data.err,
           icon: 'error',
           confirmButtonText: 'Cool',
         });
-        return navigate('/login');
+        return;
       }
     };
     if (window.location.href !== `${constants.HOST}/login`) {

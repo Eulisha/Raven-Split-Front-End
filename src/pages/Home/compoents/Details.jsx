@@ -5,14 +5,21 @@ import DetailList from './DetailList';
 import Button from 'react-bootstrap/Button';
 import Add from './Add';
 import { GroupInfo } from './Home';
+import { Page } from './Debts';
 import Swal from 'sweetalert2';
 
 const Details = ({ debtInfo, setDebt, setIsDebtChanged }) => {
   console.log('@Details');
+
+  //Context
   let CurrGroupInfo = useContext(GroupInfo);
+  let paging = useContext(Page);
+
   let { currGroup, groupUsers } = CurrGroupInfo;
   let gid = currGroup.gid;
   const debtId = debtInfo.id;
+
+  //State
   const [details, setDetail] = useState({});
 
   //撈debt_details
@@ -84,13 +91,32 @@ const Details = ({ debtInfo, setDebt, setIsDebtChanged }) => {
           });
           Swal.fire('Deleted!', 'Your file has been deleted.', 'success');
         } catch (err) {
-          console.log(err.response.data.err);
-          return Swal.fire({
-            title: 'Error!',
-            text: err.response.data.err,
-            icon: 'error',
-            confirmButtonText: 'Cool',
-          });
+          console.log(err.response);
+          if (err.response.status == 404) {
+            //帳已經不存在
+            return Swal.fire({
+              title: 'Error!',
+              text: 'This debt might already be modified by others, please refresh to get latest one.',
+              icon: 'error',
+              confirmButtonText: 'Cool',
+            }).then(async () => {
+              const token = localStorage.getItem('accessToken');
+              const { data } = await axios.get(`${constants.API_GET_DEBTS}/${gid}?paging=${paging}`, {
+                headers: {
+                  authorization: `Bearer ${token}`,
+                },
+              });
+              console.log('BACKEND for setDebts: ', data.data);
+              setDebt(data.data);
+            });
+          } else {
+            return Swal.fire({
+              title: 'Error!',
+              text: err.response.data.err,
+              icon: 'error',
+              confirmButtonText: 'Cool',
+            });
+          }
         }
       }
     });
