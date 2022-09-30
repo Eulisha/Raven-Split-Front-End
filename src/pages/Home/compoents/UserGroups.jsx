@@ -62,7 +62,7 @@ const UserGroups = ({ setCurrGroup, isGroupChanged, setGroupUsers, setGroupUserN
         {userGroups.map((group) => {
           if (group.type === '1') {
             return (
-              <CNavItem href={`#${group.gid}`} key={group.gid} onClick={() => setCurrGroup({ gid: group.gid, name: group.name, type: group.type })}>
+              <CNavItem href="#" key={group.gid} onClick={() => setCurrGroup({ gid: group.gid, name: group.name, type: group.type })}>
                 {group.name}
               </CNavItem>
             );

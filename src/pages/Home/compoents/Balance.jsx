@@ -7,6 +7,7 @@ import Icons from '../../../global/Icons';
 import SettleOne from './SettleOne';
 import currencyFormat from '../../../global/utils';
 import Swal from 'sweetalert2';
+import { FaBalanceScale } from 'react-icons/fa';
 
 const Balance = ({ isDebtChanged, setIsDebtChanged }) => {
   console.log('@balance');
@@ -49,7 +50,7 @@ const Balance = ({ isDebtChanged, setIsDebtChanged }) => {
   return (
     <div id="balance">
       <ListGroup>
-        {balances.length === 0 && groupUsers //FIXME:會不會兩個都沒有?!
+        {balances.length === 0 && groupUsers
           ? groupUsers.map((user) => {
               //新群組尚無借貸關係
               return (
@@ -82,38 +83,43 @@ const Balance = ({ isDebtChanged, setIsDebtChanged }) => {
                     </Accordion.Header>
                     <Accordion.Body>
                       <ListGroup variant="flush" className="group-balance-detail-list">
-                        {userBalance.detail.map((detail) => {
-                          return detail.amount !== 0 ? (
-                            <ListGroup.Item key={detail.id} className="group-balance-detail-item">
-                              {detail.lender === userBalance.uid ? (
-                                //header是lender所以裡面是borrower
-                                <div className="group-balance-detail-item-wrapper">
-                                  <div>owed by</div>
-                                  <div>{`${CurrGroupInfo.groupUserNames[detail.borrower]}`}</div>
-                                  <div className="owe-font">{currencyFormat(detail.amount)}</div>
-                                </div>
-                              ) : (
-                                //header是borrower所以裡面是lender
-                                <div className="group-balance-detail-item-wrapper">
-                                  <div>paid by</div>
-                                  <div>{`${CurrGroupInfo.groupUserNames[detail.lender]}`}</div>
-                                  <div className="owed-font">{currencyFormat(detail.amount)}</div>
-                                </div>
-                              )}
-                              <SettleOne.SettleOneButton
-                                key={detail.id}
-                                settleFromId={detail.borrower}
-                                settleFromName={groupUserNames[detail.borrower]}
-                                settleToId={detail.lender}
-                                settleToName={groupUserNames[detail.lender]}
-                                settleAmount={detail.amount}
-                                setIsDebtChanged={setIsDebtChanged}
-                              />
-                            </ListGroup.Item>
-                          ) : (
-                            ''
-                          );
-                        })}
+                        {userBalance.detail.length !== 0 ? (
+                          userBalance.detail.map((detail) => {
+                            return (
+                              <ListGroup.Item key={detail.id} className="group-balance-detail-item">
+                                {detail.lender === userBalance.uid ? (
+                                  //header是lender所以裡面是borrower
+                                  <div className="group-balance-detail-item-wrapper">
+                                    <div>owed by</div>
+                                    <div>{`${CurrGroupInfo.groupUserNames[detail.borrower]}`}</div>
+                                    <div className="owe-font">{currencyFormat(detail.amount)}</div>
+                                  </div>
+                                ) : (
+                                  //header是borrower所以裡面是lender
+                                  <div className="group-balance-detail-item-wrapper">
+                                    <div>paid by</div>
+                                    <div>{`${CurrGroupInfo.groupUserNames[detail.lender]}`}</div>
+                                    <div className="owed-font">{currencyFormat(detail.amount)}</div>
+                                  </div>
+                                )}
+                                <SettleOne.SettleOneButton
+                                  key={detail.id}
+                                  settleFromId={detail.borrower}
+                                  settleFromName={groupUserNames[detail.borrower]}
+                                  settleToId={detail.lender}
+                                  settleToName={groupUserNames[detail.lender]}
+                                  settleAmount={detail.amount}
+                                  setIsDebtChanged={setIsDebtChanged}
+                                />
+                              </ListGroup.Item>
+                            );
+                          })
+                        ) : (
+                          <div className="group-balance-detail-none">
+                            <FaBalanceScale />
+                            <span>Currently All Balanced.</span>
+                          </div>
+                        )}
                       </ListGroup>
                     </Accordion.Body>
                   </Accordion.Item>

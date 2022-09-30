@@ -462,6 +462,13 @@ display: flex !important;
 justify-content: flex-end;
 margin: 5px 0px 5px!important;
 }
+.group-balance-detail-none{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap:10px
+}
+
 
 /* settle pair botton */
 .settle-header{
