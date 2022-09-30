@@ -421,7 +421,7 @@ color:rgb(150 157 165);
   /* flex-grow:1.5 !important; */
   width: 35%;
   margin-left:20px;
-  /* margin-right:20px */
+  margin-bottom:20px;
   }
 .group-users-top-bar{
   display: flex;
