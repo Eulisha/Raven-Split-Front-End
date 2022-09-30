@@ -41,13 +41,14 @@ const SignIn = ({ setHasAccount }) => {
             confirmButtonText: 'Cool',
           });
         } else {
-          return Swal.fire({
+          Swal.fire({
             title: 'Error!',
             text: err.response.data.err,
             icon: 'error',
             confirmButtonText: 'Cool',
           });
         }
+        e.target.disabled = false;
       }
     } else {
       validator(formRef);
