@@ -39,7 +39,7 @@ const SignUp = ({ setHasAccount }) => {
         console.log(err.response.data.err);
         if (err.response.data.provider) {
           //從validator來的error是array形式
-          return Swal.fire({
+          Swal.fire({
             title: 'Error!',
             text: err.response.data.err[0].msg,
             icon: 'error',
