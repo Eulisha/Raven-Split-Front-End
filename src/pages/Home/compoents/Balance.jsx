@@ -83,7 +83,7 @@ const Balance = ({ isDebtChanged, setIsDebtChanged }) => {
                     <Accordion.Body>
                       <ListGroup variant="flush" className="group-balance-detail-list">
                         {userBalance.detail.map((detail) => {
-                          return (
+                          return detail.amount !== 0 ? (
                             <ListGroup.Item key={detail.id} className="group-balance-detail-item">
                               {detail.lender === userBalance.uid ? (
                                 //header是lender所以裡面是borrower
@@ -100,7 +100,6 @@ const Balance = ({ isDebtChanged, setIsDebtChanged }) => {
                                   <div className="owed-font">{currencyFormat(detail.amount)}</div>
                                 </div>
                               )}
-                              {/* {detail.amount !== 0 && ( */}
                               <SettleOne.SettleOneButton
                                 key={detail.id}
                                 settleFromId={detail.borrower}
@@ -110,8 +109,9 @@ const Balance = ({ isDebtChanged, setIsDebtChanged }) => {
                                 settleAmount={detail.amount}
                                 setIsDebtChanged={setIsDebtChanged}
                               />
-                              {/* )} */}
                             </ListGroup.Item>
+                          ) : (
+                            ''
                           );
                         })}
                       </ListGroup>
