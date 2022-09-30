@@ -34,7 +34,7 @@ const SignUp = ({ setHasAccount }) => {
         const { data } = await axios.post(`${constants.API_POST_SIGNUP}`, inputValues);
         localStorage.setItem('accessToken', data.data.accessToken);
         // window.location.assign(`${constants.HOST}/dashboard`);
-        navigate('/');
+        navigate('/dashboard');
       } catch (err) {
         console.log(err.response.data.err);
         if (err.response.data.provider) {
