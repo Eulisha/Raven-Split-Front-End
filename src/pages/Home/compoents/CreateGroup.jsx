@@ -68,6 +68,7 @@ const CreateGroup = ({ location, setEditingShow, editingShow }) => {
         confirmButtonText: 'Cool',
       });
       e.target.disabled = false;
+      return;
     }
     const token = localStorage.getItem('accessToken');
     const fetchUser = async () => {
@@ -95,8 +96,6 @@ const CreateGroup = ({ location, setEditingShow, editingShow }) => {
           icon: 'error',
           confirmButtonText: 'Cool',
         });
-        e.target.disabled = false;
-        return;
       }
     };
     fetchUser();

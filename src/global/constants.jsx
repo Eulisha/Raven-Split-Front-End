@@ -1,9 +1,9 @@
-// const HOST = 'https://raven-split.life';
-// const API_HOST = 'https://raven-split.life/api';
+const HOST = 'https://raven-split.life';
+const API_HOST = 'https://raven-split.life/api';
 // const HOST = 'http://18.180.19.123';
 // const API_HOST = 'http://18.180.19.123/api';
-const HOST = 'http://localhost:3001';
-const API_HOST = 'http://localhost:3000/api';
+// const HOST = 'http://localhost:3001';
+// const API_HOST = 'http://localhost:3000/api';
 
 //Debt
 const API_GET_DEBTS = `${API_HOST}/debt/debts`;
