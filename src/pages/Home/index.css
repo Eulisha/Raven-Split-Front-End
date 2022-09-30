@@ -6,7 +6,12 @@
     font-weight: 400;
     /* font-size: 16px; */
   }
-
+/* 
+  *:disabled{
+    background-color: dimgrey;
+    color: linen;
+    opacity: 1;
+  } */
 
   /* 大標題：22px
   小標題：18px

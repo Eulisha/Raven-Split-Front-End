@@ -46,10 +46,6 @@ const Balance = ({ isDebtChanged, setIsDebtChanged }) => {
     }
   }, [currGroup, isDebtChanged, isGroupChanged]);
 
-  useEffect(() => {
-    console.log('$$$$$$$$$$$$$$$$$$$$$$$', balances);
-  }, [balances]);
-
   return (
     <div id="balance">
       <ListGroup>

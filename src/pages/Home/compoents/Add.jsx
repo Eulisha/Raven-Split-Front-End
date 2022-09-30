@@ -8,7 +8,7 @@ import { Page } from './Debts';
 import currencyFormat from '../../../global/utils';
 import Swal from 'sweetalert2';
 import { GiReceiveMoney } from 'react-icons/gi';
-import validator from '../../../global/validator';
+// import validator from '../../../global/validator';
 
 const AddButton = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged }) => {
   const [editingShow, setEditingShow] = useState(false);
@@ -119,24 +119,32 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
     setSplit({ ...split, [prop]: Number(e.target.value) });
   };
   console.log(split);
+
   //儲存DB
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log('target:', e.target);
+    e.target.disabled = true;
     const form = formRef.current;
     const formSplit = formSplitRef.current;
 
     if (form.reportValidity() && formSplit.reportValidity()) {
+      //前端表單驗證正確
       let splitTotal = 0;
       Object.values(split).map((amount) => {
         splitTotal += Number(amount);
       });
+
+      //驗金額
       if (info.total != splitTotal) {
-        return Swal.fire({
+        Swal.fire({
           title: 'Expense is indivisible ',
           text: `Still NT$${currSum.total - currSum.sum} left. Please check before save.`,
           icon: 'warning',
           confirmButtonText: 'Cool',
         });
+        e.target.disabled = false;
+        return;
       }
 
       try {
@@ -160,6 +168,7 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
               authorization: `Bearer ${token}`,
             },
           });
+          onHide();
         } else {
           //Edit debt
           result = await axios.put(`${constants.API_PUT_DEBT}/${gid}/${info.id}`, data, {
@@ -226,8 +235,10 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
             });
             console.log('BACKEND for setDebts: ', data.data);
             setDebt(data.data);
+            onHide();
           });
         } else if (err.response.data.provider) {
+          //後端驗失敗
           //從validator來的error是array形式
           Swal.fire({
             title: 'Error!',
@@ -235,19 +246,23 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
             icon: 'error',
             confirmButtonText: 'Cool',
           });
+          e.target.disabled = true;
         } else {
+          //系統錯誤
           Swal.fire({
             title: 'Error!',
             text: err.response.data.err,
             icon: 'error',
             confirmButtonText: 'Cool',
           });
+          onHide();
         }
-        onHide();
         return;
       }
     } else {
-      validator(formRef);
+      //前端表單驗失敗
+      // validator(formRef);
+      e.target.disabled = false;
     }
   };
 

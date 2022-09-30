@@ -70,8 +70,6 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
     fetchGetSettle();
 
     return () => {
-      console.log('關掉彈窗了!!');
-
       const fetchOnHide = async () => {
         try {
           const token = localStorage.getItem('accessToken');
@@ -101,10 +99,10 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    e.target.disabled = true;
     console.log('@handle settle submit group');
     const form = formRef.current;
     if (form.reportValidity()) {
-      console.log(form, validator);
       try {
         const token = localStorage.getItem('accessToken');
         const body = {
@@ -139,19 +137,22 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
             icon: 'error',
             confirmButtonText: 'Cool',
           });
+          e.target.disabled = false;
         } else {
+          //系統錯誤
           Swal.fire({
             title: 'Error!',
             text: err.response.data.err,
             icon: 'error',
             confirmButtonText: 'Cool',
           });
+          onHide();
         }
-        onHide();
         return;
       }
     } else {
       validator(formRef);
+      e.target.disabled = false;
     }
   };
 

@@ -6,7 +6,6 @@ const validator = (formRef) => {
 
     if (element.tagName !== 'button' && element.willValidate && !element.validity.valid) {
       if (element.validity.valueMissing) {
-        console.log('if');
         return Swal.fire({
           title: 'Error!',
           text: `${element.validationMessage.replace('。', '：')}${element.title}`,
@@ -15,7 +14,6 @@ const validator = (formRef) => {
         });
         // setErrMsg({ [element.name]: element.validationMessage });
       } else {
-        console.log('else');
         return Swal.fire({
           title: 'Error!',
           text: `${element.validationMessage}`,

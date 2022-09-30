@@ -43,7 +43,6 @@ const App = () => {
           icon: 'error',
           confirmButtonText: 'Cool',
         }).then(() => {
-          console.log('.then');
           localStorage.removeItem('accessToken');
           navigate('/');
           return;

@@ -30,23 +30,28 @@ const EditGroup = ({ setEditingShow, editingShow }) => {
   const formRef = useRef();
 
   //EventHandle
-  const handleAddUser = () => {
+  const handleAddUser = (e) => {
+    e.target.disabled = true;
     if (inputUserEmail.current.value === '') {
-      return Swal.fire({
+      Swal.fire({
         title: 'Error!',
         text: 'Please entry email.',
         icon: 'error',
         confirmButtonText: 'Cool',
       });
+      e.target.disabled = false;
+      return;
     }
     if (Object.values(editedGroupUserEmails).includes(inputUserEmail.current.value)) {
       inputUserEmail.current.value = '';
-      return Swal.fire({
+      Swal.fire({
         title: 'Error!',
         text: 'Member already in list above .',
         icon: 'error',
         confirmButtonText: 'Cool',
       });
+      e.target.disabled = false;
+      return;
     }
     const token = localStorage.getItem('accessToken');
     const fetchUser = async () => {
@@ -67,6 +72,7 @@ const EditGroup = ({ setEditingShow, editingShow }) => {
         setEditedGroupUserNames({ ...editedGroupUserNames, [insertId]: userNameFromDb });
         setEditedGroupUserEmails({ ...editedGroupUserEmails, [insertId]: inputUserEmail.current.value });
         inputUserEmail.current.value = '';
+        e.target.disabled = false;
       } catch (err) {
         console.log(err.response.data.err);
         return Swal.fire({
@@ -98,6 +104,7 @@ const EditGroup = ({ setEditingShow, editingShow }) => {
   //儲存DB
   const handleSubmit = async (e) => {
     e.preventDefault();
+    e.target.disabled = true;
     const form = formRef.current;
     if (form.reportValidity()) {
       try {
@@ -149,10 +156,13 @@ const EditGroup = ({ setEditingShow, editingShow }) => {
             confirmButtonText: 'Cool',
           });
         }
+        e.target.disabled = false;
         return;
       }
     } else {
       validator(formRef);
+      e.target.disabled = false;
+      return;
     }
   };
 

@@ -63,8 +63,6 @@ const SettleOneWindow = ({ gid, settleFromId, settleFromName, settleToId, settle
   //跳出時送後端解鎖
   useEffect(() => {
     return () => {
-      console.log('關掉彈窗了!!');
-
       const fetchOnHide = async () => {
         try {
           const token = localStorage.getItem('accessToken');
@@ -94,9 +92,10 @@ const SettleOneWindow = ({ gid, settleFromId, settleFromName, settleToId, settle
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    e.target.disabled = true;
     console.log('@handle submit settle pair');
     const form = formRef.current;
-    console.log(validator, form);
+
     if (form.reportValidity()) {
       try {
         const token = localStorage.getItem('accessToken');
@@ -133,6 +132,7 @@ const SettleOneWindow = ({ gid, settleFromId, settleFromName, settleToId, settle
             icon: 'error',
             confirmButtonText: 'Cool',
           });
+          e.target.disabled = false;
         } else {
           Swal.fire({
             title: 'Error!',
@@ -140,8 +140,8 @@ const SettleOneWindow = ({ gid, settleFromId, settleFromName, settleToId, settle
             icon: 'error',
             confirmButtonText: 'Cool',
           });
+          onHide();
         }
-        onHide();
         return;
       }
     } else {

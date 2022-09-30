@@ -46,24 +46,28 @@ const CreateGroup = ({ location, setEditingShow, editingShow }) => {
   const formRef = useRef();
 
   //EventHandle
-  const handleAddUser = () => {
+  const handleAddUser = (e) => {
+    e.target.disabled = true;
     if (inputUserEmail.current.value === '') {
-      return Swal.fire({
+      Swal.fire({
         title: 'Error!',
         text: 'Please entry email.',
         icon: 'error',
         confirmButtonText: 'Cool',
       });
+      e.target.disabled = false;
+      return;
     }
     console.log(Object.values(editedGroupUserEmails), inputUserEmail.current.value);
     if (Object.values(editedGroupUserEmails).includes(inputUserEmail.current.value)) {
       inputUserEmail.current.value = '';
-      return Swal.fire({
+      Swal.fire({
         title: 'Error!',
         text: 'Member already in list above.',
         icon: 'error',
         confirmButtonText: 'Cool',
       });
+      e.target.disabled = false;
     }
     const token = localStorage.getItem('accessToken');
     const fetchUser = async () => {
@@ -82,20 +86,24 @@ const CreateGroup = ({ location, setEditingShow, editingShow }) => {
         setEditedGroupUserNames({ ...editedGroupUserNames, [insertId]: userNameFromDb });
         setEditedGroupUserEmails({ ...editedGroupUserEmails, [insertId]: inputUserEmail.current.value });
         inputUserEmail.current.value = '';
+        e.target.disabled = false;
       } catch (err) {
         console.log(err.response.data.err);
-        return Swal.fire({
+        Swal.fire({
           title: 'Error!',
           text: err.response.data.err,
           icon: 'error',
           confirmButtonText: 'Cool',
         });
+        e.target.disabled = false;
+        return;
       }
     };
     fetchUser();
   };
 
   const handleDeleteUser = (e, uid) => {
+    e.target.disabled = true;
     setEditedGroupUserIds((prev) => {
       return prev.filter((user) => user !== uid);
     });
@@ -109,6 +117,7 @@ const CreateGroup = ({ location, setEditingShow, editingShow }) => {
   //儲存DB
   const handleSubmit = async (e) => {
     e.preventDefault();
+    e.target.disabled = true;
     const form = formRef.current;
     console.log(form, validator);
     if (form.reportValidity()) {
@@ -119,14 +128,11 @@ const CreateGroup = ({ location, setEditingShow, editingShow }) => {
 
         //加自己
         newGroupUsers.groupUsers.push({ uid: id, email, role: '4' });
-        // console.log('newGroupUsers', newGroupUsers);
         //加其他人
         editedGroupUserIds.map((userId) => {
-          // console.log('editedGroupUserId:', userId);
           if (userId != id) {
             const newGroupUser = { uid: userId, email: editedGroupUserEmails[userId], role: group_type === 'group_normal' ? 2 : group_type === 'group_pair' ? 4 : 1 };
             newGroupUsers.groupUsers.push(newGroupUser);
-            // console.log('newGroupUsers', newGroupUsers);
           }
         });
 
@@ -142,10 +148,10 @@ const CreateGroup = ({ location, setEditingShow, editingShow }) => {
         console.log('BACKEND for set group..: ', data.data);
 
         setIsGroupChanged((prev) => !prev);
+        setEditingShow(false);
         // setEditedGroupUserIds([id]);
         // setEditedGroupUserEmails({ [id]: email });
         // setEditedGroupUserNames({ [id]: name });
-        setEditingShow(false);
       } catch (err) {
         console.log(err.response);
         if (err.response.data.provider) {
@@ -164,10 +170,13 @@ const CreateGroup = ({ location, setEditingShow, editingShow }) => {
             confirmButtonText: 'Cool',
           });
         }
+        e.target.disabled = false;
         return;
       }
     } else {
       validator(formRef);
+      e.target.disabled = false;
+      return;
     }
   };
 
