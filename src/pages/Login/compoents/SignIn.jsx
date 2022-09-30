@@ -28,7 +28,7 @@ const SignIn = ({ setHasAccount }) => {
       try {
         const { data } = await axios.post(`${constants.API_POST_SIGNIN}`, inputValues);
         localStorage.setItem('accessToken', data.data.accessToken);
-        window.location.assign(`${constants.HOST}/dashboard`);
+        window.location.assign(`${constants.HOST}/`);
       } catch (err) {
         console.log(err.response);
         if (err.response.data.provider) {

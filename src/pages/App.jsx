@@ -19,12 +19,12 @@ const App = () => {
 
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
+    console.log('href', window.location.href);
     if (!token) {
-      navigate('/login');
+      console.log('no token');
+      navigate('/');
       return;
     }
-
-    //TODO: forbidden是從userinfo來的不是這裡
 
     const fetchUserInfo = async () => {
       try {
@@ -37,17 +37,21 @@ const App = () => {
         setUser(data.data);
       } catch (err) {
         console.log(err.response.data.err);
-        navigate('/login');
         Swal.fire({
           title: 'Error!',
           text: err.response.data.err,
           icon: 'error',
           confirmButtonText: 'Cool',
+        }).then(() => {
+          console.log('.then');
+          localStorage.removeItem('accessToken');
+          navigate('/');
+          return;
         });
         return;
       }
     };
-    if (window.location.href !== `${constants.HOST}/login`) {
+    if (window.location.href !== `${constants.HOST}`) {
       fetchUserInfo();
     }
   }, []);
@@ -57,7 +61,7 @@ const App = () => {
       <div className="App">
         <Routes className="App">
           {user.id && <Route id="home_container" element={<Home user={user} />} path="/dashboard" />}
-          <Route element={<Login />} path="/login" />
+          <Route element={<Login />} path="/" />
         </Routes>
       </div>
     </User.Provider>
