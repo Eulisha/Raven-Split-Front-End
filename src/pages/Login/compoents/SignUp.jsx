@@ -27,13 +27,14 @@ const SignUp = ({ setHasAccount }) => {
 
   const hanldleSubmit = async (e) => {
     e.preventDefault();
+    e.target.disabled = true;
     const form = formRef.current;
     if (form.reportValidity()) {
       try {
         const { data } = await axios.post(`${constants.API_POST_SIGNUP}`, inputValues);
         localStorage.setItem('accessToken', data.data.accessToken);
         // window.location.assign(`${constants.HOST}/dashboard`);
-        navigate('/dashboard');
+        navigate('/');
       } catch (err) {
         console.log(err.response.data.err);
         if (err.response.data.provider) {
@@ -55,6 +56,7 @@ const SignUp = ({ setHasAccount }) => {
       }
     } else {
       validator(formRef);
+      e.target.disabled = false;
     }
   };
 

@@ -52,6 +52,9 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
           },
         });
         console.log('BACKEND for setSettle: ', data.data);
+        if (data.data.length === 0) {
+          return setSettle('Currently all balance.');
+        }
         let sorted = data.data.sort((a, b) => {
           return new Date(b.amount) - new Date(a.amount);
         });
@@ -163,7 +166,6 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
       </Modal.Header>
       <Form noValidate ref={formRef}>
         <Modal.Body className="settle-body">
-          <Modal.Title className="settle-description"> Below is the simple way to let every members get thiers repayments</Modal.Title>
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label>Date</Form.Label>
             <Form.Control
@@ -181,56 +183,66 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
             {/* <Form.Control ref={inputTitle} type="text" name="title" defaultValue="Settle Group All Balances" disabled></Form.Control> */}
           </Form.Group>
           <div>
-            {settle.map((ele) => {
-              return (
-                <div className="settle-pair-items">
-                  {ele.amount == 0 ? (
-                    <>
-                      <Icons.UserIcon />
-                      <span>{groupUserNames[ele.borrower]}</span>
-                      <div className="settle-pair-pay-amount-wapper">
-                        <BsArrowRight />
-                        <div style={{ display: 'flex', flexDirection: 'column', justifyItems: 'flex-end', alignItems: 'center', margin: '10px' }}>
-                          <div>
-                            <span className="settle-pair-pay-amount" style={{ color: '#dddcdc' }}>
-                              {currencyFormat(ele.amount)}
-                            </span>
-                            <GiPayMoney style={{ width: '30px', height: '30px', color: '#dddcdc' }} />
+            {Array.isArray(settle) ? (
+              settle.map((ele) => {
+                return (
+                  <div className="settle-pair-items">
+                    {ele.amount == 0 ? (
+                      <>
+                        <Icons.UserIcon />
+                        <span>{groupUserNames[ele.borrower]}</span>
+                        <div className="settle-pair-pay-amount-wapper">
+                          <BsArrowRight />
+                          <div style={{ display: 'flex', flexDirection: 'column', justifyItems: 'flex-end', alignItems: 'center', margin: '10px' }}>
+                            <div>
+                              <span className="settle-pair-pay-amount" style={{ color: '#dddcdc' }}>
+                                {currencyFormat(ele.amount)}
+                              </span>
+                              <GiPayMoney style={{ width: '30px', height: '30px', color: '#dddcdc' }} />
+                            </div>
                           </div>
+                          <BsArrowRight />
                         </div>
-                        <BsArrowRight />
-                      </div>
-                      <span>{groupUserNames[ele.lender]}</span>
-                      <Icons.UserIcon />
-                    </>
-                  ) : (
-                    <>
-                      <Icons.UserIcon />
-                      <span>{groupUserNames[ele.borrower]}</span>
-                      <div className="settle-pair-pay-amount-wapper">
-                        <BsArrowRight />
-                        <div style={{ display: 'flex', flexDirection: 'column', justifyItems: 'flex-end', alignItems: 'center', margin: '10px' }}>
-                          <div>
-                            <span className="settle-pair-pay-amount">{currencyFormat(ele.amount)}</span>
+                        <span>{groupUserNames[ele.lender]}</span>
+                        <Icons.UserIcon />
+                      </>
+                    ) : (
+                      <>
+                        <Icons.UserIcon />
+                        <span>{groupUserNames[ele.borrower]}</span>
+                        <div className="settle-pair-pay-amount-wapper">
+                          <BsArrowRight />
+                          <div style={{ display: 'flex', flexDirection: 'column', justifyItems: 'flex-end', alignItems: 'center', margin: '10px' }}>
+                            <div>
+                              <span className="settle-pair-pay-amount">{currencyFormat(ele.amount)}</span>
 
-                            <GiPayMoney style={{ width: '30px', height: '30px' }} />
+                              <GiPayMoney style={{ width: '30px', height: '30px' }} />
+                            </div>
                           </div>
+                          <BsArrowRight />
                         </div>
-                        <BsArrowRight />
-                      </div>
-                      <span>{groupUserNames[ele.lender]}</span>
-                      <Icons.UserIcon />
-                    </>
-                  )}
-                </div>
-              );
-            })}
+                        <span>{groupUserNames[ele.lender]}</span>
+                        <Icons.UserIcon />
+                      </>
+                    )}
+                  </div>
+                );
+              })
+            ) : (
+              <span style={{ fontSize: '22px' }}>{settle}</span>
+            )}
           </div>
+          <Modal.Title className="settle-description">
+            Above is the simpler way to let every members get thiers repayments by algorithum of Raven Split. <br /> For example: Adam owes Euli $100, and Euli owes Tim $100. Then
+            we will suggsion to simply ask Adam pay back $100 to Tim.
+          </Modal.Title>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" type="submit" onClick={handleSubmit}>
-            Submit
-          </Button>
+          {Array.isArray(settle) && (
+            <Button variant="primary" type="submit" onClick={handleSubmit}>
+              Submit
+            </Button>
+          )}
         </Modal.Footer>
       </Form>
     </Modal>

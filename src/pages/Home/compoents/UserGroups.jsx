@@ -47,13 +47,13 @@ const UserGroups = ({ setCurrGroup, isGroupChanged, setGroupUsers, setGroupUserN
       <CSidebarBrand>
         <a className="logo" href={`${constants.HOST}/dashboard`}>
           <FaCrow size={40} />
-          <div className="logo-title">Raven Split</div>
+          <div className="logo-title-brand">Raven Split</div>
         </a>
       </CSidebarBrand>
-      <CSidebarBrand>
+      <CSidebarBrand className="sidebar-user">
         <div className="logo" href={`${constants.HOST}/dashboard`}>
           <Icons.UserIcon />
-          <div className="logo-title">{CurrUser.user.name}</div>
+          <div className="logo-title-user">{CurrUser.user.name}</div>
         </div>
       </CSidebarBrand>
       <CSidebarNav>
@@ -68,6 +68,10 @@ const UserGroups = ({ setCurrGroup, isGroupChanged, setGroupUsers, setGroupUserN
             );
           }
         })}
+        <button className="add-group-btn" onClick={() => setEditingShow(true)}>
+          <CIcon icon={cilPlus} style={{ marginRight: '10px' }} />
+          Create Group
+        </button>
 
         {/* </CNavGroup> */}
         {/* <CNavGroup toggler="Pairs">
@@ -114,10 +118,6 @@ const UserGroups = ({ setCurrGroup, isGroupChanged, setGroupUsers, setGroupUserN
           </div>
         )}
         <CSidebarFooter>
-          <button className="add-group-btn" onClick={() => setEditingShow(true)}>
-            <CIcon icon={cilPlus} style={{ marginRight: '10px' }} />
-            Create Group
-          </button>
           <CNavItem
             href="/login"
             onClick={() => {

@@ -173,22 +173,28 @@ const SettleOneWindow = ({ gid, settleFromId, settleFromName, settleToId, settle
             {/* <Form.Control ref={inputTitle} type="text" name="title" defaultValue={`Settle Balances Between ${settleFromName} And ${settleToName}`} disabled></Form.Control> */}
           </Form.Group>
 
-          <div className="settle-pair-items">
-            <Icons.UserIcon />
-            <span>{settleFromName}</span>
-            <div className="settle-pair-pay-amount-wapper">
-              <BsArrowRight />
-              <div style={{ display: 'flex', flexDirection: 'column', justifyItems: 'flex-end', alignItems: 'center', margin: '10px' }}>
-                <div>
-                  <span className="settle-pair-pay-amount">{currencyFormat(settleAmount)}</span>
-                  <GiPayMoney style={{ width: '30px', height: '30px' }} />
+          {settleAmount !== 0 ? (
+            <div className="settle-pair-items">
+              <Icons.UserIcon />
+              <span>{settleFromName}</span>
+              <div className="settle-pair-pay-amount-wapper">
+                <BsArrowRight />
+                <div style={{ display: 'flex', flexDirection: 'column', justifyItems: 'flex-end', alignItems: 'center', margin: '10px' }}>
+                  <div>
+                    <span className="settle-pair-pay-amount">{currencyFormat(settleAmount)}</span>
+                    <GiPayMoney style={{ width: '30px', height: '30px' }} />
+                  </div>
                 </div>
+                <BsArrowRight />
               </div>
-              <BsArrowRight />
+              <span>{settleToName}</span>
+              <Icons.UserIcon />
             </div>
-            <span>{settleToName}</span>
-            <Icons.UserIcon />
-          </div>
+          ) : (
+            <div>
+              <span style={{ fontSize: '22px' }}>Currently All Balance</span>
+            </div>
+          )}
         </Modal.Body>
         <Modal.Footer>
           <Button variant="outline-primary" type="submit" onClick={handleSubmit}>

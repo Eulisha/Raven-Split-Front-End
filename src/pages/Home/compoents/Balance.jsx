@@ -100,6 +100,7 @@ const Balance = ({ isDebtChanged, setIsDebtChanged }) => {
                                   <div className="owed-font">{currencyFormat(detail.amount)}</div>
                                 </div>
                               )}
+                              {/* {detail.amount !== 0 && ( */}
                               <SettleOne.SettleOneButton
                                 key={detail.id}
                                 settleFromId={detail.borrower}
@@ -109,6 +110,7 @@ const Balance = ({ isDebtChanged, setIsDebtChanged }) => {
                                 settleAmount={detail.amount}
                                 setIsDebtChanged={setIsDebtChanged}
                               />
+                              {/* )} */}
                             </ListGroup.Item>
                           );
                         })}

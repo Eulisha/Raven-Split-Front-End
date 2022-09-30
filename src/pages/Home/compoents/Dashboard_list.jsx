@@ -3,6 +3,7 @@ import Icons from '../../../global/Icons';
 import currencyFormat from '../../../global/utils';
 
 const Dashboard_list = ({ selfBalance }) => {
+  console.log(selfBalance);
   return (
     <>
       {selfBalance.summary && (
@@ -33,96 +34,104 @@ const Dashboard_list = ({ selfBalance }) => {
           </Col>
         </Row>
       )}
-      <div className="self-balance-list">
-        <div key="self-balance-list-owe" className="self-balance-list-owe">
-          <div className="self-balance-list-title">YOU OWE</div>
-          {Object.keys(selfBalance).length > 0 &&
-            selfBalance.borrow.map((user) => {
-              return (
-                <div key={user.uid} className="self-balance-owe-person-card">
-                  <div key={`self-balance-owe-person-title-${user.uid}`} className="balance_total self-balance-owe-person-title">
-                    <div>{user.user_name} </div>
-                    <div>paid</div>
-                    <div className="owe-font">{currencyFormat(user.total)}</div>
-                  </div>
-                  <ListGroup key={`self-balance-owe-${user.uid}`}>
-                    {user.pair ? <ListGroup.Item className="balance_pair self-balance-detail-item">Non-Group {currencyFormat(user.pair)}</ListGroup.Item> : ''}
-                    {user.group_normal.map((group) => {
-                      return (
-                        <ListGroup.Item key={group.id} className="balance-group-normal self-balance-detail-item">
-                          <div className="self-balance-detail-group-wrapper">
-                            <div className="default-group-radius">
-                              <Icons.GroupIcon className="default-group-picture" />
+      {selfBalance.summary && (
+        <div className="self-balance-list">
+          <div key="self-balance-list-owe" className="self-balance-list-owe">
+            <div className="self-balance-list-title">YOU OWE</div>
+            {selfBalance.borrow.length ? (
+              selfBalance.borrow.map((user) => {
+                return (
+                  <div key={user.uid} className="self-balance-owe-person-card">
+                    <div key={`self-balance-owe-person-title-${user.uid}`} className="balance_total self-balance-owe-person-title">
+                      <div>{user.user_name} </div>
+                      <div>paid</div>
+                      <div className="owe-font">{currencyFormat(user.total)}</div>
+                    </div>
+                    <ListGroup key={`self-balance-owe-${user.uid}`}>
+                      {user.pair ? <ListGroup.Item className="balance_pair self-balance-detail-item">Non-Group {currencyFormat(user.pair)}</ListGroup.Item> : ''}
+                      {user.group_normal.map((group) => {
+                        return (
+                          <ListGroup.Item key={group.id} className="balance-group-normal self-balance-detail-item">
+                            <div className="self-balance-detail-group-wrapper">
+                              <div className="default-group-radius">
+                                <Icons.GroupIcon className="default-group-picture" />
+                              </div>
+                              <div>{group.group_name}</div>
                             </div>
-                            <div>{group.group_name}</div>
-                          </div>
-                          <div>{currencyFormat(group.amount)}</div>
-                        </ListGroup.Item>
-                      );
-                    })}
-                    {user.group_buying.map((group) => {
-                      return (
-                        <ListGroup.Item key={group.id} className="balance_group_buying self-balance-detail-item">
-                          <tbody className="self-balance-detail-table">
-                            <tr>
-                              <td>{group.group_name}</td>
-                              <td>paid</td>
-                              <td>{group.amount}</td>
-                            </tr>
-                          </tbody>
-                        </ListGroup.Item>
-                      );
-                    })}
-                  </ListGroup>
-                </div>
-              );
-            })}
-        </div>
-        <div key="self-balance-list-owed" className="self-balance-list-owed">
-          <div className="self-balance-list-title">YOU ARE OWED</div>
-          {Object.keys(selfBalance).length > 0 &&
-            selfBalance.lend.map((user) => {
-              return (
-                <div key={user.uid} className="self-balance-owed-person-card">
-                  <div key={`self-balance-owed-person-title-${user.uid}`} className="balance_total self-balance-owed-person-title">
-                    <div>{user.user_name} </div>
-                    <div>owes you</div>
-                    <div className="owed-font">{currencyFormat(user.total)}</div>
+                            <div>{currencyFormat(group.amount)}</div>
+                          </ListGroup.Item>
+                        );
+                      })}
+                      {user.group_buying.map((group) => {
+                        return (
+                          <ListGroup.Item key={group.id} className="balance_group_buying self-balance-detail-item">
+                            <tbody className="self-balance-detail-table">
+                              <tr>
+                                <td>{group.group_name}</td>
+                                <td>paid</td>
+                                <td>{group.amount}</td>
+                              </tr>
+                            </tbody>
+                          </ListGroup.Item>
+                        );
+                      })}
+                    </ListGroup>
                   </div>
-                  <ListGroup key={`self-balance-owed-${user.uid}`}>
-                    {user.pair ? <ListGroup.Item className="balance_pair self-balance-detail-item">Non-Group {currencyFormat(user.pair)}</ListGroup.Item> : ''}
-                    {user.group_normal.map((group) => {
-                      return (
-                        <ListGroup.Item key={group.id} className="balance-group-normal self-balance-detail-item">
-                          <div className="self-balance-detail-group-wrapper">
-                            <div className="default-group-radius">
-                              <Icons.GroupIcon className="default-group-picture" />
+                );
+              })
+            ) : (
+              <div className="self-balance-list-no-debt">Currently No Debt!</div>
+            )}
+          </div>
+          <div key="self-balance-list-owed" className="self-balance-list-owed">
+            <div className="self-balance-list-title">YOU ARE OWED</div>
+            {selfBalance.lend.length ? (
+              selfBalance.lend.map((user) => {
+                return (
+                  <div key={user.uid} className="self-balance-owed-person-card">
+                    <div key={`self-balance-owed-person-title-${user.uid}`} className="balance_total self-balance-owed-person-title">
+                      <div>{user.user_name} </div>
+                      <div>owes you</div>
+                      <div className="owed-font">{currencyFormat(user.total)}</div>
+                    </div>
+                    <ListGroup key={`self-balance-owed-${user.uid}`}>
+                      {user.pair ? <ListGroup.Item className="balance_pair self-balance-detail-item">Non-Group {currencyFormat(user.pair)}</ListGroup.Item> : ''}
+                      {user.group_normal.map((group) => {
+                        return (
+                          <ListGroup.Item key={group.id} className="balance-group-normal self-balance-detail-item">
+                            <div className="self-balance-detail-group-wrapper">
+                              <div className="default-group-radius">
+                                <Icons.GroupIcon className="default-group-picture" />
+                              </div>
+                              <div>{group.group_name}</div>
                             </div>
-                            <div>{group.group_name}</div>
-                          </div>
-                          <div>{currencyFormat(group.amount)}</div>
-                        </ListGroup.Item>
-                      );
-                    })}
-                    {user.group_buying.map((group) => {
-                      return (
-                        <ListGroup.Item key={group.id} className="balance_group_buying self-balance-detail-item">
-                          <tbody className="self-balance-detail-table">
-                            <tr>
-                              <td>{group.group_name}</td>
-                              <td>OWE YOU</td>
-                              <td>{group.amount}</td>
-                            </tr>
-                          </tbody>
-                        </ListGroup.Item>
-                      );
-                    })}
-                  </ListGroup>
-                </div>
-              );
-            })}
+                            <div>{currencyFormat(group.amount)}</div>
+                          </ListGroup.Item>
+                        );
+                      })}
+                      {user.group_buying.map((group) => {
+                        return (
+                          <ListGroup.Item key={group.id} className="balance_group_buying self-balance-detail-item">
+                            <tbody className="self-balance-detail-table">
+                              <tr>
+                                <td>{group.group_name}</td>
+                                <td>OWE YOU</td>
+                                <td>{group.amount}</td>
+                              </tr>
+                            </tbody>
+                          </ListGroup.Item>
+                        );
+                      })}
+                    </ListGroup>
+                  </div>
+                );
+              })
+            ) : (
+              <div className="self-balance-list-no-debt">Currently No Debt!</div>
+            )}
+          </div>
         </div>
-      </div>
+      )}
     </>
   );
 };

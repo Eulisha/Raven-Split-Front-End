@@ -23,6 +23,7 @@ const SignIn = ({ setHasAccount }) => {
 
   const hanldleSubmit = async (e) => {
     e.preventDefault();
+    e.target.disabled = true;
     const form = formRef.current;
     if (form.checkValidity()) {
       try {
@@ -50,6 +51,7 @@ const SignIn = ({ setHasAccount }) => {
       }
     } else {
       validator(formRef);
+      e.target.disabled = false;
     }
   };
 
