@@ -8,6 +8,10 @@ import SettleOne from './SettleOne';
 import currencyFormat from '../../../global/utils';
 import Swal from 'sweetalert2';
 import { FaBalanceScale } from 'react-icons/fa';
+// import { AiOutlineRise } from 'react-icons/ai';
+// import { AiOutlineFall } from 'react-icons/ai';
+// import { RiCoinsLine } from 'react-icons/ri';
+// import { BsArrowUp, BsArrowDown } from 'react-icons/bs';
 
 const Balance = ({ isDebtChanged, setIsDebtChanged }) => {
   console.log('@balance');
@@ -62,12 +66,25 @@ const Balance = ({ isDebtChanged, setIsDebtChanged }) => {
           : balances.map((userBalance) => {
               //balance是後端整理過key group-by userID的array object
               return (
-                <Accordion>
-                  <Accordion.Item key={userBalance.uid} id={userBalance.uid} className="item" eventKey="1">
-                    <Accordion.Header id={userBalance.uid}>
+                <Accordion defaultActiveKey="1">
+                  <Accordion.Item key={userBalance.uid} id={userBalance.uid} className="item">
+                    <Accordion.Header id={userBalance.uid} eventKye="1">
                       <div className="group-balance-list">
                         <Icons.UserIcon />
                         <span>{groupUserNames[userBalance.uid]} </span>
+                        {/* 顯示債務關係數量的版本
+                        <span className="owed-font">{userBalance.possitive}</span> 
+                        <AiOutlineRise className="owed-font" /> 
+                        <div>
+                        <RiCoinsLine className="owed-font" />
+                        <BsArrowUp className="owed-font" />
+                        </div>
+                        <span className="owe-font">{userBalance.negative}</span>
+                        <AiOutlineFall className="owe-font" />
+                        <div>
+                        <RiCoinsLine className="owe-font" />
+                        <BsArrowDown className="owe-font" />
+                        </div> */}
                         {userBalance.balance >= 0 ? (
                           <>
                             <span>get back </span>
