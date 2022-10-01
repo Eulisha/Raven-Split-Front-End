@@ -69,7 +69,7 @@ const SignUp = ({ setHasAccount }) => {
           <Form.Label className="login-title">Sign Up</Form.Label>
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label>Email address</Form.Label>
-            <Form.Control required validationMessage type="email" placeholder="Enter email" value={inputValues.email} title="Email" onChange={handleInput('email')} />
+            <Form.Control required type="email" placeholder="Enter email" value={inputValues.email} title="Email" onChange={handleInput('email')} />
           </Form.Group>
           <Form.Group className="mb-3" controlId="formBasicPassword">
             <Form.Label>Password</Form.Label>
