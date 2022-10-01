@@ -1,18 +1,24 @@
+import { useContext } from 'react';
 import { ListGroup, Row, Col, Card } from 'react-bootstrap';
 import Icons from '../../../global/Icons';
 import currencyFormat from '../../../global/utils';
+import { GroupInfo } from './Home';
 
 const Dashboard_list = ({ selfBalance }) => {
-  console.log(selfBalance);
+  //Context
+  let CurrGroupInfo = useContext(GroupInfo);
+  let { setCurrGroup } = CurrGroupInfo;
+
   return (
     <>
+      <div className="dashboard-title">My Balance Summary</div>
       {selfBalance.summary && (
         <Row className="dashboard-self-summary-row">
           <Col className="dashboard-self-summary-col">
             <Card className="dashboard-self-summary-card owe-bg">
               <Card.Body className="dashboard-self-summary-card-body">
                 <Card.Title className="dashboard-self-summary-card-title">Owe</Card.Title>
-                <Card.Text className="dashboard-self-summary-card-amount-owe">{currencyFormat(selfBalance.summary.borrow)}</Card.Text>
+                <Card.Text className="dashboard-self-summary-card-amount-owe owe-font">{currencyFormat(selfBalance.summary.borrow)}</Card.Text>
               </Card.Body>
             </Card>
           </Col>
@@ -20,7 +26,7 @@ const Dashboard_list = ({ selfBalance }) => {
             <Card className="dashboard-self-summary-card total-bg">
               <Card.Body className="dashboard-self-summary-card-body">
                 <Card.Title className="dashboard-self-summary-card-title">Net</Card.Title>
-                <Card.Text className="dashboard-self-summary-card-amount-total">{currencyFormat(selfBalance.summary.net)}</Card.Text>
+                <Card.Text className="dashboard-self-summary-card-amount-total total-font">{currencyFormat(selfBalance.summary.net)}</Card.Text>
               </Card.Body>
             </Card>
           </Col>
@@ -28,7 +34,7 @@ const Dashboard_list = ({ selfBalance }) => {
             <Card className="dashboard-self-summary-card owed-bg">
               <Card.Body className="dashboard-self-summary-card-body">
                 <Card.Title className="dashboard-self-summary-card-title">Owed</Card.Title>
-                <Card.Text className="dashboard-self-summary-card-amount-owed">{currencyFormat(selfBalance.summary.lend)}</Card.Text>
+                <Card.Text className="dashboard-self-summary-card-amount-owed owed-font">{currencyFormat(selfBalance.summary.lend)}</Card.Text>
               </Card.Body>
             </Card>
           </Col>
@@ -51,7 +57,11 @@ const Dashboard_list = ({ selfBalance }) => {
                       {user.pair ? <ListGroup.Item className="balance_pair self-balance-detail-item">Non-Group {currencyFormat(user.pair)}</ListGroup.Item> : ''}
                       {user.group_normal.map((group) => {
                         return (
-                          <ListGroup.Item key={group.id} className="balance-group-normal self-balance-detail-item">
+                          <ListGroup.Item
+                            key={group.id}
+                            className="balance-group-normal self-balance-detail-item"
+                            onClick={() => setCurrGroup({ gid: group.gid, name: group.group_name, type: '1' })}
+                          >
                             <div className="self-balance-detail-group-wrapper">
                               <div className="default-group-radius">
                                 <Icons.GroupIcon className="default-group-picture" />
@@ -98,7 +108,11 @@ const Dashboard_list = ({ selfBalance }) => {
                       {user.pair ? <ListGroup.Item className="balance_pair self-balance-detail-item">Non-Group {currencyFormat(user.pair)}</ListGroup.Item> : ''}
                       {user.group_normal.map((group) => {
                         return (
-                          <ListGroup.Item key={group.id} className="balance-group-normal self-balance-detail-item">
+                          <ListGroup.Item
+                            key={group.id}
+                            className="balance-group-normal self-balance-detail-item"
+                            onClick={() => setCurrGroup({ gid: group.gid, name: group.group_name, type: '1' })}
+                          >
                             <div className="self-balance-detail-group-wrapper">
                               <div className="default-group-radius">
                                 <Icons.GroupIcon className="default-group-picture" />

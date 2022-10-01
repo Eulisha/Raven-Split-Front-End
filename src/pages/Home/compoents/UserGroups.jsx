@@ -3,17 +3,21 @@ import { useState, useEffect, useContext } from 'react';
 import constants from '../../../global/constants';
 import CreateGroup from './CreateGroup';
 import { User } from '../../App';
+import { GroupInfo } from './Home';
 import { FaCrow } from 'react-icons/fa';
-import { CSidebar, CSidebarBrand, CSidebarNav, CNavTitle, CNavItem, CSidebarFooter } from '@coreui/react';
+import { CSidebar, CSidebarBrand, CSidebarNav, CNavItem, CSidebarFooter } from '@coreui/react';
 import CIcon from '@coreui/icons-react';
 import { cilAccountLogout, cilPlus } from '@coreui/icons';
 import Icons from '../../../global/Icons';
 import Swal from 'sweetalert2';
 
-const UserGroups = ({ setCurrGroup, isGroupChanged, setGroupUsers, setGroupUserNames, setGroupUserEmails, setIsGroupChanged }) => {
+const UserGroups = ({ isGroupChanged, setGroupUsers, setGroupUserNames, setGroupUserEmails, setIsGroupChanged }) => {
   console.log('@UserGroups');
 
+  //Context
   let CurrUser = useContext(User);
+  let CurrGroupInfo = useContext(GroupInfo);
+  let { currGroup, setCurrGroup } = CurrGroupInfo;
 
   const [userGroups, setUserGroups] = useState([]);
   const [editingShow, setEditingShow] = useState(false);
@@ -43,6 +47,10 @@ const UserGroups = ({ setCurrGroup, isGroupChanged, setGroupUsers, setGroupUserN
     fetchuserGroups();
   }, [isGroupChanged]);
 
+  useEffect(() => {
+    setSelected({ gid: currGroup.gid });
+  }, [currGroup]);
+
   const handleNavSelect = (e, group) => {
     console.log(group);
     setCurrGroup({ gid: group.gid, name: group.name, type: group.type });
@@ -50,22 +58,25 @@ const UserGroups = ({ setCurrGroup, isGroupChanged, setGroupUsers, setGroupUserN
   };
 
   return (
-    <CSidebar id="group_area" position="fixed">
+    <CSidebar className="group_area" position="fixed">
       <CSidebarBrand>
         <a className="logo" href={`${constants.HOST}/dashboard`}>
           <FaCrow size={40} />
           <div className="logo-title-brand">Raven Split</div>
         </a>
       </CSidebarBrand>
+      <hr className="nav-hr" />
       <CSidebarBrand className="sidebar-user">
         <div className="logo" href={`${constants.HOST}/dashboard`}>
           <Icons.UserIcon />
           <div className="logo-title-user">{CurrUser.user.name}</div>
         </div>
       </CSidebarBrand>
+      <hr className="nav-hr" />
+      <CSidebarBrand className="sidebar-group-title">My Groups</CSidebarBrand>
+      <hr className="nav-hr" />
       <CSidebarNav>
         <div className="sidebar-groups">
-          <CNavTitle>Groups</CNavTitle>
           {userGroups.map((group) => {
             if (group.type === '1') {
               return (
@@ -93,6 +104,7 @@ const UserGroups = ({ setCurrGroup, isGroupChanged, setGroupUsers, setGroupUserN
             </div>
           )}
         </div>
+        <hr className="nav-hr" />
         <CSidebarFooter>
           <CNavItem
             href="/login"

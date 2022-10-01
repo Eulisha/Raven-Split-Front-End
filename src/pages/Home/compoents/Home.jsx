@@ -31,7 +31,7 @@ const Home = () => {
     >
       {CurrUser.user && (
         <>
-          <UserGroups setCurrGroup={setCurrGroup} isGroupChanged={isGroupChanged} setIsGroupChanged={setIsGroupChanged} />
+          <UserGroups isGroupChanged={isGroupChanged} setIsGroupChanged={setIsGroupChanged} />
           <Container fluid id={currGroup.gid || null}>
             <div id="center_column">
               {currGroup.gid ? (

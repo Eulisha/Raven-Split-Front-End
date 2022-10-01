@@ -20,25 +20,25 @@
   /* 色系 */
   /* 字 */
   .owed-font{
-    color: rgb(66 170 182) !important;
+    color: rgb(46, 152, 164) !important;
   }
   .owe-font{
-    color: rgb(209 140 125) !important;
+    color: rgb(223, 132, 111) !important;
   }
   .total-font{
-    color: #e1ce95 !important;
+    color: #c09b2d !important;
   }
   /* 背景 */
   .owed-bg{
     /* background-color: rgb(66 170 182) !important; */
-    background-color: #a9d6d6 !important;
+    background-color: #bbe5e5 !important;
   }
   .owe-bg{
     /* background-color: rgb(209 140 125) !important; */
-    background-color: #eabcb2 !important;
+    background-color: #edcbc3 !important;
   }
   .total-bg{
-    background-color: #e1ce95 !important;
+    background-color: #efdda6 !important;
   }
 /* group頭像 */
   .default-group-picture{
@@ -116,13 +116,25 @@
 }
 
 /**** side bar 區 ****/
-#group_area{
+.group_area{
   font-size:16px !important;
   height: 100vh;
 }
+.sidebar-brand{
+  flex: 0.08 !important;
+}
+.logo-title-brand{
+  font-size: 26px !important;
+  /* margin-left: 30px !important; */
+}
 .sidebar-user{
   justify-content: left !important;
-  padding-left: 25px;
+  padding: 0px 20px;
+}
+.sidebar-group-title{
+  justify-content: left !important;
+  padding: 0px 20px;
+  height: 20px !important;
 }
 .sidebar-nav{
   height: 100%;
@@ -135,15 +147,10 @@
 .nav-link.active{
   background-color: rgb(98, 113, 138) !important;
 }
-
 .sidebar-footer{
   padding: 0px !important;
   margin-top: auto;
   color:#fff !important;
-}
-.logo-title-brand{
-  font-size: 22px !important;
-  /* margin-left: 30px !important; */
 }
 .logo-title-user{
   font-size: 18px !important;
@@ -152,14 +159,19 @@
 .nav-link{
   color:#fff !important;
   font-weight: 400 !important;
-  /* margin-left: 10px !important; */
+  padding-left: 30px !important;
 }
 .nav-icon{
   color:#fff !important;
 }
 .nav-title{
-  padding-left: 25px !important;
+  margin-top: 0 !important;
+  padding: 20 px 25px !important;
   font-size: 18px !important;
+
+}
+.nav-hr{
+  margin: 0;
 }
 .add-group-btn{
   display: flex;
@@ -195,6 +207,14 @@
 .self-balance-area{
   display: flex;
   flex-direction: column;
+}
+.dashboard-title{
+  float: center;
+  font-size: 24px;
+  margin: 20px auto 0px;
+  color: #3c4b64;
+  font-weight: 600;
+
 }
 /* 上方summary */
 .dashboard-self-summary-row{
@@ -235,7 +255,7 @@
   display: flex;
   flex-direction: column;
   width: 50%;
-  margin:0 10px;
+  margin:0 10px 40px;
   padding: 30px;
   background-color: #ffff;
   border:solid #ffff 5px;
@@ -280,6 +300,7 @@
   width: 100%;
   color: #0b0c0c !important;
   padding: 15px 0 !important;
+  cursor: pointer;
 }
 .self-balance-detail-group-wrapper{
   display: flex;
