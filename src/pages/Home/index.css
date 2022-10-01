@@ -130,8 +130,9 @@
   justify-content: flex-start;
 }
 .nav-link{
-  margin-left: 20px !important;
+  /* margin-left: 20px !important; */
 }
+.nav-link:active
 .sidebar-footer{
   padding: 0px !important;
   margin-top: auto;

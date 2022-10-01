@@ -17,6 +17,7 @@ const UserGroups = ({ setCurrGroup, isGroupChanged, setGroupUsers, setGroupUserN
 
   const [userGroups, setUserGroups] = useState([]);
   const [editingShow, setEditingShow] = useState(false);
+  const [selected, setSelected] = useState({});
 
   useEffect(() => {
     const fetchuserGroups = async () => {
@@ -42,6 +43,12 @@ const UserGroups = ({ setCurrGroup, isGroupChanged, setGroupUsers, setGroupUserN
     fetchuserGroups();
   }, [isGroupChanged]);
 
+  const handleNavSelect = (e, group) => {
+    console.log(group);
+    setCurrGroup({ gid: group.gid, name: group.name, type: group.type });
+    setSelected({ gid: group.gid });
+  };
+
   return (
     <CSidebar id="group_area" position="fixed">
       <CSidebarBrand>
@@ -62,7 +69,7 @@ const UserGroups = ({ setCurrGroup, isGroupChanged, setGroupUsers, setGroupUserN
         {userGroups.map((group) => {
           if (group.type === '1') {
             return (
-              <CNavItem href="#" key={group.gid} onClick={() => setCurrGroup({ gid: group.gid, name: group.name, type: group.type })}>
+              <CNavItem href="#" key={group.gid} className={selected.gid === group.gid ? 'active' : ''} onClick={(e) => handleNavSelect(e, group)}>
                 {group.name}
               </CNavItem>
             );
