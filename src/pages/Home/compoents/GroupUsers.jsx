@@ -57,9 +57,6 @@ const GroupUsers = ({ setGroupUsers, setGroupUserNames, setGroupUserEmails, isDe
 
   return (
     <div id="group-users">
-      <div className="group-users-top-bar">
-        <div> Group Balance</div>
-      </div>
       <Balance id="balance" isDebtChanged={isDebtChanged} setIsDebtChanged={setIsDebtChanged} />
     </div>
   );

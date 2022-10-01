@@ -308,7 +308,7 @@
   justify-content: center;
   align-items: center;
   height: 3rem;
-  font-size:22px !important;
+  font-size:20px !important;
   background-color:#3c4b64;
   border-radius: 5px;
   margin:5px 0;
@@ -425,10 +425,11 @@ color:rgb(150 157 165);
   }
 .group-users-top-bar{
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
   height: 3rem;
-  font-size:22px !important;
+  font-size:20px !important;
   background-color:#3c4b64;
   border:solid  rgb(38, 37, 37) 1px;
   border-radius: 5px;
