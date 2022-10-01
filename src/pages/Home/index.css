@@ -32,13 +32,16 @@
   .owed-bg{
     /* background-color: rgb(66 170 182) !important; */
     background-color: #bbe5e5 !important;
+    border: solid 2px #1e8e8e !important;
   }
   .owe-bg{
     /* background-color: rgb(209 140 125) !important; */
     background-color: #edcbc3 !important;
+    border: solid 2px #cd6852 !important;
   }
   .total-bg{
     background-color: #efdda6 !important;
+    border: solid 2px #ba921a !important;
   }
 /* group頭像 */
   .default-group-picture{

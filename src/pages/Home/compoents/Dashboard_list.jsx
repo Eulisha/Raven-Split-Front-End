@@ -11,7 +11,7 @@ const Dashboard_list = ({ selfBalance }) => {
 
   return (
     <>
-      <div className="dashboard-title">My Balance Summary</div>
+      <div className="dashboard-title">My Balance List</div>
       {selfBalance.summary && (
         <Row className="dashboard-self-summary-row">
           <Col className="dashboard-self-summary-col">
