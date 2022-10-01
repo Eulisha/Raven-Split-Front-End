@@ -129,10 +129,13 @@
   display: flex;
   justify-content: flex-start;
 }
-.nav-link{
-  /* margin-left: 20px !important; */
+.sidebar-groups{
+  overflow: scroll;
 }
-.nav-link:active
+.nav-link.active{
+  background-color: rgb(98, 113, 138) !important;
+}
+
 .sidebar-footer{
   padding: 0px !important;
   margin-top: auto;

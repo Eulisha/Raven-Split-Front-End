@@ -64,66 +64,35 @@ const UserGroups = ({ setCurrGroup, isGroupChanged, setGroupUsers, setGroupUserN
         </div>
       </CSidebarBrand>
       <CSidebarNav>
-        {/* <CNavGroup toggler="Groups"> */}
-        <CNavTitle>Groups</CNavTitle>
-        {userGroups.map((group) => {
-          if (group.type === '1') {
-            return (
-              <CNavItem href="#" key={group.gid} className={selected.gid === group.gid ? 'active' : ''} onClick={(e) => handleNavSelect(e, group)}>
-                {group.name}
-              </CNavItem>
-            );
-          }
-        })}
-        <button className="add-group-btn" onClick={() => setEditingShow(true)}>
-          <CIcon icon={cilPlus} style={{ marginRight: '10px' }} />
-          Create Group
-        </button>
-
-        {/* </CNavGroup> */}
-        {/* <CNavGroup toggler="Pairs">
+        <div className="sidebar-groups">
+          <CNavTitle>Groups</CNavTitle>
           {userGroups.map((group) => {
-            if (group.type === '2') {
+            if (group.type === '1') {
               return (
-                <CNavItem her="#" key={group.gid} onClick={() => setCurrGroup({ gid: group.gid, name: group.name, type: group.type })}>
+                <CNavItem href="#" key={group.gid} className={selected.gid === group.gid ? 'sidebar-group active' : 'sidebar-group'} onClick={(e) => handleNavSelect(e, group)}>
                   {group.name}
                 </CNavItem>
               );
             }
           })}
-          <CNavItem href="#" onClick={() => setEditingShow(true)}>
+          <button className="add-group-btn" onClick={() => setEditingShow(true)}>
             <CIcon icon={cilPlus} style={{ marginRight: '10px' }} />
-            新增群組
-          </CNavItem>
-        </CNavGroup>
-        <CNavGroup toggler="Group Buying">
-          {userGroups.map((group) => {
-            if (group.type === '3') {
-              return (
-                <CNavItem key={group.gid} onClick={() => setCurrGroup({ gid: group.gid, name: group.name, type: group.type })}>
-                  {group.name}
-                </CNavItem>
-              );
-            }
-          })}
-          <CNavItem href="#" onClick={() => setEditingShow(true)}>
-            <CIcon icon={cilPlus} style={{ marginRight: '10px' }} />
-            新增群組
-          </CNavItem>
-        </CNavGroup> */}
-        {editingShow && (
-          <div>
-            <CreateGroup
-              location="group_normal"
-              editingShow={editingShow}
-              setEditingShow={setEditingShow}
-              setGroupUsers={setGroupUsers}
-              setGroupUserNames={setGroupUserNames}
-              setGroupUserEmails={setGroupUserEmails}
-              setIsGroupChanged={setIsGroupChanged}
-            />
-          </div>
-        )}
+            Create Group
+          </button>
+          {editingShow && (
+            <div>
+              <CreateGroup
+                location="group_normal"
+                editingShow={editingShow}
+                setEditingShow={setEditingShow}
+                setGroupUsers={setGroupUsers}
+                setGroupUserNames={setGroupUserNames}
+                setGroupUserEmails={setGroupUserEmails}
+                setIsGroupChanged={setIsGroupChanged}
+              />
+            </div>
+          )}
+        </div>
         <CSidebarFooter>
           <CNavItem
             href="/login"
