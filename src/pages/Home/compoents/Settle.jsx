@@ -175,9 +175,9 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
               min="2000-01-01"
               max="2050-12-31"
               title="date"
-              defaultValue={`${new Date(Date.now()).getFullYear()}-${new Date(Date.now()).getMonth() + 1 < 10 ? 0 : ''}${new Date(Date.now()).getMonth() + 1}-${new Date(
-                Date.now()
-              ).getDate()}`}
+              defaultValue={`${new Date(Date.now()).getFullYear()}-${new Date(Date.now()).getMonth() + 1 < 10 ? 0 : ''}${new Date(Date.now()).getMonth() + 1}-${
+                new Date(Date.now()).getDate() + 1 < 10 ? 0 : ''
+              }${new Date(Date.now()).getDate()}`}
             />
             {/* <Form.Label>Title</Form.Label> */}
             {/* <Form.Control ref={inputTitle} type="text" name="title" defaultValue="Settle Group All Balances" disabled></Form.Control> */}
