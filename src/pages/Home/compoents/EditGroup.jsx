@@ -205,50 +205,60 @@ const EditGroup = ({ setEditingShow, editingShow }) => {
       <Modal.Body>
         <Form noValidate ref={formRef}>
           <Form.Group id="group_name">
-            <Form.Label>Group Name</Form.Label>
-            <Form.Control required ref={inputGroupName} title="Group Name" type="text" defaultValue={currGroup.name} />
+            <Form.Label className="add-group-members-lebel">Group Name</Form.Label>
+            <Form.Control required ref={inputGroupName} title="Group Name" type="text" placeholder="give me a name" defaultValue={currGroup.name} />
           </Form.Group>
-          <Form.Group className="add-group-members">
-            <Form.Label>Members</Form.Label>
-            {editedGroupUserIds.length > 1 ? (
-              editedGroupUserIds.map((uid) => {
+          {editedGroupUserIds.length > 1 ? (
+            <Form.Group className="add-group-members">
+              <Form.Label className="add-group-members-lebel">Current Members</Form.Label>
+              {editedGroupUserIds.map((uid) => {
                 return (
-                  <ListGroup key={uid}>
-                    {uid === id ? (
-                      <ListGroup.Item>{`${name} ${email}`}</ListGroup.Item>
-                    ) : !groupUsers.includes(uid) ? (
-                      <div>
-                        <ListGroup.Item>
-                          {`${editedGroupUserNames[uid]} ${editedGroupUserEmails[uid]}`}
-                          <MdDelete
-                            id={uid}
-                            onClick={(event) => {
-                              handleDeleteUser(event, uid);
-                            }} // 刪除icon
-                          />
-                        </ListGroup.Item>
-                      </div>
-                    ) : (
+                  groupUsers.includes(uid) && (
+                    <ListGroup>
                       <ListGroup.Item>{`${groupUserNames[uid]} ${groupUserEmails[uid]}`}</ListGroup.Item>
-                    )}
-                  </ListGroup>
+                    </ListGroup>
+                  )
                 );
-              })
-            ) : (
+              })}
+            </Form.Group>
+          ) : (
+            <Form.Group className="add-group-members">
+              (
               <ListGroup>
                 <ListGroup.Item>{`${name} ${email}`}</ListGroup.Item>
               </ListGroup>
-            )}
-          </Form.Group>
+              )
+            </Form.Group>
+          )}
+          <hr style={{ marginTop: '30px' }} />
           <Form.Group>
             <div className="add-group-invite-friend">
-              <Form.Label>Invite Friend To Join</Form.Label>
-              <InputGroup>
-                <Form.Control ref={inputUserEmail} id="add_user_email" type="email" placeholder="enter email"></Form.Control>
-                <Button variant="outline-secondary" id="button-add" onClick={handleAddUser}>
+              <Form.Label className="add-group-members-lebel">Invite Friend To Join</Form.Label>
+              <InputGroup className="add-group-invite-friend-input">
+                <Form.Control ref={inputUserEmail} className="add-group-email" type="email" placeholder="enter email"></Form.Control>
+                <Button variant="outline-success" className="add-group-members-btn" onClick={handleAddUser}>
                   Add
                 </Button>
               </InputGroup>
+              <Form.Label className="add-group-members-lebel-new">New Inviteing</Form.Label>
+              {editedGroupUserIds.map((uid) => {
+                return (
+                  !groupUsers.includes(uid) && (
+                    <ListGroup key={uid}>
+                      <ListGroup.Item>
+                        {`${editedGroupUserNames[uid]} ${editedGroupUserEmails[uid]}`}
+                        <MdDelete
+                          id={uid}
+                          className="add-group-members-delete-icon"
+                          onClick={(event) => {
+                            handleDeleteUser(event, uid);
+                          }} // 刪除icon
+                        />
+                      </ListGroup.Item>
+                    </ListGroup>
+                  )
+                );
+              })}
             </div>
           </Form.Group>
         </Form>

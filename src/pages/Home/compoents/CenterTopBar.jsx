@@ -19,9 +19,11 @@ const CenterTopBar = ({ setDebt, setIsDebtChanged }) => {
             <div className="center-top-bar-button-warp">
               <Add.AddButton setDebt={setDebt} setIsDebtChanged={setIsDebtChanged} />
               <Settle.SettleButton key="settle-button" setIsDebtChanged={setIsDebtChanged} />
-              <Button size="sm" variant="outline-light" onClick={() => setEditShow(true)}>
-                Group Setting
-              </Button>
+              <div>
+                <Button size="sm" variant="outline-light" onClick={() => setEditShow(true)}>
+                  Group Setting
+                </Button>
+              </div>
             </div>
             {groupUsers && editShow && (
               <div>

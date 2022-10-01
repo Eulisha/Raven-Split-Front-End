@@ -291,11 +291,28 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
                 />
               </Form.Label>
               <Form.Label className="add-debt-form-label-top">
-                Title: <Form.Control required type="text" title="title" defaultValue={debtInfo ? debtInfo.title : ''} onChange={handleInfoChange('title')} />
+                Title:{' '}
+                <Form.Control
+                  required
+                  type="text"
+                  title="title"
+                  placeholder="name of this expense"
+                  defaultValue={debtInfo ? debtInfo.title : ''}
+                  onChange={handleInfoChange('title')}
+                />
               </Form.Label>
               <Form.Label className="add-debt-form-label-top">
                 Total:
-                <Form.Control required type="number" min="1" max="100000000" title="total" defaultValue={debtInfo ? debtInfo.total : 0} onChange={handleInfoChange('total')} />
+                <Form.Control
+                  required
+                  type="number"
+                  min="1"
+                  max="100000000"
+                  title="total"
+                  placeholder="total of this expense"
+                  defaultValue={debtInfo ? debtInfo.total : 0}
+                  onChange={handleInfoChange('total')}
+                />
               </Form.Label>
               <Form.Label required className="add-debt-form-label-top">
                 Paid By:
