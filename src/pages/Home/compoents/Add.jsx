@@ -249,7 +249,7 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
             icon: 'error',
             confirmButtonText: 'Cool',
           });
-          e.target.disabled = true;
+          e.target.disabled = false;
         } else {
           //系統錯誤
           Swal.fire({

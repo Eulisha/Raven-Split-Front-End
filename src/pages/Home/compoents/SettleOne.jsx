@@ -146,6 +146,7 @@ const SettleOneWindow = ({ gid, settleFromId, settleFromName, settleToId, settle
       }
     } else {
       validator(formRef);
+      e.target.disabled = false;
     }
   };
 
