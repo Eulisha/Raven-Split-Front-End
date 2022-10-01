@@ -36,8 +36,15 @@ const SignUp = ({ setHasAccount }) => {
         // window.location.assign(`${constants.HOST}/dashboard`);
         navigate('/dashboard');
       } catch (err) {
-        console.log(err.response.data.err);
-        if (err.response.data.provider) {
+        console.log(err.response);
+        if (!err.response.data) {
+          Swal.fire({
+            title: 'Oops!',
+            text: 'Something Wrong. Please Try Later.',
+            icon: 'error',
+            confirmButtonText: 'Cool',
+          });
+        } else if (err.response.data.provider) {
           //從validator來的error是array形式
           Swal.fire({
             title: 'Error!',
