@@ -55,11 +55,14 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
 
   //設定state for 編輯時暫存的值
   //帳的初始值 判斷是新增or編輯
+
   const initialInfo = details
     ? debtInfo
     : {
         gid,
-        date: `${new Date(Date.now()).getFullYear()}-${new Date(Date.now()).getMonth() + 1 < 10 ? 0 : ''}${new Date(Date.now()).getMonth() + 1}-${new Date(Date.now()).getDate()}`,
+        date: `${new Date(Date.now()).getFullYear()}-${new Date(Date.now()).getMonth() + 1 < 10 ? 0 : ''}${new Date(Date.now()).getMonth() + 1}-${
+          new Date(Date.now()).getDate() + 1 < 10 ? 0 : ''
+        }${new Date(Date.now()).getDate()}`,
         title: '',
         total: 0,
         lender: currUserId,
