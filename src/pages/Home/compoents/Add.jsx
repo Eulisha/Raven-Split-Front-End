@@ -16,7 +16,7 @@ const AddButton = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged }) 
   let { groupUsers } = CurrGroupInfo;
   return (
     <div>
-      <Button size="sm" variant="outline-info" onClick={() => setEditingShow(true)}>
+      <Button size="sm" variant={details ? 'outline-info' : 'outline-light'} className="add-btn" onClick={() => setEditingShow(true)}>
         {details ? 'Edit' : 'Add Expense'}
       </Button>
       {groupUsers && editingShow && (
@@ -141,8 +141,11 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
       //驗金額
       if (info.total != splitTotal) {
         Swal.fire({
-          title: 'Expense is indivisible ',
-          text: `Still NT$${currSum.total - currSum.sum} left. Please check before save.`,
+          title: 'Mismatch with Total',
+          text:
+            currSum.total - currSum.sum > 0
+              ? `Still NT$${currSum.total - currSum.sum} left. Please check before save.`
+              : `Exceed NT$${currSum.sum - currSum.total}. Please check before save.`,
           icon: 'warning',
           confirmButtonText: 'Cool',
         });
@@ -380,14 +383,14 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
                 </Form.Label>
                 <GiReceiveMoney style={{ width: '30px', height: '30px' }} />
                 <Form.Label className="add-debt-total">
-                  {currSum.total - currSum.sum > 0 ? (
+                  {currSum.total - currSum.sum >= 0 ? (
                     <>
-                      <span>Left </span>
+                      <span>Still Left </span>
                       <span>{currencyFormat(currSum.total - currSum.sum)}</span>
                     </>
                   ) : (
                     <>
-                      <span>Over </span>
+                      <span>Exceed </span>
                       <span>{currencyFormat(currSum.sum - currSum.total)}</span>
                     </>
                   )}

@@ -16,7 +16,7 @@ const SettleButton = ({ setIsDebtChanged }) => {
   const [editingShow, setEditingShow] = useState(false);
   return (
     <div>
-      <Button size="sm" variant="outline-info" onClick={() => setEditingShow(true)}>
+      <Button size="sm" variant="outline-light" onClick={() => setEditingShow(true)}>
         Settle All
       </Button>
       {groupUsers && editingShow && <SettleWindow setIsDebtChanged={setIsDebtChanged} show={editingShow} onHide={() => setEditingShow(false)} state="editing" />}

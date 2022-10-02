@@ -29,7 +29,7 @@ const Home = () => {
     <GroupInfo.Provider
       value={{ currGroup, groupUsers, groupUserNames, groupUserEmails, isGroupChanged, setIsGroupChanged, setCurrGroup, setGroupUsers, setGroupUserNames, setGroupUserEmails }}
     >
-      {CurrUser.user && (
+      {CurrUser.user.id && (
         <>
           <UserGroups isGroupChanged={isGroupChanged} setIsGroupChanged={setIsGroupChanged} />
           <Container fluid id={currGroup.gid || null}>

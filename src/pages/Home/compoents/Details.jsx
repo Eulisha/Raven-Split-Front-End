@@ -129,13 +129,11 @@ const Details = ({ debtInfo, setDebt, setIsDebtChanged }) => {
         {debtInfo.title.includes('Settle Balances Between') ? (
           ''
         ) : (
-          <>
-            <Add.AddButton key="update" className="edit" debtInfo={debtInfo} details={details} setDebt={setDebt} setDetail={setDetail} setIsDebtChanged={setIsDebtChanged} />
-            <Button size="sm" variant="outline-danger" id={debtId} onClick={handleDeleteDebt}>
-              Delete
-            </Button>
-          </>
+          <Add.AddButton key="update" className="edit" debtInfo={debtInfo} details={details} setDebt={setDebt} setDetail={setDetail} setIsDebtChanged={setIsDebtChanged} />
         )}
+        <Button size="sm" variant="outline-danger" id={debtId} onClick={handleDeleteDebt}>
+          Delete
+        </Button>
       </div>
     </div>
   );

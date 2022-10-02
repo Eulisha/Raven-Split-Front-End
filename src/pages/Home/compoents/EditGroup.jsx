@@ -202,7 +202,7 @@ const EditGroup = ({ setEditingShow, editingShow }) => {
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">Edit Group</Modal.Title>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body className="add-group-body">
         <Form noValidate ref={formRef}>
           <Form.Group id="group_name">
             <Form.Label className="add-group-members-lebel">Group Name</Form.Label>
@@ -230,6 +230,25 @@ const EditGroup = ({ setEditingShow, editingShow }) => {
               )
             </Form.Group>
           )}
+          <Form.Label className="add-group-members-lebel-new">New Inviteing</Form.Label>
+          {editedGroupUserIds.map((uid) => {
+            return (
+              !groupUsers.includes(uid) && (
+                <ListGroup key={uid}>
+                  <ListGroup.Item>
+                    {`${editedGroupUserNames[uid]} ${editedGroupUserEmails[uid]}`}
+                    <MdDelete
+                      id={uid}
+                      className="add-group-members-delete-icon"
+                      onClick={(event) => {
+                        handleDeleteUser(event, uid);
+                      }} // 刪除icon
+                    />
+                  </ListGroup.Item>
+                </ListGroup>
+              )
+            );
+          })}
           <hr style={{ marginTop: '30px' }} />
           <Form.Group>
             <div className="add-group-invite-friend">
@@ -240,25 +259,6 @@ const EditGroup = ({ setEditingShow, editingShow }) => {
                   Add
                 </Button>
               </InputGroup>
-              <Form.Label className="add-group-members-lebel-new">New Inviteing</Form.Label>
-              {editedGroupUserIds.map((uid) => {
-                return (
-                  !groupUsers.includes(uid) && (
-                    <ListGroup key={uid}>
-                      <ListGroup.Item>
-                        {`${editedGroupUserNames[uid]} ${editedGroupUserEmails[uid]}`}
-                        <MdDelete
-                          id={uid}
-                          className="add-group-members-delete-icon"
-                          onClick={(event) => {
-                            handleDeleteUser(event, uid);
-                          }} // 刪除icon
-                        />
-                      </ListGroup.Item>
-                    </ListGroup>
-                  )
-                );
-              })}
             </div>
           </Form.Group>
         </Form>

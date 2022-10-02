@@ -215,7 +215,7 @@ const CreateGroup = ({ location, setEditingShow, editingShow }) => {
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">Create Group</Modal.Title>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body className="add-group-body">
         <Form noValidate ref={formRef}>
           <Form.Group id="group_name">
             <Form.Label className="add-group-members-lebel">Group Name</Form.Label>

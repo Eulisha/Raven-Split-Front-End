@@ -361,6 +361,7 @@ margin-right:20px
   height: 3rem;
   width: 100%;
   margin: 0 10px;
+  padding-left: 20px;
 
 }
 .debt-items-left{
@@ -446,7 +447,7 @@ color:rgb(150 157 165);
 /* group balance區 */
 #group-users{
   /* flex-grow:1.5 !important; */
-  width: 35%;
+  width: 50%;
   margin-left:20px;
   margin-bottom:20px;
   }
@@ -483,7 +484,7 @@ color:rgb(150 157 165);
 }
 .group-balance-detail-item-wrapper{
   display:flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
 }
 .group-balance-list-settle-button-wrapper{
 display: flex !important;
@@ -556,8 +557,8 @@ margin: 5px 0px 5px!important;
 .add-debt-modal-body{
   display: flex;
   justify-content: center !important;
-  align-items: center !important;
-  padding: 40px 50px !important;
+  align-items: flex-start !important;
+  padding: 50px !important;
 }
 .add-debt-lebel{
   color:#272d7b !important;
@@ -567,7 +568,10 @@ margin: 5px 0px 5px!important;
 .add-debt-form{
   display: flex;
   justify-content: center;
-  flex:0 0 25em !important;
+  flex-grow: 0;
+  flex-shrink: 0;
+  /* flex:0 0 !important; */
+  width: 50%;
   
 }
 .add-debt-form-wrapper{
@@ -587,7 +591,10 @@ margin: 5px 0px 5px!important;
   justify-content: center;
   align-items: center;
   font-size: 20px;
-  flex:0 0 20em !important;
+  /* flex:0 0 !important; */
+  flex-grow: 0;
+  flex-shrink: 0;
+  width: 50%;
 }
 .add-debt-split-detail-list{
   display: flex;
@@ -601,6 +608,7 @@ margin: 5px 0px 5px!important;
 }
 .add-debt-total-div{
   display: flex;
+  flex-direction: column;
   width: 100%;
   justify-content: space-between;
   align-items: center;
@@ -609,8 +617,8 @@ margin: 5px 0px 5px!important;
 }
 .add-debt-total{
   display: flex;
-  flex-direction: column;
   font-size: 20px !important;
+  gap: 15px
 }
 .warning-wording{
   margin-top: 10px;
@@ -619,8 +627,19 @@ margin: 5px 0px 5px!important;
   color: #cd6852 !important;
   text-align: left;
   }
+  /* .add-btn{
+    color:#0dcaf0 !important;
+    border-color: #0dcaf0 !important;
+    font-size: ;
+  }
+  .add-btn:hover{
+    color:#0b0c0c !important;
+  } */
 
 /* add-group */
+.add-group-body{
+  padding: 20px 50px !important;
+}
 .add-group-members{
   display: flex;
   flex-direction: column;
@@ -649,6 +668,9 @@ margin: 5px 0px 5px!important;
 }
 .add-group-invite-friend-input{
   margin-bottom: 20px;
+}
+.group-setting-btn{
+  border: none !important;
 }
 
 
