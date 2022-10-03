@@ -164,6 +164,10 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
         const data = { debt_main: info, debt_detail: newDetails };
         console.log('FRONTEND for post debt :', data);
 
+        //刪除資料庫用不到的key
+        delete info.isOwned;
+        delete info.ownAmount;
+
         //傳給後端
         const token = localStorage.getItem('accessToken');
         let result;
