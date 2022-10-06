@@ -187,44 +187,48 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
               settle.map((ele) => {
                 return (
                   <div className="settle-pair-items">
-                    {ele.amount == 0 ? (
-                      <>
-                        <Icons.UserIcon />
-                        <span>{groupUserNames[ele.borrower]}</span>
-                        <div className="settle-pair-pay-amount-wapper">
-                          <BsArrowRight />
-                          <div style={{ display: 'flex', flexDirection: 'column', justifyItems: 'flex-end', alignItems: 'center', margin: '10px' }}>
-                            <div>
-                              <span className="settle-pair-pay-amount" style={{ color: '#dddcdc' }}>
-                                {currencyFormat(ele.amount)}
-                              </span>
-                              <GiPayMoney style={{ width: '30px', height: '30px', color: '#dddcdc' }} />
-                            </div>
-                          </div>
-                          <BsArrowRight />
-                        </div>
-                        <span>{groupUserNames[ele.lender]}</span>
-                        <Icons.UserIcon />
-                      </>
-                    ) : (
-                      <>
-                        <Icons.UserIcon />
-                        <span>{groupUserNames[ele.borrower]}</span>
-                        <div className="settle-pair-pay-amount-wapper">
-                          <BsArrowRight />
-                          <div style={{ display: 'flex', flexDirection: 'column', justifyItems: 'flex-end', alignItems: 'center', margin: '10px' }}>
-                            <div>
-                              <span className="settle-pair-pay-amount">{currencyFormat(ele.amount)}</span>
+                    {
+                      ele.amount != 0 && (
+                        // ? (
+                        //   <>
+                        //     <Icons.UserIcon />
+                        //     <span>{groupUserNames[ele.borrower]}</span>
+                        //     <div className="settle-pair-pay-amount-wapper">
+                        //       <BsArrowRight />
+                        //       <div style={{ display: 'flex', flexDirection: 'column', justifyItems: 'flex-end', alignItems: 'center', margin: '10px' }}>
+                        //         <div>
+                        //           <span className="settle-pair-pay-amount" style={{ color: '#dddcdc' }}>
+                        //             {currencyFormat(ele.amount)}
+                        //           </span>
+                        //           <GiPayMoney style={{ width: '30px', height: '30px', color: '#dddcdc' }} />
+                        //         </div>
+                        //       </div>
+                        //       <BsArrowRight />
+                        //     </div>
+                        //     <span>{groupUserNames[ele.lender]}</span>
+                        //     <Icons.UserIcon />
+                        //   </>
+                        // ) : (
+                        <>
+                          <Icons.UserIcon />
+                          <span>{groupUserNames[ele.borrower]}</span>
+                          <div className="settle-pair-pay-amount-wapper">
+                            <BsArrowRight />
+                            <div style={{ display: 'flex', flexDirection: 'column', justifyItems: 'flex-end', alignItems: 'center', margin: '10px' }}>
+                              <div>
+                                <span className="settle-pair-pay-amount">{currencyFormat(ele.amount)}</span>
 
-                              <GiPayMoney style={{ width: '30px', height: '30px' }} />
+                                <GiPayMoney style={{ width: '30px', height: '30px' }} />
+                              </div>
                             </div>
+                            <BsArrowRight />
                           </div>
-                          <BsArrowRight />
-                        </div>
-                        <span>{groupUserNames[ele.lender]}</span>
-                        <Icons.UserIcon />
-                      </>
-                    )}
+                          <span>{groupUserNames[ele.lender]}</span>
+                          <Icons.UserIcon />
+                        </>
+                      )
+                      // )
+                    }
                   </div>
                 );
               })
