@@ -8,17 +8,17 @@ import { MdDelete } from 'react-icons/md';
 import Swal from 'sweetalert2';
 import validator from '../../../global/validator';
 
-const CreateGroup = ({ location, setEditingShow, editingShow }) => {
+const CreateGroup = ({ setEditingShow, editingShow }) => {
   console.log('@Creat Group');
 
   let CurrUser = useContext(User);
   let CurrGroupInfo = useContext(GroupInfo) || {};
   let { id, name, email } = CurrUser.user;
   let { setIsGroupChanged } = CurrGroupInfo;
-  let group_type;
+  let group_type = 'group_normal';
   console.log('id, name, email: ', id, name, email);
 
-  switch (location) {
+  switch (group_type) {
     case 'group_normal':
       group_type = '1';
       break;
@@ -141,68 +141,78 @@ const CreateGroup = ({ location, setEditingShow, editingShow }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     e.target.disabled = true;
+
     const form = formRef.current;
     console.log(form, validator);
-    if (form.reportValidity()) {
-      try {
-        //整理送後端格式
-        const newGroupUsers = { group_name: inputGroupName.current.value, group_type, groupUsers: [] };
-        //[{uid:1,email:a@a.com,role:2}]
 
-        //加自己
-        newGroupUsers.groupUsers.push({ uid: id, email, role: '4' });
-        //加其他人
-        editedGroupUserIds.map((userId) => {
-          if (userId != id) {
-            const newGroupUser = { uid: userId, email: editedGroupUserEmails[userId], role: group_type === 'group_normal' ? 2 : group_type === 'group_pair' ? 4 : 1 };
-            newGroupUsers.groupUsers.push(newGroupUser);
-          }
-        });
-
-        //傳給後端
-        const token = localStorage.getItem('accessToken');
-        console.log('FRONT for post group:', newGroupUsers);
-
-        const { data } = await axios.post(`${constants.API_POST_GROUP}`, newGroupUsers, {
-          headers: {
-            authorization: `Bearer ${token}`,
-          },
-        });
-        console.log('BACKEND for set group..: ', data.data);
-
-        setIsGroupChanged((prev) => !prev);
-        setEditingShow(false);
-        // setEditedGroupUserIds([id]);
-        // setEditedGroupUserEmails({ [id]: email });
-        // setEditedGroupUserNames({ [id]: name });
-      } catch (err) {
-        console.log(err.response);
-        if (err.response.data.provider) {
-          //從validator來的error是array形式
-          Swal.fire({
-            title: 'Error!',
-            text: err.response.data.err[0].msg,
-            icon: 'error',
-            confirmButtonText: 'Cool',
-          });
-        } else {
-          Swal.fire({
-            title: 'Error!',
-            text: err.response.data.err,
-            icon: 'error',
-            confirmButtonText: 'Cool',
-          });
-        }
-        e.target.disabled = false;
-        return;
-      }
-    } else {
+    if (!form.reportValidity()) {
       validator(formRef);
       e.target.disabled = false;
       return;
     }
-  };
 
+    if (editedGroupUserIds.length < 2) {
+      return Swal.fire({
+        title: 'Error!',
+        text: 'A group should at least have two members.',
+        icon: 'error',
+        confirmButtonText: 'Cool',
+      });
+    }
+
+    try {
+      //整理送後端格式
+      const newGroupUsers = { group_name: inputGroupName.current.value, group_type, groupUsers: [] };
+      //[{uid:1,email:a@a.com,role:2}]
+
+      //加自己
+      newGroupUsers.groupUsers.push({ uid: id, email, role: '4' });
+      //加其他人
+      editedGroupUserIds.map((userId) => {
+        if (userId != id) {
+          const newGroupUser = { uid: userId, email: editedGroupUserEmails[userId], role: group_type === 'group_normal' ? 2 : group_type === 'group_pair' ? 4 : 1 };
+          newGroupUsers.groupUsers.push(newGroupUser);
+        }
+      });
+
+      //傳給後端
+      const token = localStorage.getItem('accessToken');
+      console.log('FRONT for post group:', newGroupUsers);
+
+      const { data } = await axios.post(`${constants.API_POST_GROUP}`, newGroupUsers, {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      });
+      console.log('BACKEND for set group..: ', data.data);
+
+      setIsGroupChanged((prev) => !prev);
+      setEditingShow(false);
+      // setEditedGroupUserIds([id]);
+      // setEditedGroupUserEmails({ [id]: email });
+      // setEditedGroupUserNames({ [id]: name });
+    } catch (err) {
+      console.log(err.response);
+      if (err.response.data.provider) {
+        //從validator來的error是array形式
+        Swal.fire({
+          title: 'Error!',
+          text: err.response.data.err[0].msg,
+          icon: 'error',
+          confirmButtonText: 'Cool',
+        });
+      } else {
+        Swal.fire({
+          title: 'Error!',
+          text: err.response.data.err,
+          icon: 'error',
+          confirmButtonText: 'Cool',
+        });
+      }
+      e.target.disabled = false;
+      return;
+    }
+  };
   return (
     <Modal
       show={editingShow}
