@@ -80,7 +80,7 @@ const SignIn = ({ setHasAccount }) => {
           <Button className="sumbit-btn" variant="primary" type="submit" onClick={hanldleSubmit}>
             Submit
           </Button>
-          <button className="change-login-method-btn" variant="outline-success" onClick={() => setHasAccount(false)}>
+          <button className="change-login-method-btn" style={{ border: 'none' }} onClick={() => setHasAccount(false)}>
             I don't have account yet
           </button>
         </Form>

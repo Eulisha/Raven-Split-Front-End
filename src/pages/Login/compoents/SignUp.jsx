@@ -93,7 +93,7 @@ const SignUp = ({ setHasAccount }) => {
           <Button variant="info" type="submit" onClick={hanldleSubmit}>
             Submit
           </Button>
-          <button className="change-login-method-btn" variant="outline-success" onClick={() => setHasAccount(false)}>
+          <button className="change-login-method-btn" onClick={() => setHasAccount(false)}>
             I already have account
           </button>
         </Form>
