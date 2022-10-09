@@ -167,7 +167,7 @@ const SettleOneWindow = ({ gid, settleFromId, settleFromName, settleToId, settle
               max="2050-12-31"
               title="date"
               defaultValue={`${new Date(Date.now()).getFullYear()}-${new Date(Date.now()).getMonth() + 1 < 10 ? 0 : ''}${new Date(Date.now()).getMonth() + 1}-${
-                new Date(Date.now()).getDate() + 1 < 10 ? 0 : ''
+                new Date(Date.now()).getDate() < 10 ? 0 : ''
               }${new Date(Date.now()).getDate()}`}
             />
             {/* <Form.Label>Title</Form.Label> */}

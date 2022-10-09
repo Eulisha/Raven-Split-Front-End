@@ -61,7 +61,7 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
     : {
         gid,
         date: `${new Date(Date.now()).getFullYear()}-${new Date(Date.now()).getMonth() + 1 < 10 ? 0 : ''}${new Date(Date.now()).getMonth() + 1}-${
-          new Date(Date.now()).getDate() + 1 < 10 ? 0 : ''
+          new Date(Date.now()).getDate() < 10 ? 0 : ''
         }${new Date(Date.now()).getDate()}`,
         title: '',
         total: 0,
