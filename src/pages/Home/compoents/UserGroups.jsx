@@ -35,13 +35,22 @@ const UserGroups = ({ isGroupChanged, setGroupUsers, setGroupUserNames, setGroup
         console.log('BACKEND for setUserGroups: ', data.data);
         setUserGroups(data.data);
       } catch (err) {
-        console.log(err.response.data.err);
-        return Swal.fire({
-          title: 'Error!',
-          text: err.response.data.err,
-          icon: 'error',
-          confirmButtonText: 'Cool',
-        });
+        if (!err.response.data) {
+          //網路錯誤
+          Swal.fire({
+            title: 'Error!',
+            text: 'Network Connection failed, please try later...',
+            icon: 'error',
+            confirmButtonText: 'OK',
+          });
+        } else {
+          Swal.fire({
+            title: 'Error!',
+            text: 'Internal Server Error',
+            icon: 'error',
+            confirmButtonText: 'OK',
+          });
+        }
       }
     };
     fetchuserGroups();

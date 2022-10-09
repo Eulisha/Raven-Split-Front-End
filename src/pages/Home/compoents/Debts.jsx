@@ -34,13 +34,22 @@ const Debts = ({ debts, isDebtChanged, setDebt, setIsDebtChanged }) => {
         console.log('BACKEND for setDebts: ', data.data);
         setDebt(data.data);
       } catch (err) {
-        console.log(err.response.data.err);
-        return Swal.fire({
-          title: 'Error!',
-          text: err.response.data.err,
-          icon: 'error',
-          confirmButtonText: 'Cool',
-        });
+        if (!err.response.data) {
+          //網路錯誤
+          Swal.fire({
+            title: 'Error!',
+            text: 'Network Connection failed, please try later...',
+            icon: 'error',
+            confirmButtonText: 'OK',
+          });
+        } else {
+          Swal.fire({
+            title: 'Error!',
+            text: 'Internal Server Error',
+            icon: 'error',
+            confirmButtonText: 'OK',
+          });
+        }
       }
     };
     if (currGroup.gid) {
@@ -61,13 +70,22 @@ const Debts = ({ debts, isDebtChanged, setDebt, setIsDebtChanged }) => {
         console.log('BACKEND for setPaging: ', data.data);
         setPageCount(data.data.pageCount);
       } catch (err) {
-        console.log(err.response.data.err);
-        return Swal.fire({
-          title: 'Error!',
-          text: err.response.data.err,
-          icon: 'error',
-          confirmButtonText: 'Cool',
-        });
+        if (!err.response.data) {
+          //網路錯誤
+          Swal.fire({
+            title: 'Error!',
+            text: 'Network Connection failed, please try later...',
+            icon: 'error',
+            confirmButtonText: 'OK',
+          });
+        } else {
+          Swal.fire({
+            title: 'Error!',
+            text: 'Internal Server Error',
+            icon: 'error',
+            confirmButtonText: 'OK',
+          });
+        }
       }
     };
     if (currGroup.gid) {

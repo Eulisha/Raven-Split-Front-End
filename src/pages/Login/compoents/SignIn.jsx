@@ -37,7 +37,7 @@ const SignIn = ({ setHasAccount }) => {
             title: 'Oops!',
             text: 'Something Wrong. Please Try Later.',
             icon: 'error',
-            confirmButtonText: 'Cool',
+            confirmButtonText: 'OK',
           });
         } else if (err.response.data.provider) {
           //從validator來的error是array形式
@@ -45,16 +45,24 @@ const SignIn = ({ setHasAccount }) => {
             title: 'Error!',
             text: err.response.data.err[0].msg,
             icon: 'error',
-            confirmButtonText: 'Cool',
+            confirmButtonText: 'OK',
+          });
+        } else if (err.response.status == 403) {
+          Swal.fire({
+            title: 'Error!',
+            text: 'Please check e-mail and password are correct.',
+            icon: 'error',
+            confirmButtonText: 'OK',
           });
         } else {
           Swal.fire({
             title: 'Error!',
-            text: err.response.data.err,
+            text: 'Internal Server Error',
             icon: 'error',
-            confirmButtonText: 'Cool',
+            confirmButtonText: 'OK',
           });
         }
+      } finally {
         e.target.disabled = false;
       }
     } else {

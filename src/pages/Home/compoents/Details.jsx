@@ -47,13 +47,22 @@ const Details = ({ debtInfo, setDebt, setIsDebtChanged }) => {
         console.log('整理好最後用來setDetails: ', oriSplit);
         setDetail(oriSplit);
       } catch (err) {
-        console.log(err.response.data.err);
-        return Swal.fire({
-          title: 'Error!',
-          text: err.response.data.err,
-          icon: 'error',
-          confirmButtonText: 'Cool',
-        });
+        if (!err.response.data) {
+          //網路錯誤
+          Swal.fire({
+            title: 'Error!',
+            text: 'Network Connection failed, please try later...',
+            icon: 'error',
+            confirmButtonText: 'OK',
+          });
+        } else {
+          Swal.fire({
+            title: 'Error!',
+            text: 'Internal Server Error',
+            icon: 'error',
+            confirmButtonText: 'OK',
+          });
+        }
       }
     };
     let detailsKeys = Object.keys(details);
@@ -92,13 +101,21 @@ const Details = ({ debtInfo, setDebt, setIsDebtChanged }) => {
           Swal.fire('Deleted!', 'Your file has been deleted.', 'success');
         } catch (err) {
           console.log(err.response);
-          if (err.response.status == 404) {
+          if (!err.response.data) {
+            //網路錯誤
+            Swal.fire({
+              title: 'Error!',
+              text: 'Network Connection failed, please try later...',
+              icon: 'error',
+              confirmButtonText: 'OK',
+            });
+          } else if (err.response.status == 404) {
             //帳已經不存在
             return Swal.fire({
               title: 'Error!',
               text: 'This debt might already be modified by others, please refresh to get latest one.',
               icon: 'error',
-              confirmButtonText: 'Cool',
+              confirmButtonText: 'OK',
             }).then(async () => {
               const token = localStorage.getItem('accessToken');
               const { data } = await axios.get(`${constants.API_GET_DEBTS}/${gid}?paging=${paging}`, {
@@ -114,7 +131,7 @@ const Details = ({ debtInfo, setDebt, setIsDebtChanged }) => {
               title: 'Error!',
               text: err.response.data.err,
               icon: 'error',
-              confirmButtonText: 'Cool',
+              confirmButtonText: 'OK',
             });
           }
         }

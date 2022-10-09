@@ -78,12 +78,26 @@ const SettleOneWindow = ({ gid, settleFromId, settleFromName, settleToId, settle
           console.log('BACKEND settleDone result:  ', data.data);
         } catch (err) {
           console.log(err.response.data.err);
-          return Swal.fire({
-            title: 'Error!',
-            text: err.response.data.err,
-            icon: 'error',
-            confirmButtonText: 'Cool',
-          });
+          if (!err.response.data) {
+            //網路錯誤
+            Swal.fire({
+              title: 'Error!',
+              text: 'Network Connection failed, please try later...',
+              icon: 'error',
+              confirmButtonText: 'OK',
+            }).then(() => {
+              onHide();
+            });
+          } else {
+            return Swal.fire({
+              title: 'Error!',
+              text: 'Internal Server Error',
+              icon: 'error',
+              confirmButtonText: 'OK',
+            }).then(() => {
+              onHide();
+            });
+          }
         }
       };
       fetchOnHide();
@@ -124,25 +138,37 @@ const SettleOneWindow = ({ gid, settleFromId, settleFromName, settleToId, settle
         onHide();
       } catch (err) {
         console.log(err);
-        if (err.response.data.provider) {
+        if (!err.response.data) {
+          //網路錯誤
+          Swal.fire({
+            title: 'Error!',
+            text: 'Network Connection failed, please try later...',
+            icon: 'error',
+            confirmButtonText: 'OK',
+          }).then(() => {
+            onHide();
+          });
+        } else if (err.response.data.provider) {
           //從validator來的error是array形式
           Swal.fire({
             title: 'Error!',
             text: err.response.data.err[0].msg,
             icon: 'error',
-            confirmButtonText: 'Cool',
+            confirmButtonText: 'OK',
           });
-          e.target.disabled = false;
         } else {
+          //系統錯誤
           Swal.fire({
             title: 'Error!',
-            text: err.response.data.err,
+            text: 'Internal Server Error',
             icon: 'error',
-            confirmButtonText: 'Cool',
+            confirmButtonText: 'OK',
+          }).then(() => {
+            onHide();
           });
-          onHide();
         }
-        return;
+      } finally {
+        e.target.disabled = false;
       }
     } else {
       validator(formRef);

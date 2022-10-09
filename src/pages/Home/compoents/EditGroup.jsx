@@ -37,7 +37,7 @@ const EditGroup = ({ setEditingShow, editingShow }) => {
         title: 'Error!',
         text: 'Please entry email.',
         icon: 'error',
-        confirmButtonText: 'Cool',
+        confirmButtonText: 'OK',
       });
       e.target.disabled = false;
       return;
@@ -48,7 +48,7 @@ const EditGroup = ({ setEditingShow, editingShow }) => {
         title: 'Error!',
         text: 'Member already in list above .',
         icon: 'error',
-        confirmButtonText: 'Cool',
+        confirmButtonText: 'OK',
       });
       e.target.disabled = false;
       return;
@@ -75,15 +75,24 @@ const EditGroup = ({ setEditingShow, editingShow }) => {
         e.target.disabled = false;
       } catch (err) {
         console.log(err.response);
-        if (err.response.status == 404) {
+        if (!err.response.data) {
+          //網路錯誤
+          Swal.fire({
+            title: 'Error!',
+            text: 'Network Connection failed, please try later...',
+            icon: 'error',
+            confirmButtonText: 'OK',
+          }).then(() => {
+            setEditingShow(false);
+          });
+        } else if (err.response.status == 404) {
           //帳號不存在
           Swal.fire({
             title: 'Error!',
             text: 'User not exist.',
             icon: 'error',
-            confirmButtonText: 'Cool',
+            confirmButtonText: 'OK',
           });
-          e.target.disabled = false;
         } else if (err.response.data.provider) {
           //後端驗失敗
           //從validator來的error是array形式
@@ -91,20 +100,21 @@ const EditGroup = ({ setEditingShow, editingShow }) => {
             title: 'Error!',
             text: err.response.data.err[0].msg,
             icon: 'error',
-            confirmButtonText: 'Cool',
+            confirmButtonText: 'OK',
           });
-          e.target.disabled = false;
         } else {
           //系統錯誤
           Swal.fire({
             title: 'Error!',
-            text: err.response.data.err,
+            text: 'Internal Server Error',
             icon: 'error',
-            confirmButtonText: 'Cool',
+            confirmButtonText: 'OK',
+          }).then(() => {
+            setEditingShow(false);
           });
-          setEditingShow(false);
         }
-        return;
+      } finally {
+        e.target.disabled = false;
       }
     };
     fetchUser();
@@ -164,24 +174,37 @@ const EditGroup = ({ setEditingShow, editingShow }) => {
         setCurrGroup({ ...currGroup, ['name']: inputGroupName.current.value });
       } catch (err) {
         console.log(err.response);
-        if (err.response.data.provider) {
+        if (!err.response.data) {
+          //網路錯誤
+          Swal.fire({
+            title: 'Error!',
+            text: 'Network Connection failed, please try later...',
+            icon: 'error',
+            confirmButtonText: 'OK',
+          }).then(() => {
+            setEditingShow(false);
+          });
+        } else if (err.response.data.provider) {
           //從validator來的error是array形式
           Swal.fire({
             title: 'Error!',
             text: err.response.data.err[0].msg,
             icon: 'error',
-            confirmButtonText: 'Cool',
+            confirmButtonText: 'OK',
           });
         } else {
+          //系統錯誤
           Swal.fire({
             title: 'Error!',
-            text: err.response.data.err,
+            text: 'Internal Server Error',
             icon: 'error',
-            confirmButtonText: 'Cool',
+            confirmButtonText: 'OK',
           });
+          setEditingShow(false);
+          return;
         }
+      } finally {
         e.target.disabled = false;
-        return;
       }
     } else {
       validator(formRef);

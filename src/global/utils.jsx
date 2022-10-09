@@ -7,7 +7,7 @@ const currencyFormat = (num) => {
       title: 'Error!',
       text: 'Should be integer',
       icon: 'error',
-      confirmButtonText: 'Cool',
+      confirmButtonText: 'OK',
     });
   }
   return (

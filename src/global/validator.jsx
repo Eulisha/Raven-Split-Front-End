@@ -10,7 +10,7 @@ const validator = (formRef) => {
           title: 'Error!',
           text: `${element.validationMessage.replace('。', '：')}${element.title}`,
           icon: 'error',
-          confirmButtonText: 'Cool',
+          confirmButtonText: 'OK',
         });
         // setErrMsg({ [element.name]: element.validationMessage });
       } else {
@@ -18,7 +18,7 @@ const validator = (formRef) => {
           title: 'Error!',
           text: `${element.validationMessage}`,
           icon: 'error',
-          confirmButtonText: 'Cool',
+          confirmButtonText: 'OK',
         });
       }
     }

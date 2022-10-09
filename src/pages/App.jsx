@@ -36,17 +36,26 @@ const App = () => {
         console.log('BACKEND for setUser: ', data.data);
         setUser(data.data);
       } catch (err) {
-        console.log(err.response.data.err);
-        Swal.fire({
-          title: 'Error!',
-          text: err.response.data.err,
-          icon: 'error',
-          confirmButtonText: 'Cool',
-        }).then(() => {
-          localStorage.removeItem('accessToken');
-          navigate('/');
-          return;
-        });
+        if (!err.response.data) {
+          //網路錯誤
+          Swal.fire({
+            title: 'Error!',
+            text: 'Network Connection failed, please try later...',
+            icon: 'error',
+            confirmButtonText: 'OK',
+          });
+        } else {
+          Swal.fire({
+            title: 'Error!',
+            text: 'Please sign in first.',
+            icon: 'error',
+            confirmButtonText: 'OK',
+          }).then(() => {
+            localStorage.removeItem('accessToken');
+            navigate('/');
+            return;
+          });
+        }
         return;
       }
     };

@@ -147,7 +147,7 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
               ? `Still NT$${currSum.total - currSum.sum} left. Please check before save.`
               : `Exceed NT$${currSum.sum - currSum.total}. Please check before save.`,
           icon: 'warning',
-          confirmButtonText: 'Cool',
+          confirmButtonText: 'OK',
         });
         e.target.disabled = false;
         return;
@@ -229,13 +229,23 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
         onHide();
       } catch (err) {
         console.log(err.response);
-        if (err.response.status == 404) {
+        if (!err.response.data) {
+          //網路錯誤
+          Swal.fire({
+            title: 'Error!',
+            text: 'Network Connection failed, please try later...',
+            icon: 'error',
+            confirmButtonText: 'OK',
+          }).then(() => {
+            onHide();
+          });
+        } else if (err.response.status == 404) {
           //帳已經不存在
           Swal.fire({
             title: 'Error!',
             text: 'This debt might already be modified by others, please refresh to get latest one.',
             icon: 'error',
-            confirmButtonText: 'Cool',
+            confirmButtonText: 'OK',
           }).then(async () => {
             const token = localStorage.getItem('accessToken');
             const { data } = await axios.get(`${constants.API_GET_DEBTS}/${gid}?paging=${paging}`, {
@@ -254,20 +264,21 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
             title: 'Error!',
             text: err.response.data.err[0].msg,
             icon: 'error',
-            confirmButtonText: 'Cool',
+            confirmButtonText: 'OK',
           });
-          e.target.disabled = false;
         } else {
           //系統錯誤
           Swal.fire({
             title: 'Error!',
-            text: err.response.data.err,
+            text: 'Internal Server Error',
             icon: 'error',
-            confirmButtonText: 'Cool',
+            confirmButtonText: 'OK',
+          }).then(() => {
+            onHide();
           });
-          onHide();
         }
-        return;
+      } finally {
+        e.target.disabled = false;
       }
     } else {
       //前端表單驗失敗
