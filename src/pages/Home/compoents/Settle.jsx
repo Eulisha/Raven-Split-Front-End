@@ -60,14 +60,21 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
         });
         setSettle(sorted);
       } catch (err) {
-        console.log(err);
-        console.log(err.response.data.err);
         if (!err.response.data) {
           //網路錯誤
           Swal.fire({
             title: 'Error!',
             text: 'Network Connection failed, please try later...',
             icon: 'error',
+            confirmButtonText: 'OK',
+          }).then(() => {
+            onHide();
+          });
+        } else if (err.response.status == 503) {
+          Swal.fire({
+            title: 'Calculating...',
+            text: 'Still Calculating Best Solution. Please check later.',
+            icon: 'info',
             confirmButtonText: 'OK',
           }).then(() => {
             onHide();

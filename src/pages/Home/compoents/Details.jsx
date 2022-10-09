@@ -98,7 +98,7 @@ const Details = ({ debtInfo, setDebt, setIsDebtChanged }) => {
           setIsDebtChanged((prev) => {
             return !prev;
           });
-          Swal.fire('Deleted!', 'Your file has been deleted.', 'success');
+          Swal.fire('Deleted!', 'Expense has been deleted.', 'success');
         } catch (err) {
           console.log(err.response);
           if (!err.response.data) {
@@ -129,7 +129,7 @@ const Details = ({ debtInfo, setDebt, setIsDebtChanged }) => {
           } else {
             return Swal.fire({
               title: 'Error!',
-              text: err.response.data.err,
+              text: 'Internal Server Error',
               icon: 'error',
               confirmButtonText: 'OK',
             });

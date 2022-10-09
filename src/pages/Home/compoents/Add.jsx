@@ -227,6 +227,11 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
           return !prev;
         });
         onHide();
+        if (!details) {
+          Swal.fire('Created!', 'Expense has been created.', 'success');
+        } else {
+          Swal.fire('Updated!', 'Expense has been updated.', 'success');
+        }
       } catch (err) {
         console.log(err.response);
         if (!err.response.data) {
