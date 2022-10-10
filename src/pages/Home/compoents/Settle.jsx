@@ -82,12 +82,13 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
               } else {
                 console.log('BACKEND for setSettle: ', data.data);
                 if (data.data.length === 0) {
-                  return setSettle('Currently all balance.');
+                  setSettle('Currently all balance.');
+                } else {
+                  let sorted = data.data.sort((a, b) => {
+                    new Date(b.amount) - new Date(a.amount);
+                  });
+                  setSettle(sorted);
                 }
-                let sorted = data.data.sort((a, b) => {
-                  return new Date(b.amount) - new Date(a.amount);
-                });
-                setSettle(sorted);
                 Swal.hideLoading();
                 Swal.close();
               }
