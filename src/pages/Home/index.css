@@ -512,6 +512,15 @@ margin: 5px 0px 5px!important;
   margin-top: 20px !important;
   text-align:center
 }
+.settle-loading{
+  text-align: center;
+  /* display: flex; */
+  /* width: 100%; */
+  /* height: 100%; */
+  /* flex-direction: column; */
+  /* justify-items: center; */
+  /* align-items: center; */
+}
 .settle-body{
   display: flex;
   flex-direction: column;

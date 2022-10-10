@@ -44,52 +44,115 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
   //撈settle資料
   useEffect(() => {
     const fetchGetSettle = async () => {
-      try {
-        const token = localStorage.getItem('accessToken');
-        const { data } = await axios.get(`${constants.API_GET_SETTLE}/${gid}`, {
-          headers: {
-            authorization: `Bearer ${token}`,
-          },
-        });
-        console.log('BACKEND for setSettle: ', data.data);
-        if (data.data.length === 0) {
-          return setSettle('Currently all balance.');
-        }
-        let sorted = data.data.sort((a, b) => {
-          return new Date(b.amount) - new Date(a.amount);
-        });
-        setSettle(sorted);
-      } catch (err) {
-        if (!err.response.data) {
-          //網路錯誤
-          Swal.fire({
-            title: 'Error!',
-            text: 'Network Connection failed, please try later...',
-            icon: 'error',
-            confirmButtonText: 'OK',
-          }).then(() => {
-            onHide();
-          });
-        } else if (err.response.status == 503) {
-          Swal.fire({
-            title: 'Calculating...',
-            text: 'Still Calculating Best Solution. Please check later.',
-            icon: 'info',
-            confirmButtonText: 'OK',
-          }).then(() => {
-            onHide();
-          });
-        } else {
-          Swal.fire({
-            title: 'Error!',
-            text: 'Internal Server Error',
-            icon: 'error',
-            confirmButtonText: 'OK',
-          }).then(() => {
-            onHide();
-          });
-        }
-      }
+      Swal.fire({
+        title: 'Loading...',
+        showConfirmButton: false,
+        // html: 'Calculating best graph, please wait a second.',
+        didOpen: () => {
+          Swal.showLoading();
+          const token = localStorage.getItem('accessToken');
+          return fetch(`${constants.API_GET_SETTLE}/${gid}`, {
+            headers: {
+              authorization: `Bearer ${token}`,
+            },
+            method: 'GET',
+          })
+            .then((res) => {
+              if (!res.ok) {
+                if (res.status == 503) {
+                  Swal.fire({
+                    title: 'Calculating...',
+                    text: 'Still Calculating Best Solution. Please check later.',
+                    icon: 'info',
+                    confirmButtonText: 'OK',
+                  }).then(() => {
+                    onHide();
+                  });
+                } else {
+                  Swal.fire({
+                    title: 'Error!',
+                    text: 'Internal Server Error',
+                    icon: 'error',
+                    confirmButtonText: 'OK',
+                  }).then(() => {
+                    onHide();
+                  });
+                }
+              }
+              Swal.hideLoading();
+              return res.json();
+            })
+            .then((data) => {
+              console.log('BACKEND for setSettle: ', data.data);
+              if (data.data.length === 0) {
+                return setSettle('Currently all balance.');
+              }
+              let sorted = data.data.sort((a, b) => {
+                return new Date(b.amount) - new Date(a.amount);
+              });
+              setSettle(sorted);
+            })
+            .then(() => Swal.close())
+            .catch(() => {
+              //網路錯誤
+              Swal.fire({
+                title: 'Error!',
+                text: 'Network Connection failed, please try later...',
+                icon: 'error',
+                confirmButtonText: 'OK',
+              }).then(() => {
+                onHide();
+              });
+            });
+        },
+      });
+
+      // try {
+      //   const token = localStorage.getItem('accessToken');
+      //   const { data } = await axios.get(`${constants.API_GET_SETTLE}/${gid}`, {
+      //     headers: {
+      //       authorization: `Bearer ${token}`,
+      //     },
+      //   });
+      //   console.log('BACKEND for setSettle: ', data.data);
+      //   if (data.data.length === 0) {
+      //     return setSettle('Currently all balance.');
+      //   }
+      //   let sorted = data.data.sort((a, b) => {
+      //     return new Date(b.amount) - new Date(a.amount);
+      //   });
+      //   setSettle(sorted);
+      // } catch (err) {
+      //   if (!err.response.data) {
+      //     //網路錯誤
+      //     Swal.fire({
+      //       title: 'Error!',
+      //       text: 'Network Connection failed, please try later...',
+      //       icon: 'error',
+      //       confirmButtonText: 'OK',
+      //     }).then(() => {
+      //       onHide();
+      //     });
+      //   } else if (err.response.status == 503) {
+      //     Swal.fire({
+      //       title: 'Calculating...',
+      //       text: 'Still Calculating Best Solution. Please check later.',
+      //       icon: 'info',
+      //       confirmButtonText: 'OK',
+      //     }).then(() => {
+      //       onHide();
+      //     });
+      //   } else {
+      //     Swal.fire({
+      //       title: 'Error!',
+      //       text: 'Internal Server Error',
+      //       icon: 'error',
+      //       confirmButtonText: 'OK',
+      //     }).then(() => {
+      //       onHide();
+      //     });
+      //   }
+      // }
     };
     fetchGetSettle();
 
@@ -273,6 +336,7 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
             we will suggsion to simply ask Adam pay back $100 to Tim.
           </Modal.Title>
         </Modal.Body>
+
         <Modal.Footer>
           {Array.isArray(settle) && (
             <Button variant="primary" type="submit" onClick={handleSubmit}>
