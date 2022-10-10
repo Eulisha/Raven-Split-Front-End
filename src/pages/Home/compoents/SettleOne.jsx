@@ -112,61 +112,78 @@ const SettleOneWindow = ({ gid, settleFromId, settleFromName, settleToId, settle
 
     if (form.reportValidity()) {
       try {
-        const token = localStorage.getItem('accessToken');
         const body = {
           settle_main: {
             gid,
             date: inputDate.current.value,
-            // title: `Settle Balances Between ${settleFromName} And ${settleToName}`,
           },
-          // settle_detail: settle,
         };
         console.log('FRONT for settle pair: ', body);
-        const { data } = await axios.post(`${constants.API_POST_SETTLE_PAIR}/${gid}/${settleFromId}/${settleToId}`, body, {
-          headers: {
-            authorization: `Bearer ${token}`,
+
+        //傳給後端
+        Swal.fire({
+          title: 'Saving...',
+          showConfirmButton: false,
+          didOpen: async () => {
+            Swal.showLoading();
+            const token = localStorage.getItem('accessToken');
+            return await fetch(`${constants.API_POST_SETTLE_PAIR}/${gid}/${settleFromId}/${settleToId}`, {
+              headers: {
+                authorization: `Bearer ${token}`,
+                'content-type': 'application/json',
+              },
+              body: JSON.stringify(body),
+              method: 'POST',
+            })
+              .then(async (res) => {
+                const data = await res.json();
+                if (!res.ok) {
+                  if (res.status == 400) {
+                    //後端驗失敗
+                    //從validator來的error是array形式
+                    return Swal.fire({
+                      title: 'Error!',
+                      text: data.err[0].msg,
+                      icon: 'error',
+                      confirmButtonText: 'OK',
+                    });
+                  } else {
+                    //系統錯誤
+                    Swal.fire({
+                      title: 'Error!',
+                      text: 'Internal Server Error',
+                      icon: 'error',
+                      confirmButtonText: 'OK',
+                    }).then(() => {
+                      onHide();
+                    });
+                  }
+                } else {
+                  console.log('BACKEND settle pair result: ', data.data);
+                  console.log(setIsDebtChanged);
+                  setIsDebtChanged((prev) => {
+                    return !prev;
+                  });
+                  Swal.hideLoading();
+                  onHide();
+                  Swal.fire('Updated!', 'Expense has been updated.', 'success');
+                }
+              })
+              .catch(() => {
+                //網路錯誤
+                Swal.fire({
+                  title: 'Error!',
+                  text: 'Network Connection failed, please try later...',
+                  icon: 'error',
+                  confirmButtonText: 'OK',
+                }).then(() => {
+                  onHide();
+                });
+              });
           },
         });
-
-        console.log('BACKEND settle pair result: ', data);
-        console.log(setIsDebtChanged);
-        // setSettle([]);
-        setIsDebtChanged((prev) => {
-          return !prev;
-        });
-        console.log('finished');
-        onHide();
       } catch (err) {
         console.log(err);
-        if (!err.response.data) {
-          //網路錯誤
-          Swal.fire({
-            title: 'Error!',
-            text: 'Network Connection failed, please try later...',
-            icon: 'error',
-            confirmButtonText: 'OK',
-          }).then(() => {
-            onHide();
-          });
-        } else if (err.response.data.provider) {
-          //從validator來的error是array形式
-          Swal.fire({
-            title: 'Error!',
-            text: err.response.data.err[0].msg,
-            icon: 'error',
-            confirmButtonText: 'OK',
-          });
-        } else {
-          //系統錯誤
-          Swal.fire({
-            title: 'Error!',
-            text: 'Internal Server Error',
-            icon: 'error',
-            confirmButtonText: 'OK',
-          }).then(() => {
-            onHide();
-          });
-        }
       } finally {
         e.target.disabled = false;
       }

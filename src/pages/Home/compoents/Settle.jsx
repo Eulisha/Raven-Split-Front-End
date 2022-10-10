@@ -57,7 +57,8 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
             },
             method: 'GET',
           })
-            .then((res) => {
+            .then(async (res) => {
+              const data = await res.json();
               if (!res.ok) {
                 if (res.status == 503) {
                   Swal.fire({
@@ -78,22 +79,21 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
                     onHide();
                   });
                 }
+              } else {
+                console.log('BACKEND for setSettle: ', data.data);
+                if (data.data.length === 0) {
+                  return setSettle('Currently all balance.');
+                }
+                let sorted = data.data.sort((a, b) => {
+                  return new Date(b.amount) - new Date(a.amount);
+                });
+                setSettle(sorted);
+                Swal.hideLoading();
+                Swal.close();
               }
-              Swal.hideLoading();
-              return res.json();
             })
-            .then((data) => {
-              console.log('BACKEND for setSettle: ', data.data);
-              if (data.data.length === 0) {
-                return setSettle('Currently all balance.');
-              }
-              let sorted = data.data.sort((a, b) => {
-                return new Date(b.amount) - new Date(a.amount);
-              });
-              setSettle(sorted);
-            })
-            .then(() => Swal.close())
-            .catch(() => {
+            .catch((err) => {
+              console.log(err);
               //網路錯誤
               Swal.fire({
                 title: 'Error!',

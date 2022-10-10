@@ -161,127 +161,136 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
             newDetails.push({ borrower: Number(uid), amount: Number(split[uid]) });
           }
         });
-        const data = { debt_main: info, debt_detail: newDetails };
-        console.log('FRONTEND for post debt :', data);
+        const body = { debt_main: info, debt_detail: newDetails };
+        console.log('FRONTEND for post debt :', body);
 
         //刪除資料庫用不到的key
         delete info.isOwned;
         delete info.ownAmount;
 
         //傳給後端
-        const token = localStorage.getItem('accessToken');
-        let result;
-        if (!details) {
-          //Add debt
-          result = await axios.post(`${constants.API_POST_DEBT}/${gid}`, data, {
-            headers: {
-              authorization: `Bearer ${token}`,
-            },
-          });
-          onHide();
-        } else {
-          //Edit debt
-          result = await axios.put(`${constants.API_PUT_DEBT}/${gid}/${info.id}`, data, {
-            headers: {
-              authorization: `Bearer ${token}`,
-            },
-          });
-        }
-        console.log('BACKEND for new info debtId: ', result.data);
-
-        //要把debtId改成新的
-        info.id = result.data.data.debtId;
-        //整理state data的格式
-        info.isOwned = Number(info.lender) === currUserId ? true : false;
-        info.ownAmount = Number(info.lender) === currUserId ? info.total - (split[currUserId] ? split[currUserId] : 0) : split[currUserId] ? split[currUserId] : 0;
-        if (details) {
-          //Edit
-          setDebt((prev) => {
-            //找到本來的那筆更新
-            let newArr = prev.map((item) => {
-              if (item.id === debtInfo.id) {
-                return info;
-              } else {
-                return item;
-              }
-            });
-            //排序
-            let sorted = newArr.sort((a, b) => {
-              return new Date(b.date) - new Date(a.date);
-            });
-            return sorted;
-          });
-          setDetail(split);
-        } else {
-          //Add
-          setDebt((prev) => {
-            //加進去之後再排序
-            prev.push(info);
-            let sorted = prev.sort((a, b) => {
-              return new Date(b.date) - new Date(a.date);
-            });
-            return sorted;
-          });
-        }
-        setIsDebtChanged((prev) => {
-          return !prev;
-        });
-        onHide();
-        if (!details) {
-          Swal.fire('Created!', 'Expense has been created.', 'success');
-        } else {
-          Swal.fire('Updated!', 'Expense has been updated.', 'success');
-        }
-      } catch (err) {
-        console.log(err.response);
-        if (!err.response.data) {
-          //網路錯誤
-          Swal.fire({
-            title: 'Error!',
-            text: 'Network Connection failed, please try later...',
-            icon: 'error',
-            confirmButtonText: 'OK',
-          }).then(() => {
-            onHide();
-          });
-        } else if (err.response.status == 404) {
-          //帳已經不存在
-          Swal.fire({
-            title: 'Error!',
-            text: 'This debt might already be modified by others, please refresh to get latest one.',
-            icon: 'error',
-            confirmButtonText: 'OK',
-          }).then(async () => {
+        Swal.fire({
+          title: 'Saving...',
+          showConfirmButton: false,
+          didOpen: async () => {
+            Swal.showLoading();
             const token = localStorage.getItem('accessToken');
-            const { data } = await axios.get(`${constants.API_GET_DEBTS}/${gid}?paging=${paging}`, {
+
+            return await fetch(!details ? `${constants.API_POST_DEBT}/${gid}` : `${constants.API_PUT_DEBT}/${gid}/${info.id}`, {
               headers: {
                 authorization: `Bearer ${token}`,
+                'content-type': 'application/json',
               },
-            });
-            console.log('BACKEND for setDebts: ', data.data);
-            setDebt(data.data);
-            onHide();
-          });
-        } else if (err.response.data.provider) {
-          //後端驗失敗
-          //從validator來的error是array形式
-          Swal.fire({
-            title: 'Error!',
-            text: err.response.data.err[0].msg,
-            icon: 'error',
-            confirmButtonText: 'OK',
-          });
-        } else {
-          //系統錯誤
-          Swal.fire({
-            title: 'Error!',
-            text: 'Internal Server Error',
-            icon: 'error',
-            confirmButtonText: 'OK',
-          }).then(() => {
-            onHide();
-          });
-        }
+              body: JSON.stringify(body),
+              method: !details ? 'POST' : 'PUT',
+            })
+              .then(async (res) => {
+                const data = await res.json();
+                if (!res.ok) {
+                  if (res.status == 404) {
+                    //帳已經不存在
+                    Swal.fire({
+                      title: 'Error!',
+                      text: 'This debt might already be modified by others, please refresh to get latest one.',
+                      icon: 'error',
+                      confirmButtonText: 'OK',
+                    }).then(async () => {
+                      const token = localStorage.getItem('accessToken');
+                      const { data } = await axios.get(`${constants.API_GET_DEBTS}/${gid}?paging=${paging}`, {
+                        headers: {
+                          authorization: `Bearer ${token}`,
+                        },
+                      });
+                      console.log('BACKEND for setDebts: ', data.data);
+                      setDebt(data.data);
+                      onHide();
+                    });
+                  } else if (res.status == 400) {
+                    //後端驗失敗
+                    //從validator來的error是array形式
+                    return Swal.fire({
+                      title: 'Error!',
+                      text: data.err[0].msg,
+                      icon: 'error',
+                      confirmButtonText: 'OK',
+                    });
+                  } else {
+                    //系統錯誤
+                    Swal.fire({
+                      title: 'Error!',
+                      text: 'Internal Server Error',
+                      icon: 'error',
+                      confirmButtonText: 'OK',
+                    }).then(() => {
+                      onHide();
+                    });
+                  }
+                } else {
+                  console.log('BACKEND for setDebt: ', data.data);
+
+                  //要把debtId改成新的
+                  info.id = data.data.debtId;
+                  //整理state data的格式
+                  info.isOwned = Number(info.lender) === currUserId ? true : false;
+                  info.ownAmount = Number(info.lender) === currUserId ? info.total - (split[currUserId] ? split[currUserId] : 0) : split[currUserId] ? split[currUserId] : 0;
+
+                  if (details) {
+                    //Edit
+                    setDebt((prev) => {
+                      //找到本來的那筆更新
+                      let newArr = prev.map((item) => {
+                        if (item.id === debtInfo.id) {
+                          return info;
+                        } else {
+                          return item;
+                        }
+                      });
+                      //排序
+                      let sorted = newArr.sort((a, b) => {
+                        return new Date(b.date) - new Date(a.date);
+                      });
+                      return sorted;
+                    });
+                    setDetail(split);
+                  } else {
+                    //Add
+                    setDebt((prev) => {
+                      //加進去之後再排序
+                      prev.push(info);
+                      let sorted = prev.sort((a, b) => {
+                        return new Date(b.date) - new Date(a.date);
+                      });
+                      return sorted;
+                    });
+                  }
+
+                  setIsDebtChanged((prev) => {
+                    return !prev;
+                  });
+                  Swal.hideLoading();
+                  onHide();
+                  if (!details) {
+                    Swal.fire('Created!', 'Expense has been created.', 'success');
+                  } else {
+                    Swal.fire('Updated!', 'Expense has been updated.', 'success');
+                  }
+                }
+              })
+              .catch(() => {
+                //網路錯誤
+                Swal.fire({
+                  title: 'Error!',
+                  text: 'Network Connection failed, please try later...',
+                  icon: 'error',
+                  confirmButtonText: 'OK',
+                }).then(() => {
+                  onHide();
+                });
+              });
+          },
+        });
+      } catch (err) {
+        console.log(err);
       } finally {
         e.target.disabled = false;
       }
