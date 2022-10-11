@@ -43,6 +43,9 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
 
   //撈settle資料
   useEffect(() => {
+    setIsDebtChanged((prev) => {
+      return !prev;
+    });
     const fetchGetSettle = async () => {
       Swal.fire({
         title: 'Loading...',
