@@ -17,11 +17,49 @@ const SettleOneButton = ({ ownStatus, settleFromId, settleFromName, settleToId, 
   let { currGroup } = CurrGroupInfo;
   let gid = currGroup.gid;
   const [editingShow, setEditingShow] = useState(false);
+  // const [getLock, setGetLock] = useState(false);
   // console.log('settleToId, settleToName, gid: ', settleToId, settleToName, gid);
+
+  const checkIfSettlable = async () => {
+    try {
+      const token = localStorage.getItem('accessToken');
+      await axios(`${constants.API_GET_SETTLE_PAIR}/${gid}/${settleFromId}/${settleToId}`, {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      });
+      // setGetLock(true);
+      setEditingShow(true);
+    } catch (err) {
+      if (!err.response.data) {
+        //網路錯誤
+        Swal.fire({
+          title: 'Error!',
+          text: 'Network Connection failed, please try later...',
+          icon: 'error',
+          confirmButtonText: 'OK',
+        });
+      } else if (err.response.status == 503) {
+        Swal.fire({
+          title: 'Oops!',
+          text: err.response.data.err,
+          icon: 'info',
+          confirmButtonText: 'OK',
+        });
+      } else {
+        Swal.fire({
+          title: 'Error!',
+          text: 'Internal Server Error',
+          icon: 'error',
+          confirmButtonText: 'OK',
+        });
+      }
+    }
+  };
 
   return (
     <div className="group-balance-list-settle-button-wrapper">
-      <Button size="sm" variant="outline-info" className="group-balance-list-settle-button" onClick={() => setEditingShow(true)}>
+      <Button size="sm" variant="outline-info" className="group-balance-list-settle-button" onClick={() => checkIfSettlable()}>
         Settle
       </Button>
       {editingShow && (
@@ -57,11 +95,10 @@ const SettleOneWindow = ({ gid, settleFromId, settleFromName, settleToId, settle
   const formRef = useRef();
 
   //state
-  // const [settle, setSettle] = useState([]);
   // console.log('user id, name, email, settleToId, settleToName, groupUserNames: ', id, name, email, settleToId, settleToName, groupUserNames);
 
-  //跳出時送後端解鎖
   useEffect(() => {
+    //跳出時送後端解鎖
     return () => {
       const fetchOnHide = async () => {
         try {
@@ -146,6 +183,15 @@ const SettleOneWindow = ({ gid, settleFromId, settleFromName, settleToId, settle
                       text: data.err[0].msg,
                       icon: 'error',
                       confirmButtonText: 'OK',
+                    });
+                  } else if (res.status == 503) {
+                    Swal.fire({
+                      title: 'Oops!',
+                      text: data.err,
+                      icon: 'info',
+                      confirmButtonText: 'OK',
+                    }).then(() => {
+                      onHide();
                     });
                   } else {
                     //系統錯誤
