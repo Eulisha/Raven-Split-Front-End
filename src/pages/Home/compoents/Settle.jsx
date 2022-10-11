@@ -41,8 +41,34 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
   //state
   const [settle, setSettle] = useState([]);
 
+  const fetchOnHide = async (e) => {
+    e.preventDefault;
+    try {
+      const token = localStorage.getItem('accessToken');
+      const { data } = await axios.post(
+        `${constants.API_POST_SETTLE_DONE}/${gid}`,
+        {},
+        {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log('BACKEND settleDone result:  ', data.data);
+    } catch (err) {
+      console.log(err.response.data.err);
+      return Swal.fire({
+        title: 'Error!',
+        text: err.response.data.err,
+        icon: 'error',
+        confirmButtonText: 'OK',
+      });
+    }
+  };
+
   //撈settle資料
   useEffect(() => {
+    window.addEventListener('beforeunload', fetchOnHide);
     setIsDebtChanged((prev) => {
       return !prev;
     });
@@ -161,30 +187,9 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
     fetchGetSettle();
 
     return () => {
-      const fetchOnHide = async () => {
-        try {
-          const token = localStorage.getItem('accessToken');
-          const { data } = await axios.post(
-            `${constants.API_POST_SETTLE_DONE}/${gid}`,
-            {},
-            {
-              headers: {
-                authorization: `Bearer ${token}`,
-              },
-            }
-          );
-          console.log('BACKEND settleDone result:  ', data.data);
-        } catch (err) {
-          console.log(err.response.data.err);
-          return Swal.fire({
-            title: 'Error!',
-            text: err.response.data.err,
-            icon: 'error',
-            confirmButtonText: 'OK',
-          });
-        }
-      };
-      fetchOnHide();
+      window.removeEventListener('beforeunload', fetchOnHide);
+      localStorage.setItem('currentGroup', gid);
+      fetchOnHide(gid);
     };
   }, []);
 

@@ -101,47 +101,53 @@ const SettleOneWindow = ({ gid, settleFromId, settleFromName, settleToId, settle
   //state
   // console.log('user id, name, email, settleToId, settleToName, groupUserNames: ', id, name, email, settleToId, settleToName, groupUserNames);
 
+  const fetchOnHide = async (e) => {
+    e.preventDefault;
+    try {
+      const token = localStorage.getItem('accessToken');
+      const { data } = await axios.post(
+        `${constants.API_POST_SETTLE_DONE}/${gid}`,
+        {},
+        {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log('BACKEND settleDone result:  ', data.data);
+    } catch (err) {
+      console.log(err.response.data.err);
+      if (!err.response.data) {
+        //網路錯誤
+        Swal.fire({
+          title: 'Error!',
+          text: 'Network Connection failed, please try later...',
+          icon: 'error',
+          confirmButtonText: 'OK',
+        }).then(() => {
+          onHide();
+        });
+      } else {
+        return Swal.fire({
+          title: 'Error!',
+          text: 'Internal Server Error',
+          icon: 'error',
+          confirmButtonText: 'OK',
+        }).then(() => {
+          onHide();
+        });
+      }
+    }
+  };
+
   useEffect(() => {
+    window.addEventListener('beforeunload', fetchOnHide);
+
     //跳出時送後端解鎖
     return () => {
-      const fetchOnHide = async () => {
-        try {
-          const token = localStorage.getItem('accessToken');
-          const { data } = await axios.post(
-            `${constants.API_POST_SETTLE_DONE}/${gid}`,
-            {},
-            {
-              headers: {
-                authorization: `Bearer ${token}`,
-              },
-            }
-          );
-          console.log('BACKEND settleDone result:  ', data.data);
-        } catch (err) {
-          console.log(err.response.data.err);
-          if (!err.response.data) {
-            //網路錯誤
-            Swal.fire({
-              title: 'Error!',
-              text: 'Network Connection failed, please try later...',
-              icon: 'error',
-              confirmButtonText: 'OK',
-            }).then(() => {
-              onHide();
-            });
-          } else {
-            return Swal.fire({
-              title: 'Error!',
-              text: 'Internal Server Error',
-              icon: 'error',
-              confirmButtonText: 'OK',
-            }).then(() => {
-              onHide();
-            });
-          }
-        }
-      };
-      fetchOnHide();
+      window.removeEventListener('beforeunload', fetchOnHide);
+      localStorage.setItem('currentGroup', gid);
+      fetchOnHide(gid);
     };
   }, []);
 
