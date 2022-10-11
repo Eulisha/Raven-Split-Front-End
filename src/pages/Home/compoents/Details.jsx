@@ -126,6 +126,13 @@ const Details = ({ debtInfo, setDebt, setIsDebtChanged }) => {
               console.log('BACKEND for setDebts: ', data.data);
               setDebt(data.data);
             });
+          } else if (err.response.status == 503) {
+            return Swal.fire({
+              title: 'Oops!',
+              text: err.response.data.err,
+              icon: 'info',
+              confirmButtonText: 'OK',
+            });
           } else {
             return Swal.fire({
               title: 'Error!',

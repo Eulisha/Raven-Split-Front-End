@@ -63,7 +63,7 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
                 if (res.status == 503) {
                   Swal.fire({
                     title: 'Calculating...',
-                    text: 'Still Calculating Best Solution. Please check later.',
+                    text: data.err,
                     icon: 'info',
                     confirmButtonText: 'OK',
                   }).then(() => {

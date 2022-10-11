@@ -205,6 +205,15 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
                       setDebt(data.data);
                       onHide();
                     });
+                  } else if (res.status == 503) {
+                    Swal.fire({
+                      title: 'Oops!',
+                      text: data.err,
+                      icon: 'info',
+                      confirmButtonText: 'OK',
+                    }).then(() => {
+                      onHide();
+                    });
                   } else if (res.status == 400) {
                     //後端驗失敗
                     //從validator來的error是array形式
