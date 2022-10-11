@@ -18,4 +18,37 @@ const currencyFormat = (num) => {
   );
 };
 
-export default currencyFormat;
+// const fetchNewData = () => {
+//   const fetchDebts = async (gid) => {
+//     try {
+//       const token = localStorage.getItem('accessToken');
+//       const { data } = await axios.get(`${constants.API_GET_DEBTS}/${gid}?paging=${paging}`, {
+//         headers: {
+//           authorization: `Bearer ${token}`,
+//         },
+//       });
+
+//       console.log('BACKEND for setDebts: ', data.data);
+//       setDebt(data.data);
+//     } catch (err) {
+//       if (!err.response.data) {
+//         //網路錯誤
+//         Swal.fire({
+//           title: 'Error!',
+//           text: 'Network Connection failed, please try later...',
+//           icon: 'error',
+//           confirmButtonText: 'OK',
+//         });
+//       } else {
+//         Swal.fire({
+//           title: 'Error!',
+//           text: 'Internal Server Error',
+//           icon: 'error',
+//           confirmButtonText: 'OK',
+//         });
+//       }
+//     }
+//   };
+// };
+
+export default { currencyFormat };

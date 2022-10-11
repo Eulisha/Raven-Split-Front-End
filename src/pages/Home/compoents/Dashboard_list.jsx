@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { ListGroup, Row, Col, Card } from 'react-bootstrap';
 import Icons from '../../../global/Icons';
-import currencyFormat from '../../../global/utils';
+import utils from '../../../global/utils';
 import { GroupInfo } from './Home';
 
 const Dashboard_list = ({ selfBalance }) => {
@@ -18,7 +18,7 @@ const Dashboard_list = ({ selfBalance }) => {
             <Card className="dashboard-self-summary-card owe-bg">
               <Card.Body className="dashboard-self-summary-card-body">
                 <Card.Title className="dashboard-self-summary-card-title">Owe</Card.Title>
-                <Card.Text className="dashboard-self-summary-card-amount-owe owe-font">{currencyFormat(selfBalance.summary.borrow)}</Card.Text>
+                <Card.Text className="dashboard-self-summary-card-amount-owe owe-font">{utils.currencyFormat(selfBalance.summary.borrow)}</Card.Text>
               </Card.Body>
             </Card>
           </Col>
@@ -26,7 +26,7 @@ const Dashboard_list = ({ selfBalance }) => {
             <Card className="dashboard-self-summary-card total-bg">
               <Card.Body className="dashboard-self-summary-card-body">
                 <Card.Title className="dashboard-self-summary-card-title">Net</Card.Title>
-                <Card.Text className="dashboard-self-summary-card-amount-total total-font">{currencyFormat(selfBalance.summary.net)}</Card.Text>
+                <Card.Text className="dashboard-self-summary-card-amount-total total-font">{utils.currencyFormat(selfBalance.summary.net)}</Card.Text>
               </Card.Body>
             </Card>
           </Col>
@@ -34,7 +34,7 @@ const Dashboard_list = ({ selfBalance }) => {
             <Card className="dashboard-self-summary-card owed-bg">
               <Card.Body className="dashboard-self-summary-card-body">
                 <Card.Title className="dashboard-self-summary-card-title">Owed</Card.Title>
-                <Card.Text className="dashboard-self-summary-card-amount-owed owed-font">{currencyFormat(selfBalance.summary.lend)}</Card.Text>
+                <Card.Text className="dashboard-self-summary-card-amount-owed owed-font">{utils.currencyFormat(selfBalance.summary.lend)}</Card.Text>
               </Card.Body>
             </Card>
           </Col>
@@ -51,10 +51,10 @@ const Dashboard_list = ({ selfBalance }) => {
                     <div key={`self-balance-owe-person-title-${user.uid}`} className="balance_total self-balance-owe-person-title">
                       <div>{user.user_name} </div>
                       <div>paid</div>
-                      <div className="owe-font">{currencyFormat(user.total)}</div>
+                      <div className="owe-font">{utils.currencyFormat(user.total)}</div>
                     </div>
                     <ListGroup key={`self-balance-owe-${user.uid}`}>
-                      {user.pair ? <ListGroup.Item className="balance_pair self-balance-detail-item">Non-Group {currencyFormat(user.pair)}</ListGroup.Item> : ''}
+                      {user.pair ? <ListGroup.Item className="balance_pair self-balance-detail-item">Non-Group {utils.currencyFormat(user.pair)}</ListGroup.Item> : ''}
                       {user.group_normal.map((group) => {
                         return (
                           <ListGroup.Item
@@ -68,7 +68,7 @@ const Dashboard_list = ({ selfBalance }) => {
                               </div>
                               <div>{group.group_name}</div>
                             </div>
-                            <div>{currencyFormat(group.amount)}</div>
+                            <div>{utils.currencyFormat(group.amount)}</div>
                           </ListGroup.Item>
                         );
                       })}
@@ -102,10 +102,10 @@ const Dashboard_list = ({ selfBalance }) => {
                     <div key={`self-balance-owed-person-title-${user.uid}`} className="balance_total self-balance-owed-person-title">
                       <div>{user.user_name} </div>
                       <div>owes you</div>
-                      <div className="owed-font">{currencyFormat(user.total)}</div>
+                      <div className="owed-font">{utils.currencyFormat(user.total)}</div>
                     </div>
                     <ListGroup key={`self-balance-owed-${user.uid}`}>
-                      {user.pair ? <ListGroup.Item className="balance_pair self-balance-detail-item">Non-Group {currencyFormat(user.pair)}</ListGroup.Item> : ''}
+                      {user.pair ? <ListGroup.Item className="balance_pair self-balance-detail-item">Non-Group {utils.currencyFormat(user.pair)}</ListGroup.Item> : ''}
                       {user.group_normal.map((group) => {
                         return (
                           <ListGroup.Item
@@ -119,7 +119,7 @@ const Dashboard_list = ({ selfBalance }) => {
                               </div>
                               <div>{group.group_name}</div>
                             </div>
-                            <div>{currencyFormat(group.amount)}</div>
+                            <div>{utils.currencyFormat(group.amount)}</div>
                           </ListGroup.Item>
                         );
                       })}

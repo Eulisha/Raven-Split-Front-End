@@ -5,7 +5,7 @@ import constants from '../../../global/constants';
 import { GroupInfo } from './Home';
 import Swal from 'sweetalert2';
 import Icons from '../../../global/Icons';
-import currencyFormat from '../../../global/utils';
+import utils from '../../../global/utils';
 import { GiPayMoney } from 'react-icons/gi';
 import { BsArrowRight } from 'react-icons/bs';
 import validator from '../../../global/validator';
@@ -294,7 +294,7 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
                         //       <div style={{ display: 'flex', flexDirection: 'column', justifyItems: 'flex-end', alignItems: 'center', margin: '10px' }}>
                         //         <div>
                         //           <span className="settle-pair-pay-amount" style={{ color: '#dddcdc' }}>
-                        //             {currencyFormat(ele.amount)}
+                        //             {utils.currencyFormat(ele.amount)}
                         //           </span>
                         //           <GiPayMoney style={{ width: '30px', height: '30px', color: '#dddcdc' }} />
                         //         </div>
@@ -312,7 +312,7 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
                             <BsArrowRight />
                             <div style={{ display: 'flex', flexDirection: 'column', justifyItems: 'flex-end', alignItems: 'center', margin: '10px' }}>
                               <div>
-                                <span className="settle-pair-pay-amount">{currencyFormat(ele.amount)}</span>
+                                <span className="settle-pair-pay-amount">{utils.currencyFormat(ele.amount)}</span>
 
                                 <GiPayMoney style={{ width: '30px', height: '30px' }} />
                               </div>

@@ -5,7 +5,7 @@ import constants from '../../../global/constants';
 // import { User } from '../../App';
 import { GroupInfo } from './Home';
 import Icons from '../../../global/Icons';
-import currencyFormat from '../../../global/utils';
+import utils from '../../../global/utils';
 // import { RiMoneyDollarCircleLine } from 'react-icons/ri';
 import { GiPayMoney } from 'react-icons/gi';
 import { BsArrowRight } from 'react-icons/bs';
@@ -21,6 +21,10 @@ const SettleOneButton = ({ ownStatus, settleFromId, settleFromName, settleToId, 
   // console.log('settleToId, settleToName, gid: ', settleToId, settleToName, gid);
 
   const checkIfSettlable = async () => {
+    setIsDebtChanged((prev) => {
+      return !prev;
+    });
+
     try {
       const token = localStorage.getItem('accessToken');
       await axios(`${constants.API_GET_SETTLE_PAIR}/${gid}/${settleFromId}/${settleToId}`, {
@@ -271,7 +275,7 @@ const SettleOneWindow = ({ gid, settleFromId, settleFromName, settleToId, settle
                 <BsArrowRight />
                 <div style={{ display: 'flex', flexDirection: 'column', justifyItems: 'flex-end', alignItems: 'center', margin: '10px' }}>
                   <div>
-                    <span className="settle-pair-pay-amount">{currencyFormat(settleAmount)}</span>
+                    <span className="settle-pair-pay-amount">{utils.currencyFormat(settleAmount)}</span>
                     <GiPayMoney style={{ width: '30px', height: '30px' }} />
                   </div>
                 </div>

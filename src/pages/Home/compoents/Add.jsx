@@ -1,11 +1,11 @@
-import axios from 'axios';
+// import axios from 'axios';
 import { useState, useEffect, useContext, useRef } from 'react';
 import { Button, Modal, Form, InputGroup } from 'react-bootstrap';
 import constants from '../../../global/constants';
 import { User } from '../../App';
 import { GroupInfo } from './Home';
-import { Page } from './Debts';
-import currencyFormat from '../../../global/utils';
+// import { Page } from './Debts';
+import utils from '../../../global/utils';
 import Swal from 'sweetalert2';
 import { GiReceiveMoney } from 'react-icons/gi';
 // import validator from '../../../global/validator';
@@ -40,7 +40,7 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
   //Context
   let CurrGroupInfo = useContext(GroupInfo);
   let CurrUser = useContext(User);
-  let paging = useContext(Page);
+  // let paging = useContext(Page);
 
   let currUserId = CurrUser.user.id;
   let currUserName = CurrUser.user.name;
@@ -110,7 +110,7 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
   //EventHandle
   const handleInfoChange = (prop) => (e) => {
     if (e.target.name === 'total' || e.target.name === 'amount' || e.target.name === 'lender') {
-      setInfo({ ...info, [prop]: currencyFormat(Number(e.target.value)) });
+      setInfo({ ...info, [prop]: utils.currencyFormat(Number(e.target.value)) });
     } else if (e.target.name === 'split_method') {
       console.log(inputSplitMethod.current.value);
       setInfo({ ...info, [prop]: inputSplitMethod.current.value });
@@ -195,14 +195,17 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
                       icon: 'error',
                       confirmButtonText: 'OK',
                     }).then(async () => {
-                      const token = localStorage.getItem('accessToken');
-                      const { data } = await axios.get(`${constants.API_GET_DEBTS}/${gid}?paging=${paging}`, {
-                        headers: {
-                          authorization: `Bearer ${token}`,
-                        },
+                      // const token = localStorage.getItem('accessToken');
+                      // const { data } = await axios.get(`${constants.API_GET_DEBTS}/${gid}?paging=${paging}`, {
+                      //   headers: {
+                      //     authorization: `Bearer ${token}`,
+                      //   },
+                      // });
+                      // console.log('BACKEND for setDebts: ', data.data);
+                      // setDebt(data.data);
+                      setIsDebtChanged((prev) => {
+                        return !prev;
                       });
-                      console.log('BACKEND for setDebts: ', data.data);
-                      setDebt(data.data);
                       onHide();
                     });
                   } else if (res.status == 503) {
@@ -417,19 +420,19 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
               <div className="add-debt-total-div">
                 <Form.Label className="add-debt-total">
                   <span>Total</span>
-                  <span>{currSum.total ? currencyFormat(currSum.total) : 'NT$ 0'}</span>
+                  <span>{currSum.total ? utils.currencyFormat(currSum.total) : 'NT$ 0'}</span>
                 </Form.Label>
                 <GiReceiveMoney style={{ width: '30px', height: '30px' }} />
                 <Form.Label className="add-debt-total">
                   {currSum.total - currSum.sum >= 0 ? (
                     <>
                       <span>Still Left </span>
-                      <span>{currencyFormat(currSum.total - currSum.sum)}</span>
+                      <span>{utils.currencyFormat(currSum.total - currSum.sum)}</span>
                     </>
                   ) : (
                     <>
                       <span>Exceed </span>
-                      <span>{currencyFormat(currSum.sum - currSum.total)}</span>
+                      <span>{utils.currencyFormat(currSum.sum - currSum.total)}</span>
                     </>
                   )}
                 </Form.Label>

@@ -6,7 +6,7 @@ import { User } from '../../App';
 import { GroupInfo } from './Home';
 import Icons from '../../../global/Icons';
 import SettleOne from './SettleOne';
-import currencyFormat from '../../../global/utils';
+import utils from '../../../global/utils';
 import Swal from 'sweetalert2';
 import { FaBalanceScale } from 'react-icons/fa';
 
@@ -86,12 +86,12 @@ const Balance = ({ isDebtChanged, setIsDebtChanged }) => {
                   {currUserBalance.balance >= 0 ? (
                     <>
                       <span>get back </span>
-                      <span className="owed-font">{currencyFormat(currUserBalance.balance)} </span>
+                      <span className="owed-font">{utils.currencyFormat(currUserBalance.balance)} </span>
                     </>
                   ) : (
                     <>
                       <span>owes</span>
-                      <span className="owe-font">{currencyFormat(-currUserBalance.balance)} </span>
+                      <span className="owe-font">{utils.currencyFormat(-currUserBalance.balance)} </span>
                     </>
                   )}
                 </div>
@@ -107,14 +107,14 @@ const Balance = ({ isDebtChanged, setIsDebtChanged }) => {
                             <div className="group-balance-detail-item-wrapper">
                               <div>owed by</div>
                               <div>{`${CurrGroupInfo.groupUserNames[detail.borrower]}`}</div>
-                              <div className="owe-font">{currencyFormat(detail.amount)}</div>
+                              <div className="owe-font">{utils.currencyFormat(detail.amount)}</div>
                             </div>
                           ) : (
                             //header是borrower所以裡面是lender
                             <div className="group-balance-detail-item-wrapper">
                               <div>paid by</div>
                               <div>{`${CurrGroupInfo.groupUserNames[detail.lender]}`}</div>
-                              <div className="owed-font">{currencyFormat(detail.amount)}</div>
+                              <div className="owed-font">{utils.currencyFormat(detail.amount)}</div>
                             </div>
                           )}
                           <SettleOne.SettleOneButton
@@ -152,12 +152,12 @@ const Balance = ({ isDebtChanged, setIsDebtChanged }) => {
                       {userBalance.balance >= 0 ? (
                         <>
                           <span>get back </span>
-                          <span className="owed-font">{currencyFormat(userBalance.balance)} </span>
+                          <span className="owed-font">{utils.currencyFormat(userBalance.balance)} </span>
                         </>
                       ) : (
                         <>
                           <span>owes</span>
-                          <span className="owe-font">{currencyFormat(-userBalance.balance)} </span>
+                          <span className="owe-font">{utils.currencyFormat(-userBalance.balance)} </span>
                         </>
                       )}
                     </div>
@@ -173,14 +173,14 @@ const Balance = ({ isDebtChanged, setIsDebtChanged }) => {
                                 <div className="group-balance-detail-item-wrapper">
                                   <div>owed by</div>
                                   <div>{`${CurrGroupInfo.groupUserNames[detail.borrower]}`}</div>
-                                  <div className="owe-font">{currencyFormat(detail.amount)}</div>
+                                  <div className="owe-font">{utils.currencyFormat(detail.amount)}</div>
                                 </div>
                               ) : (
                                 //header是borrower所以裡面是lender
                                 <div className="group-balance-detail-item-wrapper">
                                   <div>paid by</div>
                                   <div>{`${CurrGroupInfo.groupUserNames[detail.lender]}`}</div>
-                                  <div className="owed-font">{currencyFormat(detail.amount)}</div>
+                                  <div className="owed-font">{utils.currencyFormat(detail.amount)}</div>
                                 </div>
                               )}
                               <SettleOne.SettleOneButton
