@@ -415,6 +415,16 @@ color:rgb(150 157 165);
   margin-top: 15px !important;
   margin-bottom: 15px !important;
 }
+.debt-list-no-debt{
+  display: flex;
+  justify-content: center;
+  font-size: 16px;
+  color: #0b0c0c;
+  background-color: white;
+  border-radius: 5px;
+  padding: 16px 20px
+;
+}
 
 
 /* debt detail */

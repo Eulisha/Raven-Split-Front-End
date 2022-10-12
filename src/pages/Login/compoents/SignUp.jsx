@@ -3,13 +3,13 @@ import { useState, useRef } from 'react';
 import constants from '../../../global/constants';
 import { Form, Button, Card } from 'react-bootstrap';
 import Swal from 'sweetalert2';
-// import { useNavigate } from 'react-router-dom';
 import validator from '../../../global/validator';
 
 const SignUp = ({ setHasAccount }) => {
-  console.log('@Signup');
-
+  //Ref
   const formRef = useRef();
+
+  //State
   const [inputValues, setinputValues] = useState({
     email: '',
     password: '',
@@ -17,14 +17,13 @@ const SignUp = ({ setHasAccount }) => {
     cellphone: '',
     provider: 'native',
   });
-  // const [submitted, setSubmitted] = useState(false);
-  // const navigate = useNavigate();
 
-  //event handler
+  //Eventhandler
   const handleInput = (prop) => (e) => {
     setinputValues({ ...inputValues, [prop]: e.target.value });
   };
 
+  //Submit
   const hanldleSubmit = async (e) => {
     e.preventDefault();
     e.target.disabled = true;
@@ -34,18 +33,16 @@ const SignUp = ({ setHasAccount }) => {
         const { data } = await axios.post(`${constants.API_POST_SIGNUP}`, inputValues);
         localStorage.setItem('accessToken', data.data.accessToken);
         window.location.assign(`${constants.HOST}/dashboard`);
-        // navigate('/dashboard');
       } catch (err) {
-        console.log(err.response);
         if (!err.response.data) {
           Swal.fire({
             title: 'Oops!',
-            text: 'Something Wrong. Please Try Later.',
+            text: 'Network Connection failed, please try later...',
             icon: 'error',
             confirmButtonText: 'OK',
           });
         } else if (err.response.data.provider) {
-          //從validator來的error是array形式
+          //後端驗證失敗
           Swal.fire({
             title: 'Error!',
             text: err.response.data.err[0].msg,
@@ -78,7 +75,7 @@ const SignUp = ({ setHasAccount }) => {
 
   return (
     <div className="login-wrapper">
-      <img className="login-image" src="https://i.pinimg.com/originals/e4/c0/f9/e4c0f92fa80da7648307aae4a3896a11.gif" />
+      <img className="login-image" src="/raven.gif" />
       <Card className="login-card">
         <Form className="sign-up" noValidate ref={formRef}>
           <Form.Label className="login-title">Sign Up</Form.Label>
@@ -95,10 +92,10 @@ const SignUp = ({ setHasAccount }) => {
             <Form.Control required type="text" placeholder="Name" name="name" value={inputValues.name} title="Name" onChange={handleInput('name')} />
           </Form.Group>
           <Form.Group className="mb-3" controlId="formBasicCellPhone">
-            <Form.Label>CellPhone</Form.Label>
-            <Form.Control required type="tel" placeholder="CellPhone" value={inputValues.cellphone} title="Cellphone" onChange={handleInput('cellphone')} />
+            <Form.Label>Cell Phone</Form.Label>
+            <Form.Control required type="tel" placeholder="Cell Phone" value={inputValues.cellphone} title="Cellphone" onChange={handleInput('cellphone')} />
           </Form.Group>
-          <Button variant="info" type="submit" onClick={hanldleSubmit}>
+          <Button className="sumbit-btn" variant="primary" type="submit" onClick={hanldleSubmit}>
             Submit
           </Button>
           <button className="change-login-method-btn" style={{ border: 'none' }} onClick={() => setHasAccount(false)}>

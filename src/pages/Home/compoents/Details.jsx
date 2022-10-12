@@ -9,8 +9,6 @@ import { Page } from './Debts';
 import Swal from 'sweetalert2';
 
 const Details = ({ debtInfo, setDebt, setIsDebtChanged }) => {
-  console.log('@Details');
-
   //Context
   let CurrGroupInfo = useContext(GroupInfo);
   let paging = useContext(Page);
@@ -32,9 +30,8 @@ const Details = ({ debtInfo, setDebt, setIsDebtChanged }) => {
             authorization: `Bearer ${token}`,
           },
         });
-        console.log('BACKEND for setDetails: ', data.data);
 
-        //整理成快速查找的object, oriSplit = {1:50, 2:50}
+        //整理成以uid為key的object
         const oriSplit = {};
         data.data.map((detail) => {
           for (let uid of groupUsers) {
@@ -44,20 +41,19 @@ const Details = ({ debtInfo, setDebt, setIsDebtChanged }) => {
             }
           }
         });
-        console.log('整理好最後用來setDetails: ', oriSplit);
         setDetail(oriSplit);
       } catch (err) {
         if (!err.response.data) {
           //網路錯誤
           Swal.fire({
-            title: 'Error!',
+            title: 'Oops!',
             text: 'Network Connection failed, please try later...',
             icon: 'error',
             confirmButtonText: 'OK',
           });
         } else {
           Swal.fire({
-            title: 'Error!',
+            title: 'Oops!',
             text: 'Internal Server Error',
             icon: 'error',
             confirmButtonText: 'OK',
@@ -83,65 +79,75 @@ const Details = ({ debtInfo, setDebt, setIsDebtChanged }) => {
       confirmButtonText: 'Yes, delete it!',
     }).then(async (result) => {
       if (result.isConfirmed) {
-        try {
-          const token = localStorage.getItem('accessToken');
-          const { data } = await axios.delete(`${constants.API_DELETE_DEBT}/${currGroup.gid}/${debtId}`, {
-            headers: {
-              authorization: `Bearer ${token}`,
-            },
-          });
-          console.log('BACKEND for delete setDebt: ', data.data);
-          //刪除成功，set debt
-          setDebt((prev) => {
-            return prev.filter((item) => item.id !== debtId);
-          });
-          setIsDebtChanged((prev) => {
-            return !prev;
-          });
-          Swal.fire('Deleted!', 'Expense has been deleted.', 'success');
-        } catch (err) {
-          console.log(err.response);
-          if (!err.response.data) {
-            //網路錯誤
-            Swal.fire({
-              title: 'Error!',
-              text: 'Network Connection failed, please try later...',
-              icon: 'error',
-              confirmButtonText: 'OK',
-            });
-          } else if (err.response.status == 404) {
-            //帳已經不存在
-            return Swal.fire({
-              title: 'Error!',
-              text: 'This debt might already be modified by others, please refresh to get latest one.',
-              icon: 'error',
-              confirmButtonText: 'OK',
-            }).then(async () => {
+        Swal.fire({
+          title: 'Loading...',
+          showConfirmButton: false,
+          allowOutsideClick: () => !Swal.isLoading(),
+          didOpen: async () => {
+            Swal.showLoading();
+            try {
               const token = localStorage.getItem('accessToken');
-              const { data } = await axios.get(`${constants.API_GET_DEBTS}/${gid}?paging=${paging}`, {
+              await axios.delete(`${constants.API_DELETE_DEBT}/${currGroup.gid}/${debtId}`, {
                 headers: {
                   authorization: `Bearer ${token}`,
                 },
               });
-              console.log('BACKEND for setDebts: ', data.data);
-              setDebt(data.data);
-            });
-          } else if (err.response.status == 503) {
-            return Swal.fire({
-              title: 'Oops!',
-              text: err.response.data.err,
-              icon: 'info',
-              confirmButtonText: 'OK',
-            });
-          } else {
-            return Swal.fire({
-              title: 'Error!',
-              text: 'Internal Server Error',
-              icon: 'error',
-              confirmButtonText: 'OK',
-            });
-          }
-        }
+
+              //刪除成功
+              setTimeout(() => {
+                setDebt((prev) => {
+                  return prev.filter((item) => item.id !== debtId);
+                });
+                setIsDebtChanged((prev) => {
+                  return !prev;
+                });
+                Swal.hideLoading();
+                Swal.close();
+                Swal.fire({ title: 'Deleted!', icon: 'success', showConfirmButton: false, timer: 1200 });
+              }, 500);
+            } catch (err) {
+              if (!err.response.data) {
+                //網路錯誤
+                Swal.fire({
+                  title: 'Oops!',
+                  text: 'Network Connection failed, please try later...',
+                  icon: 'error',
+                  confirmButtonText: 'OK',
+                });
+              } else if (err.response.status == 404) {
+                //帳已經不存在
+                return Swal.fire({
+                  title: 'Oops!',
+                  text: 'This debt might already be modified by others, please refresh to get latest one.',
+                  icon: 'error',
+                  confirmButtonText: 'OK',
+                }).then(async () => {
+                  const token = localStorage.getItem('accessToken');
+                  const { data } = await axios.get(`${constants.API_GET_DEBTS}/${gid}?paging=${paging}`, {
+                    headers: {
+                      authorization: `Bearer ${token}`,
+                    },
+                  });
+                  setDebt(data.data);
+                });
+              } else if (err.response.status == 503) {
+                return Swal.fire({
+                  title: 'Oops!',
+                  text: err.response.data.err,
+                  icon: 'info',
+                  confirmButtonText: 'OK',
+                });
+              } else {
+                return Swal.fire({
+                  title: 'Oops!',
+                  text: 'Internal Server Error',
+                  icon: 'error',
+                  confirmButtonText: 'OK',
+                });
+              }
+            }
+          },
+        });
       }
     });
   };

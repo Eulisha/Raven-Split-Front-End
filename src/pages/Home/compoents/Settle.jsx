@@ -25,17 +25,13 @@ const SettleButton = ({ setIsDebtChanged }) => {
 };
 
 const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
-  console.log('@Settle');
-
   //Context
   let CurrGroupInfo = useContext(GroupInfo);
   let { currGroup, groupUserNames } = CurrGroupInfo;
   let gid = currGroup.gid;
-  console.log('currGroup, groupUserNames, gid: ', currGroup, groupUserNames, gid);
 
   //Ref
   const inputDate = useRef();
-  // const inputTitle = useRef();
   const formRef = useRef();
 
   //state
@@ -45,7 +41,7 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
     e.preventDefault;
     try {
       const token = localStorage.getItem('accessToken');
-      const { data } = await axios.post(
+      await axios.post(
         `${constants.API_POST_SETTLE_DONE}/${gid}`,
         {},
         {
@@ -54,15 +50,8 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
           },
         }
       );
-      console.log('BACKEND settleDone result:  ', data.data);
     } catch (err) {
-      console.log(err.response.data.err);
-      return Swal.fire({
-        title: 'Error!',
-        text: err.response.data.err,
-        icon: 'error',
-        confirmButtonText: 'OK',
-      });
+      console.err(err);
     }
   };
 
@@ -76,7 +65,9 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
       Swal.fire({
         title: 'Loading...',
         showConfirmButton: false,
-        // html: 'Calculating best graph, please wait a second.',
+        html: 'Calculating best graph, please wait a second.',
+        allowOutsideClick: () => !Swal.isLoading(),
+
         didOpen: () => {
           Swal.showLoading();
           const token = localStorage.getItem('accessToken');
@@ -100,7 +91,7 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
                   });
                 } else {
                   Swal.fire({
-                    title: 'Error!',
+                    title: 'Oops!',
                     text: 'Internal Server Error',
                     icon: 'error',
                     confirmButtonText: 'OK',
@@ -109,24 +100,24 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
                   });
                 }
               } else {
-                console.log('BACKEND for setSettle: ', data.data);
-                if (data.data.length === 0) {
-                  setSettle('Currently all balance.');
-                } else {
-                  let sorted = data.data.sort((a, b) => {
-                    new Date(b.amount) - new Date(a.amount);
-                  });
-                  setSettle(sorted);
-                }
-                Swal.hideLoading();
-                Swal.close();
+                setTimeout(() => {
+                  if (data.data.length === 0) {
+                    setSettle('Currently all balance.');
+                  } else {
+                    let sorted = data.data.sort((a, b) => {
+                      new Date(b.amount) - new Date(a.amount);
+                    });
+                    setSettle(sorted);
+                  }
+                  Swal.hideLoading();
+                  Swal.close();
+                }, 800);
               }
             })
-            .catch((err) => {
-              console.log(err);
+            .catch(() => {
               //網路錯誤
               Swal.fire({
-                title: 'Error!',
+                title: 'Oops!',
                 text: 'Network Connection failed, please try later...',
                 icon: 'error',
                 confirmButtonText: 'OK',
@@ -136,53 +127,6 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
             });
         },
       });
-
-      // try {
-      //   const token = localStorage.getItem('accessToken');
-      //   const { data } = await axios.get(`${constants.API_GET_SETTLE}/${gid}`, {
-      //     headers: {
-      //       authorization: `Bearer ${token}`,
-      //     },
-      //   });
-      //   console.log('BACKEND for setSettle: ', data.data);
-      //   if (data.data.length === 0) {
-      //     return setSettle('Currently all balance.');
-      //   }
-      //   let sorted = data.data.sort((a, b) => {
-      //     return new Date(b.amount) - new Date(a.amount);
-      //   });
-      //   setSettle(sorted);
-      // } catch (err) {
-      //   if (!err.response.data) {
-      //     //網路錯誤
-      //     Swal.fire({
-      //       title: 'Error!',
-      //       text: 'Network Connection failed, please try later...',
-      //       icon: 'error',
-      //       confirmButtonText: 'OK',
-      //     }).then(() => {
-      //       onHide();
-      //     });
-      //   } else if (err.response.status == 503) {
-      //     Swal.fire({
-      //       title: 'Calculating...',
-      //       text: 'Still Calculating Best Solution. Please check later.',
-      //       icon: 'info',
-      //       confirmButtonText: 'OK',
-      //     }).then(() => {
-      //       onHide();
-      //     });
-      //   } else {
-      //     Swal.fire({
-      //       title: 'Error!',
-      //       text: 'Internal Server Error',
-      //       icon: 'error',
-      //       confirmButtonText: 'OK',
-      //     }).then(() => {
-      //       onHide();
-      //     });
-      //   }
-      // }
     };
     fetchGetSettle();
 
@@ -195,67 +139,74 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     e.target.disabled = true;
-    console.log('@handle settle submit group');
     const form = formRef.current;
+
     if (form.reportValidity()) {
-      try {
-        const token = localStorage.getItem('accessToken');
-        const body = {
-          settle_main: {
-            gid,
-            date: inputDate.current.value,
-            // title: inputTitle.current.value,
-          },
-          settle_detail: settle,
-        };
-        console.log('FRONT for settle group: ', body);
-        const { data } = await axios.post(`${constants.API_POST_SETTLE}/${gid}`, body, {
-          headers: {
-            authorization: `Bearer ${token}`,
-          },
-        });
-        console.log('BACKEND settle result: ', data);
-
-        setSettle([]);
-        setIsDebtChanged((prev) => {
-          return !prev;
-        });
-
-        onHide();
-      } catch (err) {
-        console.log(err.response);
-        if (!err.response.data) {
-          //網路錯誤
-          Swal.fire({
-            title: 'Error!',
-            text: 'Network Connection failed, please try later...',
-            icon: 'error',
-            confirmButtonText: 'OK',
-          }).then(() => {
-            onHide();
-          });
-        } else if (err.response.data.provider) {
-          //從validator來的error是array形式
-          Swal.fire({
-            title: 'Error!',
-            text: err.response.data.err[0].msg,
-            icon: 'error',
-            confirmButtonText: 'OK',
-          });
-        } else {
-          //系統錯誤
-          Swal.fire({
-            title: 'Error!',
-            text: 'Internal Server Error',
-            icon: 'error',
-            confirmButtonText: 'OK',
-          }).then(() => {
-            onHide();
-          });
-        }
-      } finally {
-        e.target.disabled = false;
-      }
+      Swal.fire({
+        title: 'Saving...',
+        showConfirmButton: false,
+        allowOutsideClick: () => !Swal.isLoading(),
+        didOpen: async () => {
+          Swal.showLoading();
+          try {
+            const token = localStorage.getItem('accessToken');
+            const body = {
+              settle_main: {
+                gid,
+                date: inputDate.current.value,
+              },
+              settle_detail: settle,
+            };
+            await axios.post(`${constants.API_POST_SETTLE}/${gid}`, body, {
+              headers: {
+                authorization: `Bearer ${token}`,
+              },
+            });
+            setTimeout(() => {
+              setSettle([]);
+              setIsDebtChanged((prev) => {
+                return !prev;
+              });
+              Swal.hideLoading();
+              Swal.close();
+              Swal.fire({ title: 'Done!', icon: 'success', showConfirmButton: false, timer: 1200 });
+              onHide();
+            }, 500);
+          } catch (err) {
+            if (!err.response.data) {
+              //網路錯誤
+              Swal.fire({
+                title: 'Oops!',
+                text: 'Network Connection failed, please try later...',
+                icon: 'error',
+                confirmButtonText: 'OK',
+              }).then(() => {
+                onHide();
+              });
+            } else if (err.response.data.provider) {
+              //驗證失敗
+              Swal.fire({
+                title: 'Error!',
+                text: err.response.data.err[0].msg,
+                icon: 'error',
+                confirmButtonText: 'OK',
+              });
+            } else {
+              //系統錯誤
+              Swal.fire({
+                title: 'Oops!',
+                text: 'Internal Server Error',
+                icon: 'error',
+                confirmButtonText: 'OK',
+              }).then(() => {
+                onHide();
+              });
+            }
+          } finally {
+            e.target.disabled = false;
+          }
+        },
+      });
     } else {
       validator(formRef);
       e.target.disabled = false;
@@ -282,56 +233,30 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
                 new Date(Date.now()).getDate() < 10 ? 0 : ''
               }${new Date(Date.now()).getDate()}`}
             />
-            {/* <Form.Label>Title</Form.Label> */}
-            {/* <Form.Control ref={inputTitle} type="text" name="title" defaultValue="Settle Group All Balances" disabled></Form.Control> */}
           </Form.Group>
           <div>
             {Array.isArray(settle) ? (
               settle.map((ele) => {
                 return (
                   <div className="settle-pair-items">
-                    {
-                      ele.amount != 0 && (
-                        // ? (
-                        //   <>
-                        //     <Icons.UserIcon />
-                        //     <span>{groupUserNames[ele.borrower]}</span>
-                        //     <div className="settle-pair-pay-amount-wapper">
-                        //       <BsArrowRight />
-                        //       <div style={{ display: 'flex', flexDirection: 'column', justifyItems: 'flex-end', alignItems: 'center', margin: '10px' }}>
-                        //         <div>
-                        //           <span className="settle-pair-pay-amount" style={{ color: '#dddcdc' }}>
-                        //             {utils.currencyFormat(ele.amount)}
-                        //           </span>
-                        //           <GiPayMoney style={{ width: '30px', height: '30px', color: '#dddcdc' }} />
-                        //         </div>
-                        //       </div>
-                        //       <BsArrowRight />
-                        //     </div>
-                        //     <span>{groupUserNames[ele.lender]}</span>
-                        //     <Icons.UserIcon />
-                        //   </>
-                        // ) : (
-                        <>
-                          <Icons.UserIcon />
-                          <span>{groupUserNames[ele.borrower]}</span>
-                          <div className="settle-pair-pay-amount-wapper">
-                            <BsArrowRight />
-                            <div style={{ display: 'flex', flexDirection: 'column', justifyItems: 'flex-end', alignItems: 'center', margin: '10px' }}>
-                              <div>
-                                <span className="settle-pair-pay-amount">{utils.currencyFormat(ele.amount)}</span>
-
-                                <GiPayMoney style={{ width: '30px', height: '30px' }} />
-                              </div>
+                    {ele.amount != 0 && (
+                      <>
+                        <Icons.UserIcon />
+                        <span>{groupUserNames[ele.borrower]}</span>
+                        <div className="settle-pair-pay-amount-wapper">
+                          <BsArrowRight />
+                          <div style={{ display: 'flex', flexDirection: 'column', justifyItems: 'flex-end', alignItems: 'center', margin: '10px' }}>
+                            <div>
+                              <span className="settle-pair-pay-amount">{utils.currencyFormat(ele.amount)}</span>
+                              <GiPayMoney style={{ width: '30px', height: '30px' }} />
                             </div>
-                            <BsArrowRight />
                           </div>
-                          <span>{groupUserNames[ele.lender]}</span>
-                          <Icons.UserIcon />
-                        </>
-                      )
-                      // )
-                    }
+                          <BsArrowRight />
+                        </div>
+                        <span>{groupUserNames[ele.lender]}</span>
+                        <Icons.UserIcon />
+                      </>
+                    )}
                   </div>
                 );
               })

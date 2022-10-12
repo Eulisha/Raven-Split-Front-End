@@ -12,17 +12,17 @@ import Icons from '../../../global/Icons';
 import Swal from 'sweetalert2';
 
 const UserGroups = ({ isGroupChanged, setGroupUsers, setGroupUserNames, setGroupUserEmails, setIsGroupChanged }) => {
-  console.log('@UserGroups');
-
   //Context
   let CurrUser = useContext(User);
   let CurrGroupInfo = useContext(GroupInfo);
   let { currGroup, setCurrGroup } = CurrGroupInfo;
 
+  //State
   const [userGroups, setUserGroups] = useState([]);
   const [editingShow, setEditingShow] = useState(false);
   const [selected, setSelected] = useState({});
 
+  //Effect
   useEffect(() => {
     const fetchuserGroups = async () => {
       try {
@@ -32,20 +32,19 @@ const UserGroups = ({ isGroupChanged, setGroupUsers, setGroupUserNames, setGroup
             authorization: `Bearer ${token}`,
           },
         });
-        console.log('BACKEND for setUserGroups: ', data.data);
         setUserGroups(data.data);
       } catch (err) {
         if (!err.response.data) {
           //網路錯誤
           Swal.fire({
-            title: 'Error!',
+            title: 'Oops!',
             text: 'Network Connection failed, please try later...',
             icon: 'error',
             confirmButtonText: 'OK',
           });
         } else {
           Swal.fire({
-            title: 'Error!',
+            title: 'Oops!',
             text: 'Internal Server Error',
             icon: 'error',
             confirmButtonText: 'OK',
@@ -60,8 +59,8 @@ const UserGroups = ({ isGroupChanged, setGroupUsers, setGroupUserNames, setGroup
     setSelected({ gid: currGroup.gid });
   }, [currGroup]);
 
+  //Eventhandler
   const handleNavSelect = (e, group) => {
-    console.log(group);
     setCurrGroup({ gid: group.gid, name: group.name, type: group.type });
     setSelected({ gid: group.gid });
   };

@@ -12,14 +12,12 @@ import CenterTopBar from './CenterTopBar';
 export const GroupInfo = React.createContext();
 
 const Home = () => {
-  console.log('@Home');
   const CurrUser = useContext(User);
-  console.log('CurrUser: ', CurrUser);
 
   const [currGroup, setCurrGroup] = useState({ gid: null, name: null, type: null });
   const [groupUsers, setGroupUsers] = useState([]); //array of Ids of groupUsers
-  const [groupUserNames, setGroupUserNames] = useState({}); //{1:Euli}
-  const [groupUserEmails, setGroupUserEmails] = useState({}); //{1:Euli}
+  const [groupUserNames, setGroupUserNames] = useState({});
+  const [groupUserEmails, setGroupUserEmails] = useState({});
   const [isGroupChanged, setIsGroupChanged] = useState(false);
 
   const [debts, setDebt] = useState([]);
@@ -38,12 +36,7 @@ const Home = () => {
                 <>
                   <CenterTopBar setDebt={setDebt} setIsDebtChanged={setIsDebtChanged} />
                   <div className="group-debt-area">
-                    <Debts
-                      debts={debts}
-                      setDebt={setDebt}
-                      isDebtChanged={isDebtChanged} //傳給debt跟detail
-                      setIsDebtChanged={setIsDebtChanged} //要傳給settle頁
-                    />
+                    <Debts debts={debts} setDebt={setDebt} isDebtChanged={isDebtChanged} setIsDebtChanged={setIsDebtChanged} />
                     <GroupUsers
                       id="right_sidebar"
                       setGroupUsers={setGroupUsers}

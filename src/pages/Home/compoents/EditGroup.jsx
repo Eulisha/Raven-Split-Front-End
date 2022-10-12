@@ -5,19 +5,15 @@ import constants from '../../../global/constants';
 import { User } from '../../App';
 import { GroupInfo } from './Home';
 import { MdDelete } from 'react-icons/md';
-import { useEffect } from 'react';
 import Swal from 'sweetalert2';
 import validator from '../../../global/validator';
 
 const EditGroup = ({ setEditingShow, editingShow }) => {
-  console.log('@Edit Group');
-
   let CurrUser = useContext(User);
   let CurrGroupInfo = useContext(GroupInfo);
-  let { id, name, email } = CurrUser.user;
+  let { name, email } = CurrUser.user;
   let { currGroup, groupUsers, groupUserNames, groupUserEmails, setCurrGroup, setIsGroupChanged } = CurrGroupInfo;
   let group_type = currGroup.type;
-  console.log('id, name, email, currGroup, groupUsers, group_type: ', id, name, email, currGroup, groupUsers, group_type);
 
   //設定state
   const [editedGroupUserIds, setEditedGroupUserIds] = useState(groupUsers);
@@ -61,12 +57,11 @@ const EditGroup = ({ setEditingShow, editingShow }) => {
             authorization: `Bearer ${token}`,
           },
         });
-        console.log('BACKEND for setEditedGroup:', data.data);
 
         //查使用者存在
         const insertId = data.data.id;
         const userNameFromDb = data.data.name;
-        console.log(insertId, userNameFromDb);
+
         //新增id到array
         setEditedGroupUserIds([...editedGroupUserIds, insertId]);
         setEditedGroupUserNames({ ...editedGroupUserNames, [insertId]: userNameFromDb });
@@ -74,11 +69,10 @@ const EditGroup = ({ setEditingShow, editingShow }) => {
         inputUserEmail.current.value = '';
         e.target.disabled = false;
       } catch (err) {
-        console.log(err.response);
         if (!err.response.data) {
           //網路錯誤
           Swal.fire({
-            title: 'Error!',
+            title: 'Oops!',
             text: 'Network Connection failed, please try later...',
             icon: 'error',
             confirmButtonText: 'OK',
@@ -95,7 +89,6 @@ const EditGroup = ({ setEditingShow, editingShow }) => {
           });
         } else if (err.response.data.provider) {
           //後端驗失敗
-          //從validator來的error是array形式
           Swal.fire({
             title: 'Error!',
             text: err.response.data.err[0].msg,
@@ -105,7 +98,7 @@ const EditGroup = ({ setEditingShow, editingShow }) => {
         } else {
           //系統錯誤
           Swal.fire({
-            title: 'Error!',
+            title: 'Oops!',
             text: 'Internal Server Error',
             icon: 'error',
             confirmButtonText: 'OK',
@@ -131,81 +124,81 @@ const EditGroup = ({ setEditingShow, editingShow }) => {
     });
   };
 
-  useEffect(() => {
-    console.log('use effect log editedGroupUserEmails, editedGroupUserNames, editedGroupUserIds:', editedGroupUserEmails, editedGroupUserNames, editedGroupUserIds);
-  }, [editedGroupUserIds]);
-
   //儲存DB
   const handleSubmit = async (e) => {
     e.preventDefault();
     e.target.disabled = true;
+
     const form = formRef.current;
     if (form.reportValidity()) {
-      try {
-        //整理送後端格式
-        const newGroupUsers = { group_name: inputGroupName.current.value, group_type, groupUsers: [] };
-        //[{uid:1,email:a@a.com,role:2}]
+      //整理送後端格式
+      const newGroupUsers = { group_name: inputGroupName.current.value, group_type, groupUsers: [] };
 
-        console.log(editedGroupUserIds);
-        editedGroupUserIds.map((userId) => {
-          console.log('editedGroupUserId', userId, groupUsers);
-          if (!groupUsers.includes(userId)) {
-            //將新增的加入arr
-            const newGroupUser = { uid: userId, email: editedGroupUserEmails[userId], role: group_type === '1' ? 2 : group_type === '2' ? 4 : 1 };
-            // console.log(newGroupUser);
-            newGroupUsers.groupUsers.push(newGroupUser);
-            // console.log(newGroupUsers);
-          }
-        });
-
-        //傳給後端
-        const token = localStorage.getItem('accessToken');
-        console.log('FRONT for put group:', newGroupUsers);
-
-        const { data } = await axios.put(`${constants.API_PUT_GROUP}/${currGroup.gid}`, newGroupUsers, {
-          headers: {
-            authorization: `Bearer ${token}`,
-          },
-        });
-        console.log('BACKEND for set group..: ', data.data);
-
-        setIsGroupChanged((prev) => !prev);
-        setEditingShow(false);
-        setCurrGroup({ ...currGroup, ['name']: inputGroupName.current.value });
-      } catch (err) {
-        console.log(err.response);
-        if (!err.response.data) {
-          //網路錯誤
-          Swal.fire({
-            title: 'Error!',
-            text: 'Network Connection failed, please try later...',
-            icon: 'error',
-            confirmButtonText: 'OK',
-          }).then(() => {
-            setEditingShow(false);
-          });
-        } else if (err.response.data.provider) {
-          //從validator來的error是array形式
-          Swal.fire({
-            title: 'Error!',
-            text: err.response.data.err[0].msg,
-            icon: 'error',
-            confirmButtonText: 'OK',
-          });
-        } else {
-          //系統錯誤
-          Swal.fire({
-            title: 'Error!',
-            text: 'Internal Server Error',
-            icon: 'error',
-            confirmButtonText: 'OK',
-          });
-          setEditingShow(false);
-          return;
+      editedGroupUserIds.map((userId) => {
+        if (!groupUsers.includes(userId)) {
+          //將新增的加入arr
+          const newGroupUser = { uid: userId, email: editedGroupUserEmails[userId] };
+          newGroupUsers.groupUsers.push(newGroupUser);
         }
-      } finally {
-        e.target.disabled = false;
-      }
+      });
+
+      //傳給後端
+      const token = localStorage.getItem('accessToken');
+
+      Swal.fire({
+        title: 'Loading...',
+        showConfirmButton: false,
+        allowOutsideClick: () => !Swal.isLoading(),
+        didOpen: async () => {
+          Swal.showLoading();
+          try {
+            await axios.put(`${constants.API_PUT_GROUP}/${currGroup.gid}`, newGroupUsers, {
+              headers: {
+                authorization: `Bearer ${token}`,
+              },
+            });
+            setTimeout(() => {
+              setIsGroupChanged((prev) => !prev);
+              setEditingShow(false);
+              setCurrGroup({ ...currGroup, ['name']: inputGroupName.current.value });
+              Swal.hideLoading();
+              Swal.close();
+              Swal.fire({ title: 'Updateed!', icon: 'success', showConfirmButton: false, timer: 1200 });
+            }, 500);
+          } catch (err) {
+            if (!err.response.data) {
+              //網路錯誤
+              Swal.fire({
+                title: 'Oops!',
+                text: 'Network Connection failed, please try later...',
+                icon: 'error',
+                confirmButtonText: 'OK',
+              }).then(() => {
+                setEditingShow(false);
+              });
+            } else if (err.response.data.provider) {
+              //後端驗證失敗
+              Swal.fire({
+                title: 'Error!',
+                text: err.response.data.err[0].msg,
+                icon: 'error',
+                confirmButtonText: 'OK',
+              });
+            } else {
+              //系統錯誤
+              Swal.fire({
+                title: 'Oops!',
+                text: 'Internal Server Error',
+                icon: 'error',
+                confirmButtonText: 'OK',
+              });
+              setEditingShow(false);
+            }
+          } finally {
+            e.target.disabled = false;
+          }
+        },
+      });
     } else {
       validator(formRef);
       e.target.disabled = false;
@@ -265,7 +258,7 @@ const EditGroup = ({ setEditingShow, editingShow }) => {
                       className="add-group-members-delete-icon"
                       onClick={(event) => {
                         handleDeleteUser(event, uid);
-                      }} // 刪除icon
+                      }}
                     />
                   </ListGroup.Item>
                 </ListGroup>

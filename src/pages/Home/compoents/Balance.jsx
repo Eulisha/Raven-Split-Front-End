@@ -11,16 +11,13 @@ import Swal from 'sweetalert2';
 import { FaBalanceScale } from 'react-icons/fa';
 
 const Balance = ({ isDebtChanged, setIsDebtChanged }) => {
-  console.log('@balance');
-
   //useContext
   let CurrUser = useContext(User);
   let CurrGroupInfo = useContext(GroupInfo);
   let currUserId = CurrUser.user.id;
   let currUserName = CurrUser.user.name;
-  let { currGroup, groupUsers, groupUserNames, isGroupChanged } = CurrGroupInfo;
+  let { currGroup, groupUserNames, isGroupChanged } = CurrGroupInfo;
   let { gid } = currGroup;
-  console.log('currGroup, groupUsers, groupUserNames, isGroupChanged, gid: ', currGroup, groupUsers, groupUserNames, isGroupChanged, gid);
 
   //useState
   const [currUserBalance, setcurrUserBalance] = useState({});
@@ -35,7 +32,7 @@ const Balance = ({ isDebtChanged, setIsDebtChanged }) => {
             authorization: `Bearer ${token}`,
           },
         });
-        console.log('BACKEND for setbalance: ', data); //{1:{uid:1,total:100,details:[{id:901,borrower:2,lender:1,amount:50}]}}
+
         let currUserObject = {};
         let otherUserArr = [];
 
@@ -52,14 +49,14 @@ const Balance = ({ isDebtChanged, setIsDebtChanged }) => {
         if (!err.response.data) {
           //網路錯誤
           Swal.fire({
-            title: 'Error!',
+            title: 'Oops!',
             text: 'Network Connection failed, please try later...',
             icon: 'error',
             confirmButtonText: 'OK',
           });
         } else {
           Swal.fire({
-            title: 'Error!',
+            title: 'Oops!',
             text: 'Internal Server Error',
             icon: 'error',
             confirmButtonText: 'OK',
@@ -214,17 +211,3 @@ const Balance = ({ isDebtChanged, setIsDebtChanged }) => {
 };
 
 export default Balance;
-
-{
-  /* {balances.length === 0 && groupUsers
-          ? groupUsers.map((user) => {
-              //新群組尚無借貸關係
-              return (
-                <ListGroup>
-                  <ListGroup.Item key={user} className="item">
-                    {groupUserNames[user]}
-                  </ListGroup.Item>
-                </ListGroup>
-              );
-            }): */
-}

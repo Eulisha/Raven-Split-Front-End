@@ -2,11 +2,9 @@ import axios from 'axios';
 import { useState, useEffect, useRef, useContext } from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
 import constants from '../../../global/constants';
-// import { User } from '../../App';
 import { GroupInfo } from './Home';
 import Icons from '../../../global/Icons';
 import utils from '../../../global/utils';
-// import { RiMoneyDollarCircleLine } from 'react-icons/ri';
 import { GiPayMoney } from 'react-icons/gi';
 import { BsArrowRight } from 'react-icons/bs';
 import Swal from 'sweetalert2';
@@ -17,8 +15,6 @@ const SettleOneButton = ({ ownStatus, settleFromId, settleFromName, settleToId, 
   let { currGroup } = CurrGroupInfo;
   let gid = currGroup.gid;
   const [editingShow, setEditingShow] = useState(false);
-  // const [getLock, setGetLock] = useState(false);
-  // console.log('settleToId, settleToName, gid: ', settleToId, settleToName, gid);
 
   const checkIfSettlable = async () => {
     setIsDebtChanged((prev) => {
@@ -32,13 +28,12 @@ const SettleOneButton = ({ ownStatus, settleFromId, settleFromName, settleToId, 
           authorization: `Bearer ${token}`,
         },
       });
-      // setGetLock(true);
       setEditingShow(true);
     } catch (err) {
       if (!err.response.data) {
         //網路錯誤
         Swal.fire({
-          title: 'Error!',
+          title: 'Oops!',
           text: 'Network Connection failed, please try later...',
           icon: 'error',
           confirmButtonText: 'OK',
@@ -52,7 +47,7 @@ const SettleOneButton = ({ ownStatus, settleFromId, settleFromName, settleToId, 
         });
       } else {
         Swal.fire({
-          title: 'Error!',
+          title: 'Oops!',
           text: 'Internal Server Error',
           icon: 'error',
           confirmButtonText: 'OK',
@@ -85,27 +80,15 @@ const SettleOneButton = ({ ownStatus, settleFromId, settleFromName, settleToId, 
 };
 
 const SettleOneWindow = ({ gid, settleFromId, settleFromName, settleToId, settleToName, settleAmount, setIsDebtChanged, onHide, show }) => {
-  console.log('@Settle pair');
-
-  //Context
-  // let CurrUser = useContext(User);
-  // let CurrGroupInfo = useContext(GroupInfo);
-  // let { id, name, email } = CurrUser.user;
-  // let { groupUserNames } = CurrGroupInfo;
-
   //Ref
   const inputDate = useRef();
-  // const inputTitle = useRef();
   const formRef = useRef();
-
-  //state
-  // console.log('user id, name, email, settleToId, settleToName, groupUserNames: ', id, name, email, settleToId, settleToName, groupUserNames);
 
   const fetchOnHide = async (e) => {
     e.preventDefault;
     try {
       const token = localStorage.getItem('accessToken');
-      const { data } = await axios.post(
+      await axios.post(
         `${constants.API_POST_SETTLE_DONE}/${gid}`,
         {},
         {
@@ -114,29 +97,8 @@ const SettleOneWindow = ({ gid, settleFromId, settleFromName, settleToId, settle
           },
         }
       );
-      console.log('BACKEND settleDone result:  ', data.data);
     } catch (err) {
-      console.log(err.response.data.err);
-      if (!err.response.data) {
-        //網路錯誤
-        Swal.fire({
-          title: 'Error!',
-          text: 'Network Connection failed, please try later...',
-          icon: 'error',
-          confirmButtonText: 'OK',
-        }).then(() => {
-          onHide();
-        });
-      } else {
-        return Swal.fire({
-          title: 'Error!',
-          text: 'Internal Server Error',
-          icon: 'error',
-          confirmButtonText: 'OK',
-        }).then(() => {
-          onHide();
-        });
-      }
+      console.error(err);
     }
   };
 
@@ -153,95 +115,91 @@ const SettleOneWindow = ({ gid, settleFromId, settleFromName, settleToId, settle
   const handleSubmit = async (e) => {
     e.preventDefault();
     e.target.disabled = true;
-    console.log('@handle submit settle pair');
+
     const form = formRef.current;
-
     if (form.reportValidity()) {
-      try {
-        const body = {
-          settle_main: {
-            gid,
-            date: inputDate.current.value,
-          },
-        };
-        console.log('FRONT for settle pair: ', body);
+      const body = {
+        settle_main: {
+          gid,
+          date: inputDate.current.value,
+        },
+      };
 
-        //傳給後端
-        Swal.fire({
-          title: 'Saving...',
-          showConfirmButton: false,
-          didOpen: async () => {
-            Swal.showLoading();
-            const token = localStorage.getItem('accessToken');
-            return await fetch(`${constants.API_POST_SETTLE_PAIR}/${gid}/${settleFromId}/${settleToId}`, {
-              headers: {
-                authorization: `Bearer ${token}`,
-                'content-type': 'application/json',
-              },
-              body: JSON.stringify(body),
-              method: 'POST',
-            })
-              .then(async (res) => {
-                const data = await res.json();
-                if (!res.ok) {
-                  if (res.status == 400) {
-                    //後端驗失敗
-                    //從validator來的error是array形式
-                    return Swal.fire({
-                      title: 'Error!',
-                      text: data.err[0].msg,
-                      icon: 'error',
-                      confirmButtonText: 'OK',
-                    });
-                  } else if (res.status == 503) {
-                    Swal.fire({
-                      title: 'Oops!',
-                      text: data.err,
-                      icon: 'info',
-                      confirmButtonText: 'OK',
-                    }).then(() => {
-                      onHide();
-                    });
-                  } else {
-                    //系統錯誤
-                    Swal.fire({
-                      title: 'Error!',
-                      text: 'Internal Server Error',
-                      icon: 'error',
-                      confirmButtonText: 'OK',
-                    }).then(() => {
-                      onHide();
-                    });
-                  }
+      //傳給後端
+      Swal.fire({
+        title: 'Saving...',
+        showConfirmButton: false,
+        didOpen: async () => {
+          Swal.showLoading();
+          const token = localStorage.getItem('accessToken');
+          await fetch(`${constants.API_POST_SETTLE_PAIR}/${gid}/${settleFromId}/${settleToId}`, {
+            headers: {
+              authorization: `Bearer ${token}`,
+              'content-type': 'application/json',
+            },
+            body: JSON.stringify(body),
+            method: 'POST',
+          })
+            .then(async (res) => {
+              const data = await res.json();
+              if (!res.ok) {
+                if (res.status == 400) {
+                  //後端驗失敗
+                  //從validator來的error是array形式
+                  return Swal.fire({
+                    title: 'Error!',
+                    text: data.err[0].msg,
+                    icon: 'error',
+                    confirmButtonText: 'OK',
+                  });
+                } else if (res.status == 503) {
+                  Swal.fire({
+                    title: 'Oops!',
+                    text: data.err,
+                    icon: 'info',
+                    confirmButtonText: 'OK',
+                  }).then(() => {
+                    onHide();
+                  });
                 } else {
-                  console.log('BACKEND settle pair result: ', data.data);
-                  console.log(setIsDebtChanged);
+                  //系統錯誤
+                  Swal.fire({
+                    title: 'Error!',
+                    text: 'Internal Server Error',
+                    icon: 'error',
+                    confirmButtonText: 'OK',
+                  }).then(() => {
+                    onHide();
+                  });
+                }
+              } else {
+                setTimeout(() => {
                   setIsDebtChanged((prev) => {
                     return !prev;
                   });
                   Swal.hideLoading();
+                  Swal.close();
                   onHide();
                   Swal.fire('Updated!', 'Expense has been updated.', 'success');
-                }
-              })
-              .catch(() => {
-                //網路錯誤
-                Swal.fire({
-                  title: 'Error!',
-                  text: 'Network Connection failed, please try later...',
-                  icon: 'error',
-                  confirmButtonText: 'OK',
-                }).then(() => {
-                  onHide();
-                });
+                }, 500);
+              }
+            })
+            .catch(() => {
+              //網路錯誤
+              Swal.fire({
+                title: 'Error!',
+                text: 'Network Connection failed, please try later...',
+                icon: 'error',
+                confirmButtonText: 'OK',
+              }).then(() => {
+                onHide();
               });
-          },
-        });
-      } catch (err) {
-        console.log(err);
-      } finally {
-        e.target.disabled = false;
-      }
+            })
+            .finally(() => {
+              e.target.disabled = false;
+            });
+        },
+      });
     } else {
       validator(formRef);
       e.target.disabled = false;
@@ -268,8 +226,6 @@ const SettleOneWindow = ({ gid, settleFromId, settleFromName, settleToId, settle
                 new Date(Date.now()).getDate() < 10 ? 0 : ''
               }${new Date(Date.now()).getDate()}`}
             />
-            {/* <Form.Label>Title</Form.Label> */}
-            {/* <Form.Control ref={inputTitle} type="text" name="title" defaultValue={`Settle Balances Between ${settleFromName} And ${settleToName}`} disabled></Form.Control> */}
           </Form.Group>
 
           {settleAmount !== 0 ? (

@@ -1,14 +1,11 @@
-// import axios from 'axios';
 import { useState, useEffect, useContext, useRef } from 'react';
 import { Button, Modal, Form, InputGroup } from 'react-bootstrap';
 import constants from '../../../global/constants';
 import { User } from '../../App';
 import { GroupInfo } from './Home';
-// import { Page } from './Debts';
 import utils from '../../../global/utils';
 import Swal from 'sweetalert2';
 import { GiReceiveMoney } from 'react-icons/gi';
-// import validator from '../../../global/validator';
 
 const AddButton = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged }) => {
   const [editingShow, setEditingShow] = useState(false);
@@ -35,29 +32,22 @@ const AddButton = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged }) 
 };
 
 const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged, onHide, show }) => {
-  console.log('@ Debt add/edit');
-
   //Context
   let CurrGroupInfo = useContext(GroupInfo);
   let CurrUser = useContext(User);
-  // let paging = useContext(Page);
 
   let currUserId = CurrUser.user.id;
-  let currUserName = CurrUser.user.name;
   let gid = CurrGroupInfo.currGroup.gid;
   let { groupUsers, groupUserNames } = CurrGroupInfo;
-  console.log('groupUsers, groupUserNames, currUserId, currUserName, gid: ', groupUsers, groupUserNames, currUserId, currUserName, gid);
 
   //Ref
   const formRef = useRef();
   const formSplitRef = useRef();
   const inputSplitMethod = useRef();
 
-  //設定state for 編輯時暫存的值
-  //帳的初始值 判斷是新增or編輯
-
+  //State
   const initialInfo = details
-    ? debtInfo
+    ? debtInfo //帳的初始值 判斷是新增or編輯
     : {
         gid,
         date: `${new Date(Date.now()).getFullYear()}-${new Date(Date.now()).getMonth() + 1 < 10 ? 0 : ''}${new Date(Date.now()).getMonth() + 1}-${
@@ -75,15 +65,15 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
   const [split, setSplit] = useState(oriSplit); //{uid:amount}
   const [currSum, setSum] = useState(oriSum);
 
-  //Re-Render currSum
-  //total
+  //count total
   useEffect(() => {
     const handleSum = (prop) => {
       setSum({ ...currSum, [prop]: info.total });
     };
     handleSum('total');
   }, [info]);
-  //subsum
+
+  //count subsum
   useEffect(() => {
     const sum = Object.values(split).reduce((acc, curr) => {
       return acc + Number(curr);
@@ -93,9 +83,9 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
     };
     handleSum('sum');
   }, [split]);
-  //動態設定平分帳
+
+  //count split even
   useEffect(() => {
-    console.log(info, split);
     if (info.split_method === '1') {
       const evenAmount = Math.floor(info.total / groupUsers.length);
       const evenly = {};
@@ -112,7 +102,6 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
     if (e.target.name === 'total' || e.target.name === 'amount' || e.target.name === 'lender') {
       setInfo({ ...info, [prop]: utils.currencyFormat(Number(e.target.value)) });
     } else if (e.target.name === 'split_method') {
-      console.log(inputSplitMethod.current.value);
       setInfo({ ...info, [prop]: inputSplitMethod.current.value });
     } else {
       setInfo({ ...info, [prop]: e.target.value });
@@ -121,24 +110,22 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
   const handleSplitChange = (prop) => (e) => {
     setSplit({ ...split, [prop]: Number(e.target.value) });
   };
-  console.log(split);
 
-  //儲存DB
+  //Submit
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('target:', e.target);
     e.target.disabled = true;
     const form = formRef.current;
     const formSplit = formSplitRef.current;
 
     if (form.reportValidity() && formSplit.reportValidity()) {
       //前端表單驗證正確
+
+      //驗金額
       let splitTotal = 0;
       Object.values(split).map((amount) => {
         splitTotal += Number(amount);
       });
-
-      //驗金額
       if (info.total != splitTotal) {
         Swal.fire({
           title: 'Mismatch with Total',
@@ -146,101 +133,91 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
             currSum.total - currSum.sum > 0
               ? `Still NT$${currSum.total - currSum.sum} left. Please check before save.`
               : `Exceed NT$${currSum.sum - currSum.total}. Please check before save.`,
-          icon: 'warning',
+          icon: 'error',
           confirmButtonText: 'OK',
         });
         e.target.disabled = false;
         return;
       }
 
-      try {
-        //整理送後端格式
-        const newDetails = [];
-        groupUsers.map((uid) => {
-          if (split[uid]) {
-            newDetails.push({ borrower: Number(uid), amount: Number(split[uid]) });
-          }
-        });
-        const body = { debt_main: info, debt_detail: newDetails };
-        console.log('FRONTEND for post debt :', body);
+      //整理送後端格式
+      const newDetails = [];
+      groupUsers.map((uid) => {
+        if (split[uid]) {
+          newDetails.push({ borrower: Number(uid), amount: Number(split[uid]) });
+        }
+      });
+      const body = { debt_main: info, debt_detail: newDetails };
 
-        //刪除資料庫用不到的key
-        delete info.isOwned;
-        delete info.ownAmount;
+      //刪除資料庫用不到的key
+      delete info.isOwned;
+      delete info.ownAmount;
 
-        //傳給後端
-        Swal.fire({
-          title: 'Saving...',
-          showConfirmButton: false,
-          didOpen: async () => {
-            Swal.showLoading();
-            const token = localStorage.getItem('accessToken');
+      //傳給後端
+      Swal.fire({
+        title: 'Saving...',
+        showConfirmButton: false,
+        allowOutsideClick: () => !Swal.isLoading(),
+        didOpen: async () => {
+          Swal.showLoading();
+          const token = localStorage.getItem('accessToken');
 
-            return await fetch(!details ? `${constants.API_POST_DEBT}/${gid}` : `${constants.API_PUT_DEBT}/${gid}/${info.id}`, {
-              headers: {
-                authorization: `Bearer ${token}`,
-                'content-type': 'application/json',
-              },
-              body: JSON.stringify(body),
-              method: !details ? 'POST' : 'PUT',
-            })
-              .then(async (res) => {
-                const data = await res.json();
-                if (!res.ok) {
-                  if (res.status == 404) {
-                    //帳已經不存在
-                    Swal.fire({
-                      title: 'Error!',
-                      text: 'This debt might already be modified by others, please refresh to get latest one.',
-                      icon: 'error',
-                      confirmButtonText: 'OK',
-                    }).then(async () => {
-                      // const token = localStorage.getItem('accessToken');
-                      // const { data } = await axios.get(`${constants.API_GET_DEBTS}/${gid}?paging=${paging}`, {
-                      //   headers: {
-                      //     authorization: `Bearer ${token}`,
-                      //   },
-                      // });
-                      // console.log('BACKEND for setDebts: ', data.data);
-                      // setDebt(data.data);
-                      setIsDebtChanged((prev) => {
-                        return !prev;
-                      });
-                      onHide();
+          await fetch(!details ? `${constants.API_POST_DEBT}/${gid}` : `${constants.API_PUT_DEBT}/${gid}/${info.id}`, {
+            headers: {
+              authorization: `Bearer ${token}`,
+              'content-type': 'application/json',
+            },
+            body: JSON.stringify(body),
+            method: !details ? 'POST' : 'PUT',
+          })
+            .then(async (res) => {
+              const data = await res.json();
+              if (!res.ok) {
+                if (res.status == 404) {
+                  //帳已經不存在
+                  Swal.fire({
+                    title: 'Oops!',
+                    text: 'This debt might already be modified by others, need refresh to get latest one.',
+                    icon: 'error',
+                    confirmButtonText: 'OK',
+                  }).then(async () => {
+                    setIsDebtChanged((prev) => {
+                      return !prev;
                     });
-                  } else if (res.status == 503) {
-                    Swal.fire({
-                      title: 'Oops!',
-                      text: data.err,
-                      icon: 'info',
-                      confirmButtonText: 'OK',
-                    }).then(() => {
-                      onHide();
-                    });
-                  } else if (res.status == 400) {
-                    //後端驗失敗
-                    //從validator來的error是array形式
-                    return Swal.fire({
-                      title: 'Error!',
-                      text: data.err[0].msg,
-                      icon: 'error',
-                      confirmButtonText: 'OK',
-                    });
-                  } else {
-                    //系統錯誤
-                    Swal.fire({
-                      title: 'Error!',
-                      text: 'Internal Server Error',
-                      icon: 'error',
-                      confirmButtonText: 'OK',
-                    }).then(() => {
-                      onHide();
-                    });
-                  }
+                    onHide();
+                  });
+                } else if (res.status == 503) {
+                  //有其他人正在settle
+                  Swal.fire({
+                    title: 'Oops!',
+                    text: data.err,
+                    icon: 'warning',
+                    confirmButtonText: 'OK',
+                  }).then(() => {
+                    onHide();
+                  });
+                } else if (res.status == 400) {
+                  //後端驗失敗
+                  return Swal.fire({
+                    title: 'Error!',
+                    text: data.err[0].msg,
+                    icon: 'error',
+                    confirmButtonText: 'OK',
+                  });
                 } else {
-                  console.log('BACKEND for setDebt: ', data.data);
-
-                  //要把debtId改成新的
+                  //系統錯誤
+                  Swal.fire({
+                    title: 'Oops!',
+                    text: 'Internal Server Error',
+                    icon: 'error',
+                    confirmButtonText: 'OK',
+                  }).then(() => {
+                    onHide();
+                  });
+                }
+              } else {
+                setTimeout(() => {
+                  //把debtId改成新的
                   info.id = data.data.debtId;
                   //整理state data的格式
                   info.isOwned = Number(info.lender) === currUserId ? true : false;
@@ -275,40 +252,35 @@ const AddingWindow = ({ debtInfo, details, setDebt, setDetail, setIsDebtChanged,
                       return sorted;
                     });
                   }
-
                   setIsDebtChanged((prev) => {
                     return !prev;
                   });
                   Swal.hideLoading();
                   onHide();
                   if (!details) {
-                    Swal.fire('Created!', 'Expense has been created.', 'success');
+                    Swal.fire({ title: 'Created!', text: 'Expense has been created.', icon: 'success', showConfirmButton: false, timer: 1200 });
                   } else {
-                    Swal.fire('Updated!', 'Expense has been updated.', 'success');
+                    Swal.fire({ title: 'Updated!', text: 'Expense has been udpated.', icon: 'success', showConfirmButton: false, timer: 1200 });
                   }
-                }
-              })
-              .catch(() => {
-                //網路錯誤
-                Swal.fire({
-                  title: 'Error!',
-                  text: 'Network Connection failed, please try later...',
-                  icon: 'error',
-                  confirmButtonText: 'OK',
-                }).then(() => {
-                  onHide();
-                });
+                }, 500);
+              }
+            })
+            .catch(() => {
+              //網路錯誤
+              Swal.fire({
+                title: 'Oops!',
+                text: 'Network Connection failed, please try later...',
+                icon: 'error',
+                confirmButtonText: 'OK',
               });
-          },
-        });
-      } catch (err) {
-        console.log(err);
-      } finally {
-        e.target.disabled = false;
-      }
+            })
+            .finally(() => {
+              e.target.disabled = false;
+            });
+        },
+      });
     } else {
       //前端表單驗失敗
-      // validator(formRef);
       e.target.disabled = false;
     }
   };

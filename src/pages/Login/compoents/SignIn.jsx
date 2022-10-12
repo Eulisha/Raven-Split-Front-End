@@ -6,21 +6,22 @@ import Swal from 'sweetalert2';
 import validator from '../../../global/validator';
 
 const SignIn = ({ setHasAccount }) => {
-  console.log('@Signin');
-
+  //Ref
   const formRef = useRef();
 
+  //State
   const [inputValues, setinputValues] = useState({
     email: '',
     password: '',
     provider: 'native',
   });
 
-  //event handler
+  //Eventhandler
   const handleInput = (prop) => (e) => {
     setinputValues({ ...inputValues, [prop]: e.target.value });
   };
 
+  //Eventhandler
   const hanldleSubmit = async (e) => {
     e.preventDefault();
     e.target.disabled = true;
@@ -31,16 +32,15 @@ const SignIn = ({ setHasAccount }) => {
         localStorage.setItem('accessToken', data.data.accessToken);
         window.location.assign(`${constants.HOST}/dashboard`);
       } catch (err) {
-        console.log(err.response);
         if (!err.response.data) {
           Swal.fire({
             title: 'Oops!',
-            text: 'Something Wrong. Please Try Later.',
+            text: 'Network Connection failed, please try later...',
             icon: 'error',
             confirmButtonText: 'OK',
           });
         } else if (err.response.data.provider) {
-          //從validator來的error是array形式
+          //後端驗證錯誤
           Swal.fire({
             title: 'Error!',
             text: err.response.data.err[0].msg,
@@ -73,7 +73,7 @@ const SignIn = ({ setHasAccount }) => {
 
   return (
     <div className="login-wrapper">
-      <img className="login-image" src="https://i.pinimg.com/originals/e4/c0/f9/e4c0f92fa80da7648307aae4a3896a11.gif" />
+      <img className="login-image" src="/raven.gif" alt="raven" />
       <Card className="login-card">
         <Form className="sign-in" noValidate ref={formRef}>
           <Form.Label className="login-title">Sign In</Form.Label>

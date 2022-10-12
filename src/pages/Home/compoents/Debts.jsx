@@ -12,11 +12,11 @@ import Swal from 'sweetalert2';
 export const Page = React.createContext();
 
 const Debts = ({ debts, isDebtChanged, setDebt, setIsDebtChanged }) => {
-  console.log('@Debts');
-
+  //Context
   let CurrGroupInfo = useContext(GroupInfo);
   let { currGroup, groupUsers } = CurrGroupInfo;
 
+  //State
   const [paging, setPaging] = useState(1);
   const [pageCount, setPageCount] = useState(1);
 
@@ -30,21 +30,19 @@ const Debts = ({ debts, isDebtChanged, setDebt, setIsDebtChanged }) => {
             authorization: `Bearer ${token}`,
           },
         });
-
-        console.log('BACKEND for setDebts: ', data.data);
         setDebt(data.data);
       } catch (err) {
         if (!err.response.data) {
           //網路錯誤
           Swal.fire({
-            title: 'Error!',
+            title: 'Oops!',
             text: 'Network Connection failed, please try later...',
             icon: 'error',
             confirmButtonText: 'OK',
           });
         } else {
           Swal.fire({
-            title: 'Error!',
+            title: 'Oops!',
             text: 'Internal Server Error',
             icon: 'error',
             confirmButtonText: 'OK',
@@ -67,20 +65,19 @@ const Debts = ({ debts, isDebtChanged, setDebt, setIsDebtChanged }) => {
             authorization: `Bearer ${token}`,
           },
         });
-        console.log('BACKEND for setPaging: ', data.data);
         setPageCount(data.data.pageCount);
       } catch (err) {
         if (!err.response.data) {
           //網路錯誤
           Swal.fire({
-            title: 'Error!',
+            title: 'Oops!',
             text: 'Network Connection failed, please try later...',
             icon: 'error',
             confirmButtonText: 'OK',
           });
         } else {
           Swal.fire({
-            title: 'Error!',
+            title: 'Oops!',
             text: 'Internal Server Error',
             icon: 'error',
             confirmButtonText: 'OK',
@@ -96,12 +93,8 @@ const Debts = ({ debts, isDebtChanged, setDebt, setIsDebtChanged }) => {
   return (
     <Page.Provider value={paging}>
       <div id="debts_column">
-        <div className="debt-top-bar">
-          Expense List
-          {/* <RiUserSettingsLine style={{ marginLeft: '10px' }} /> */}
-        </div>
-        {debts.length > 0 &&
-          groupUsers.length > 0 &&
+        <div className="debt-top-bar">Expense List</div>
+        {debts.length > 0 && groupUsers.length > 0 ? (
           debts.map((debt) => {
             return (
               <>
@@ -117,14 +110,20 @@ const Debts = ({ debts, isDebtChanged, setDebt, setIsDebtChanged }) => {
                 </Accordion>
               </>
             );
-          })}
-        <Pagination
-          count={pageCount}
-          page={paging}
-          onChange={(e, page) => {
-            setPaging(page);
-          }}
-        />
+          })
+        ) : (
+          <div className="debt-list-no-debt">No Expense Record.</div>
+        )}
+
+        {debts.length > 0 && (
+          <Pagination
+            count={pageCount}
+            page={paging}
+            onChange={(e, page) => {
+              setPaging(page);
+            }}
+          />
+        )}
       </div>
     </Page.Provider>
   );

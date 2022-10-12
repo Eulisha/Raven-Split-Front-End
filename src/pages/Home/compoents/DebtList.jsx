@@ -1,13 +1,10 @@
-// import axios from 'axios';
-// import constants from '../../../global/constants';
-// import Button from 'react-bootstrap/Button';
 import { useContext } from 'react';
 import { GroupInfo } from './Home';
 import { User } from '../../App';
 import utils from '../../../global/utils';
 
 const DebtList = ({ debtInfo }) => {
-  console.log('@DebtList');
+  //Context
   let CurrGroupInfo = useContext(GroupInfo);
   let CurrUser = useContext(User);
   let currUserId = CurrUser.user.id;

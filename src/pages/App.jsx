@@ -2,26 +2,22 @@ import '../index.css';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import Login from './Login/compoents/Login';
 import Home from './Home/compoents/Home';
-// import Header from '../global/Header';
 import React, { useState, useEffect } from 'react';
 import constants from '../global/constants';
 import axios from 'axios';
-// import './style.scss';
 import '@coreui/coreui/dist/css/coreui.min.css';
 import Swal from 'sweetalert2';
 
 export const User = React.createContext();
 
 const App = () => {
-  console.log('@App');
   const navigate = useNavigate();
   const [user, setUser] = useState({});
 
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
-    console.log('href', window.location.href);
+
     if (!token) {
-      console.log('no token');
       navigate('/');
       return;
     }
@@ -33,23 +29,22 @@ const App = () => {
             authorization: `Bearer ${token}`,
           },
         });
-        console.log('BACKEND for setUser: ', data.data);
         setUser(data.data);
       } catch (err) {
         if (!err.response.data) {
           //網路錯誤
           Swal.fire({
-            title: 'Error!',
+            title: 'Oops!',
             text: 'Network Connection failed, please try later...',
             icon: 'error',
             confirmButtonText: 'OK',
           });
         } else {
           Swal.fire({
-            title: 'Error!',
-            text: 'Please sign in first.',
-            icon: 'error',
-            confirmButtonText: 'OK',
+            title: 'Please sign in first.',
+            icon: 'warning',
+            showConfirmButton: false,
+            timer: 1000,
           }).then(() => {
             localStorage.removeItem('accessToken');
             navigate('/');

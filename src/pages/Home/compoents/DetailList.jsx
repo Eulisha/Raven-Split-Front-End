@@ -4,8 +4,6 @@ import { GroupInfo } from './Home';
 import Icons from '../../../global/Icons';
 import utils from '../../../global/utils';
 
-// import { NumericFormat } from 'react-number-format';
-
 const DetailList = ({ details }) => {
   let CurrGroupInfo = useContext(GroupInfo);
 
@@ -20,9 +18,7 @@ const DetailList = ({ details }) => {
                 <Icons.UserIcon />
               </div>
               <div>{`${CurrGroupInfo.groupUserNames[borrowerId]}`}</div>
-              {/* <div>owns</div> */}
               <div>{utils.currencyFormat(details[borrowerId])}</div>
-              {/* <NumericFormat value={details[borrowerId]} thousandSeparator="," disabled style={{ border: 'none', backgroundColor: 'inherit' }} />; */}
             </ListGroup.Item>
           );
         })}

@@ -2,17 +2,10 @@ import axios from 'axios';
 import { useEffect, useContext } from 'react';
 import constants from '../../../global/constants';
 import Balance from './Balance';
-// import { User } from '../../App';
 import { GroupInfo } from './Home';
 import Swal from 'sweetalert2';
-// import { RiUserSettingsLine } from 'react-icons/ri';
-{
-  /* <RiUserSettingsLine style={{ marginLeft: '10px' }} /> */
-}
 
 const GroupUsers = ({ setGroupUsers, setGroupUserNames, setGroupUserEmails, isDebtChanged, isGroupChanged, setIsDebtChanged }) => {
-  console.log('@GroupUsers');
-  // let CurrUser = useContext(User);
   let CurrGroupInfo = useContext(GroupInfo);
   let { currGroup } = CurrGroupInfo;
   let { gid } = currGroup;
@@ -26,16 +19,16 @@ const GroupUsers = ({ setGroupUsers, setGroupUserNames, setGroupUserEmails, isDe
             authorization: `Bearer ${token}`,
           },
         });
-        console.log('BACKEND for setGroup..:  ', data.data);
 
         //整理成適合的格式
         const groupUsers = []; //array of Ids of groupUsers
         const userNames = {}; //object of id-name key pair
         const userEmails = {}; //object of id-email key pair
+        //object with uid as key
         data.data.map((user) => {
           groupUsers.push(user.uid);
-          userNames[user.uid] = user.name; //{1:Euli}
-          userEmails[user.uid] = user.email; //{1:Euli}
+          userNames[user.uid] = user.name;
+          userEmails[user.uid] = user.email;
         });
         setGroupUsers(groupUsers);
         setGroupUserNames(userNames);
@@ -44,14 +37,14 @@ const GroupUsers = ({ setGroupUsers, setGroupUserNames, setGroupUserEmails, isDe
         if (!err.response.data) {
           //網路錯誤
           Swal.fire({
-            title: 'Error!',
+            title: 'Oops!',
             text: 'Network Connection failed, please try later...',
             icon: 'error',
             confirmButtonText: 'OK',
           });
         } else {
           Swal.fire({
-            title: 'Error!',
+            title: 'Oops!',
             text: 'Internal Server Error',
             icon: 'error',
             confirmButtonText: 'OK',
