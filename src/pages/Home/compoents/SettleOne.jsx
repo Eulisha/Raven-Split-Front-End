@@ -146,7 +146,6 @@ const SettleOneWindow = ({ gid, settleFromId, settleFromName, settleToId, settle
     //跳出時送後端解鎖
     return () => {
       window.removeEventListener('beforeunload', fetchOnHide);
-      localStorage.setItem('currentGroup', gid);
       fetchOnHide(gid);
     };
   }, []);

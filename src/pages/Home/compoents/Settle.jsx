@@ -188,7 +188,6 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
 
     return () => {
       window.removeEventListener('beforeunload', fetchOnHide);
-      localStorage.setItem('currentGroup', gid);
       fetchOnHide(gid);
     };
   }, []);
