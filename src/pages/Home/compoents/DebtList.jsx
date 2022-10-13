@@ -15,7 +15,7 @@ const DebtList = ({ debtInfo }) => {
     <div className="debt-header">
       <div className="debt-items-left">
         <div className="date debt-item">{`${date.replace('2022-', '').replace('-', '/')} `}</div>
-        <div className="description debt-item">{`${title} `}</div>
+        <div className={title.length < 20 ? 'description debt-item' : 'debt-items-title'}>{`${title} `}</div>
       </div>
       <div className="debt-items-right">
         <div className="cost debt-item-pay-by">

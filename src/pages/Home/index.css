@@ -344,7 +344,7 @@
 }
 #debts_column{
 /* flex-grow:2 !important; */
-width: 60%;
+width: 70%;
 margin-right:20px
 }
 .detail-list-buttons{
@@ -372,6 +372,9 @@ margin-right:20px
   font-size: 18px;
   height: 100%;
   gap:30px
+}
+.debt-items-title{
+  font-size: 16px;
 }
 .date{
   font-size: 16px;
@@ -476,12 +479,18 @@ color:rgb(150 157 165);
 }
 /* balance列表 */
 .group-balance-list{
+  position: relative;
   display: flex !important;
-  justify-content: space-evenly;
+  justify-content: space-between;
   align-items: center;
   width: 100%;
   padding: 0 16px ;
   font-size: 16px;
+}
+.group-balance-list-name{
+  display: flex;
+  align-items: center;
+  gap: 2rem;
 }
 
 .group-balance-detail-item{
@@ -505,7 +514,11 @@ margin: 5px 0px 5px!important;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap:10px
+  gap:10px;
+}
+.owe-status{
+  position: absolute;
+  left: 45%
 }
 
 

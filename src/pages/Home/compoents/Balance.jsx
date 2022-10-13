@@ -78,16 +78,18 @@ const Balance = ({ isDebtChanged, setIsDebtChanged }) => {
             <Accordion.Item key={currUserId} className="item" eventKey={gid}>
               <Accordion.Header>
                 <div className="group-balance-list">
-                  <Icons.UserIcon />
-                  <span>{currUserName} </span>
+                  <div className="group-balance-list-name">
+                    <Icons.UserIcon />
+                    <span>{currUserName} </span>
+                  </div>
                   {currUserBalance.balance >= 0 ? (
                     <>
-                      <span>get back </span>
+                      <span className="owe-status">get back </span>
                       <span className="owed-font">{utils.currencyFormat(currUserBalance.balance)} </span>
                     </>
                   ) : (
                     <>
-                      <span>owes</span>
+                      <span className="owe-status">owes</span>
                       <span className="owe-font">{utils.currencyFormat(-currUserBalance.balance)} </span>
                     </>
                   )}
@@ -144,16 +146,18 @@ const Balance = ({ isDebtChanged, setIsDebtChanged }) => {
                 <Accordion.Item key={`${gid}-${userBalance.uid}`} className="item" eventKey={`${gid}-${userBalance.uid}`}>
                   <Accordion.Header>
                     <div className="group-balance-list">
-                      <Icons.UserIcon />
-                      <span>{groupUserNames[userBalance.uid]} </span>
+                      <div className="group-balance-list-name">
+                        <Icons.UserIcon />
+                        <span>{groupUserNames[userBalance.uid]} </span>
+                      </div>
                       {userBalance.balance >= 0 ? (
                         <>
-                          <span>get back </span>
+                          <span className="owe-status">get back </span>
                           <span className="owed-font">{utils.currencyFormat(userBalance.balance)} </span>
                         </>
                       ) : (
                         <>
-                          <span>owes</span>
+                          <span className="owe-status">owes</span>
                           <span className="owe-font">{utils.currencyFormat(-userBalance.balance)} </span>
                         </>
                       )}
