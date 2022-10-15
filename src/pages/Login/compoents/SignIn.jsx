@@ -73,7 +73,13 @@ const SignIn = ({ setHasAccount }) => {
 
   return (
     <div className="login-wrapper">
-      <img className="login-image" src="/raven.gif" alt="raven" />
+      <div className="login-image-wrapper">
+        <img className="login-image" src="/raven.gif" alt="raven" />
+        <div className="login-welcome">
+          <span className="login-welcome-title">Welcom to Raven Split</span>
+          <span className="login-welcome-text">A place to easily record shared expenses in groups</span>
+        </div>
+      </div>
       <Card className="login-card">
         <Form className="sign-in" noValidate ref={formRef}>
           <Form.Label className="login-title">Sign In</Form.Label>
