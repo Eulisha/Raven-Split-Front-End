@@ -11,11 +11,11 @@ import { cilAccountLogout, cilPlus } from '@coreui/icons';
 import Icons from '../../../global/Icons';
 import Swal from 'sweetalert2';
 
-const UserGroups = ({ isGroupChanged, setGroupUsers, setGroupUserNames, setGroupUserEmails, setIsGroupChanged }) => {
+const UserGroups = () => {
   //Context
   let CurrUser = useContext(User);
   let CurrGroupInfo = useContext(GroupInfo);
-  let { currGroup, setCurrGroup, setPaging } = CurrGroupInfo;
+  let { currGroup, setCurrGroup, setPaging, setGroupUsers, setGroupUserNames, setGroupUserEmails, isGroupChanged, setIsGroupChanged } = CurrGroupInfo;
 
   //State
   const [userGroups, setUserGroups] = useState([]);
@@ -64,6 +64,7 @@ const UserGroups = ({ isGroupChanged, setGroupUsers, setGroupUserNames, setGroup
     setCurrGroup({ gid: group.gid, name: group.name, type: group.type });
     setSelected({ gid: group.gid });
     setPaging(1);
+    setGroupUsers([]);
   };
 
   return (

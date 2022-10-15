@@ -99,7 +99,8 @@ const Debts = ({ debts, isDebtChanged, setDebt, setIsDebtChanged }) => {
     <Page.Provider value={paging}>
       <div id="debts_column">
         <div className="debt-top-bar">Expense List</div>
-        {debts.length > 0 && groupUsers.length > 0 ? (
+        {debts.length > 0 &&
+          groupUsers.length > 0 &&
           debts.map((debt) => {
             return (
               <>
@@ -115,10 +116,9 @@ const Debts = ({ debts, isDebtChanged, setDebt, setIsDebtChanged }) => {
                 </Accordion>
               </>
             );
-          })
-        ) : (
-          <div className="debt-list-no-debt">No Expense Record.</div>
-        )}
+          })}
+
+        {debts.length === 0 && groupUsers.length === 0 && <div className="debt-list-no-debt">No Expense Record.</div>}
 
         {debts.length > 0 && (
           <Pagination

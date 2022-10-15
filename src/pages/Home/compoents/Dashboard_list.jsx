@@ -7,12 +7,13 @@ import { GroupInfo } from './Home';
 const Dashboard_list = ({ selfBalance }) => {
   //Context
   let CurrGroupInfo = useContext(GroupInfo);
-  let { setCurrGroup, setPaging } = CurrGroupInfo;
+  let { setCurrGroup, setPaging, setGroupUsers } = CurrGroupInfo;
 
   //EventHandler
   const handleSelectGroup = (group) => {
     setCurrGroup({ gid: group.gid, name: group.group_name, type: '1' });
     setPaging(1);
+    setGroupUsers([]);
   };
 
   return (

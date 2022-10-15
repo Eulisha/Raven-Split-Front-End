@@ -43,7 +43,7 @@ const Home = () => {
     >
       {CurrUser.user.id && (
         <>
-          <UserGroups isGroupChanged={isGroupChanged} setIsGroupChanged={setIsGroupChanged} setPaging={setPaging} />
+          <UserGroups />
           <Container fluid id={currGroup.gid || null}>
             <div id="center_column">
               {currGroup.gid ? (
@@ -51,15 +51,7 @@ const Home = () => {
                   <CenterTopBar setDebt={setDebt} setIsDebtChanged={setIsDebtChanged} />
                   <div className="group-debt-area">
                     <Debts debts={debts} setDebt={setDebt} isDebtChanged={isDebtChanged} setIsDebtChanged={setIsDebtChanged} />
-                    <GroupUsers
-                      id="right_sidebar"
-                      setGroupUsers={setGroupUsers}
-                      setGroupUserNames={setGroupUserNames}
-                      setGroupUserEmails={setGroupUserEmails}
-                      isDebtChanged={isDebtChanged}
-                      isGroupChanged={isGroupChanged}
-                      setIsDebtChanged={setIsDebtChanged}
-                    />
+                    <GroupUsers id="right_sidebar" isDebtChanged={isDebtChanged} setIsDebtChanged={setIsDebtChanged} />
                   </div>
                 </>
               ) : (

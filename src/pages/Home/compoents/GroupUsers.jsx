@@ -5,9 +5,9 @@ import Balance from './Balance';
 import { GroupInfo } from './Home';
 import Swal from 'sweetalert2';
 
-const GroupUsers = ({ setGroupUsers, setGroupUserNames, setGroupUserEmails, isDebtChanged, isGroupChanged, setIsDebtChanged }) => {
+const GroupUsers = ({ isDebtChanged, setIsDebtChanged }) => {
   let CurrGroupInfo = useContext(GroupInfo);
-  let { currGroup } = CurrGroupInfo;
+  let { currGroup, setGroupUsers, setGroupUserNames, setGroupUserEmails, isGroupChanged } = CurrGroupInfo;
   let { gid } = currGroup;
 
   useEffect(() => {
