@@ -15,7 +15,20 @@ const Login = () => {
     }
   }, []);
 
-  return <div className="login">{hasAccount ? <SignIn className="sign-in" setHasAccount={setHasAccount} /> : <SignUp className="sign-up" setHasAccount={setHasAccount} />}</div>;
+  return (
+    <div className="login">
+      <div className="login-wrapper">
+        <div className="login-image-wrapper">
+          <img className="login-image" src="/raven.gif" alt="raven" />
+          <div className="login-welcome">
+            <span className="login-welcome-title">Welcom to Raven Split</span>
+            <span className="login-welcome-text">A place to easily record shared expenses in groups</span>
+          </div>
+        </div>
+        {hasAccount ? <SignIn className="sign-in" setHasAccount={setHasAccount} /> : <SignUp className="sign-up" setHasAccount={setHasAccount} />}
+      </div>
+    </div>
+  );
 };
 
 export default Login;

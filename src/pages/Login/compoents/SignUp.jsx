@@ -14,7 +14,7 @@ const SignUp = ({ setHasAccount }) => {
     email: '',
     password: '',
     name: '',
-    cellphone: '',
+    // cellphone: '',
     provider: 'native',
   });
 
@@ -74,8 +74,7 @@ const SignUp = ({ setHasAccount }) => {
   };
 
   return (
-    <div className="login-wrapper">
-      <img className="login-image" src="/raven.gif" />
+    <>
       <Card className="login-card">
         <Form className="sign-up" noValidate ref={formRef}>
           <Form.Label className="login-title">Sign Up</Form.Label>
@@ -91,19 +90,19 @@ const SignUp = ({ setHasAccount }) => {
             <Form.Label>Name</Form.Label>
             <Form.Control required type="text" placeholder="Name" name="name" value={inputValues.name} title="Name" onChange={handleInput('name')} />
           </Form.Group>
-          <Form.Group className="mb-3" controlId="formBasicCellPhone">
-            <Form.Label>Cell Phone</Form.Label>
-            <Form.Control required type="tel" placeholder="Cell Phone" value={inputValues.cellphone} title="Cellphone" onChange={handleInput('cellphone')} />
-          </Form.Group>
+          {/* <Form.Group className="mb-3" controlId="formBasicCellPhone"> */}
+          {/* <Form.Label>Cell Phone</Form.Label> */}
+          {/* <Form.Control required type="tel" placeholder="Cell Phone" value={inputValues.cellphone} title="Cellphone" onChange={handleInput('cellphone')} /> */}
+          {/* </Form.Group> */}
           <Button className="sumbit-btn" variant="primary" type="submit" onClick={hanldleSubmit}>
             Submit
           </Button>
-          <button className="change-login-method-btn" style={{ border: 'none' }} onClick={() => setHasAccount(false)}>
+          <button type="button" className="change-login-method-btn" style={{ border: 'none' }} onClick={() => setHasAccount(true)}>
             I already have account
           </button>
         </Form>
       </Card>
-    </div>
+    </>
   );
 };
 
