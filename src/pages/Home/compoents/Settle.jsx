@@ -238,9 +238,9 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
             {Array.isArray(settle) ? (
               settle.map((ele) => {
                 return (
-                  <div className="settle-pair-items">
+                  <>
                     {ele.amount != 0 && (
-                      <>
+                      <div className="settle-pair-items">
                         <Icons.UserIcon />
                         <span>{groupUserNames[ele.borrower]}</span>
                         <div className="settle-pair-pay-amount-wapper">
@@ -255,9 +255,9 @@ const SettleWindow = ({ setIsDebtChanged, onHide, show }) => {
                         </div>
                         <span>{groupUserNames[ele.lender]}</span>
                         <Icons.UserIcon />
-                      </>
+                      </div>
                     )}
-                  </div>
+                  </>
                 );
               })
             ) : (
