@@ -14,14 +14,14 @@ export const Page = React.createContext();
 const Debts = ({ debts, isDebtChanged, setDebt, setIsDebtChanged }) => {
   //Context
   let CurrGroupInfo = useContext(GroupInfo);
-  let { currGroup, groupUsers } = CurrGroupInfo;
+  let { currGroup, groupUsers, paging, setPaging } = CurrGroupInfo;
 
   //State
-  const [paging, setPaging] = useState(1);
   const [pageCount, setPageCount] = useState(1);
 
   //撈debts
   useEffect(() => {
+    let isCancelled = false;
     const fetchDebts = async (gid) => {
       try {
         const token = localStorage.getItem('accessToken');
@@ -30,7 +30,9 @@ const Debts = ({ debts, isDebtChanged, setDebt, setIsDebtChanged }) => {
             authorization: `Bearer ${token}`,
           },
         });
-        setDebt(data.data);
+        if (!isCancelled) {
+          setDebt(data.data);
+        }
       } catch (err) {
         if (!err.response.data) {
           //網路錯誤
@@ -53,6 +55,9 @@ const Debts = ({ debts, isDebtChanged, setDebt, setIsDebtChanged }) => {
     if (currGroup.gid) {
       fetchDebts(currGroup.gid);
     }
+    return () => {
+      isCancelled = true;
+    };
   }, [currGroup, isDebtChanged, paging]);
 
   //撈pages

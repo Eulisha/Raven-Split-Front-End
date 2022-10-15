@@ -7,7 +7,13 @@ import { GroupInfo } from './Home';
 const Dashboard_list = ({ selfBalance }) => {
   //Context
   let CurrGroupInfo = useContext(GroupInfo);
-  let { setCurrGroup } = CurrGroupInfo;
+  let { setCurrGroup, setPaging } = CurrGroupInfo;
+
+  //EventHandler
+  const handleSelectGroup = (group) => {
+    setCurrGroup({ gid: group.gid, name: group.group_name, type: '1' });
+    setPaging(1);
+  };
 
   return (
     <>
@@ -57,11 +63,7 @@ const Dashboard_list = ({ selfBalance }) => {
                       {user.pair ? <ListGroup.Item className="balance_pair self-balance-detail-item">Non-Group {utils.currencyFormat(user.pair)}</ListGroup.Item> : ''}
                       {user.group_normal.map((group) => {
                         return (
-                          <ListGroup.Item
-                            key={group.id}
-                            className="balance-group-normal self-balance-detail-item"
-                            onClick={() => setCurrGroup({ gid: group.gid, name: group.group_name, type: '1' })}
-                          >
+                          <ListGroup.Item key={group.id} className="balance-group-normal self-balance-detail-item" onClick={(group) => handleSelectGroup(group)}>
                             <div className="self-balance-detail-group-wrapper">
                               <div className="default-group-radius">
                                 <Icons.GroupIcon className="default-group-picture" />
@@ -108,11 +110,7 @@ const Dashboard_list = ({ selfBalance }) => {
                       {user.pair ? <ListGroup.Item className="balance_pair self-balance-detail-item">Non-Group {utils.currencyFormat(user.pair)}</ListGroup.Item> : ''}
                       {user.group_normal.map((group) => {
                         return (
-                          <ListGroup.Item
-                            key={group.id}
-                            className="balance-group-normal self-balance-detail-item"
-                            onClick={() => setCurrGroup({ gid: group.gid, name: group.group_name, type: '1' })}
-                          >
+                          <ListGroup.Item key={group.id} className="balance-group-normal self-balance-detail-item" onClick={(group) => handleSelectGroup(group)}>
                             <div className="self-balance-detail-group-wrapper">
                               <div className="default-group-radius">
                                 <Icons.GroupIcon className="default-group-picture" />

@@ -22,14 +22,28 @@ const Home = () => {
 
   const [debts, setDebt] = useState([]);
   const [isDebtChanged, setIsDebtChanged] = useState(false);
+  const [paging, setPaging] = useState(1);
 
   return (
     <GroupInfo.Provider
-      value={{ currGroup, groupUsers, groupUserNames, groupUserEmails, isGroupChanged, setIsGroupChanged, setCurrGroup, setGroupUsers, setGroupUserNames, setGroupUserEmails }}
+      value={{
+        currGroup,
+        groupUsers,
+        groupUserNames,
+        groupUserEmails,
+        isGroupChanged,
+        setIsGroupChanged,
+        setCurrGroup,
+        setGroupUsers,
+        setGroupUserNames,
+        setGroupUserEmails,
+        paging,
+        setPaging,
+      }}
     >
       {CurrUser.user.id && (
         <>
-          <UserGroups isGroupChanged={isGroupChanged} setIsGroupChanged={setIsGroupChanged} />
+          <UserGroups isGroupChanged={isGroupChanged} setIsGroupChanged={setIsGroupChanged} setPaging={setPaging} />
           <Container fluid id={currGroup.gid || null}>
             <div id="center_column">
               {currGroup.gid ? (

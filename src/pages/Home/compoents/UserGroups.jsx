@@ -15,7 +15,7 @@ const UserGroups = ({ isGroupChanged, setGroupUsers, setGroupUserNames, setGroup
   //Context
   let CurrUser = useContext(User);
   let CurrGroupInfo = useContext(GroupInfo);
-  let { currGroup, setCurrGroup } = CurrGroupInfo;
+  let { currGroup, setCurrGroup, setPaging } = CurrGroupInfo;
 
   //State
   const [userGroups, setUserGroups] = useState([]);
@@ -63,6 +63,7 @@ const UserGroups = ({ isGroupChanged, setGroupUsers, setGroupUserNames, setGroup
   const handleNavSelect = (e, group) => {
     setCurrGroup({ gid: group.gid, name: group.name, type: group.type });
     setSelected({ gid: group.gid });
+    setPaging(1);
   };
 
   return (
