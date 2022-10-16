@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import { ListGroup, Row, Col, Card } from 'react-bootstrap';
 import Icons from '../../../global/Icons';
 import utils from '../../../global/utils';
@@ -7,7 +7,7 @@ import { GroupInfo } from './Home';
 const Dashboard_list = ({ selfBalance }) => {
   //Context
   let CurrGroupInfo = useContext(GroupInfo);
-  let { currGroup, setCurrGroup, setPaging, setGroupUsers } = CurrGroupInfo;
+  let { setCurrGroup, setPaging, setGroupUsers } = CurrGroupInfo;
 
   //EventHandler
   const handleSelectGroup = (e, group) => {
