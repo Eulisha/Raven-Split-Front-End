@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { ListGroup, Row, Col, Card } from 'react-bootstrap';
 import Icons from '../../../global/Icons';
 import utils from '../../../global/utils';
@@ -7,10 +7,10 @@ import { GroupInfo } from './Home';
 const Dashboard_list = ({ selfBalance }) => {
   //Context
   let CurrGroupInfo = useContext(GroupInfo);
-  let { setCurrGroup, setPaging, setGroupUsers } = CurrGroupInfo;
+  let { currGroup, setCurrGroup, setPaging, setGroupUsers } = CurrGroupInfo;
 
   //EventHandler
-  const handleSelectGroup = (group) => {
+  const handleSelectGroup = (e, group) => {
     setCurrGroup({ gid: group.gid, name: group.group_name, type: '1' });
     setPaging(1);
     setGroupUsers([]);
@@ -64,7 +64,7 @@ const Dashboard_list = ({ selfBalance }) => {
                       {user.pair ? <ListGroup.Item className="balance_pair self-balance-detail-item">Non-Group {utils.currencyFormat(user.pair)}</ListGroup.Item> : ''}
                       {user.group_normal.map((group) => {
                         return (
-                          <ListGroup.Item key={group.id} className="balance-group-normal self-balance-detail-item" onClick={(group) => handleSelectGroup(group)}>
+                          <ListGroup.Item key={group.id} className="balance-group-normal self-balance-detail-item" onClick={(e) => handleSelectGroup(e, group)}>
                             <div className="self-balance-detail-group-wrapper">
                               <div className="default-group-radius">
                                 <Icons.GroupIcon className="default-group-picture" />
@@ -111,7 +111,7 @@ const Dashboard_list = ({ selfBalance }) => {
                       {user.pair ? <ListGroup.Item className="balance_pair self-balance-detail-item">Non-Group {utils.currencyFormat(user.pair)}</ListGroup.Item> : ''}
                       {user.group_normal.map((group) => {
                         return (
-                          <ListGroup.Item key={group.id} className="balance-group-normal self-balance-detail-item" onClick={(group) => handleSelectGroup(group)}>
+                          <ListGroup.Item key={group.id} className="balance-group-normal self-balance-detail-item" onClick={(e) => handleSelectGroup(e, group)}>
                             <div className="self-balance-detail-group-wrapper">
                               <div className="default-group-radius">
                                 <Icons.GroupIcon className="default-group-picture" />
