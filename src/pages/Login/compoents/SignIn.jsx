@@ -11,8 +11,8 @@ const SignIn = ({ setHasAccount }) => {
 
   //State
   const [inputValues, setinputValues] = useState({
-    email: 'guest@raven-split.life',
-    password: '12345678',
+    email: '',
+    password: '',
     provider: 'native',
   });
 
