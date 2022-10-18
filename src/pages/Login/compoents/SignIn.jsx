@@ -90,6 +90,9 @@ const SignIn = ({ setHasAccount }) => {
           <button type="button" className="change-login-method-btn" style={{ border: 'none' }} onClick={() => setHasAccount(false)}>
             I don't have account yet
           </button>
+          <a style={{ marginTop: '10%' }} target="blank" href="https://github.com/Eulisha/Raven-Split/blob/main/README.md#get-started-right-now-raven-split">
+            Use Demo Account to Login
+          </a>
         </Form>
       </Card>
     </>
